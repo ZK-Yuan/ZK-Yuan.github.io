@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>苑泽楷 - AI 产品经理</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    </script>
+
+    <style>
+        /* =========================================
+           1. CSS 变量与主题系统
+           ========================================= */
+        :root {
+            --bg-primary: #f5f5f7;
+            --bg-secondary: #fbfbfd;
+            --text-primary: #1d1d1f; 
+            --text-secondary: #86868b;
+            --nav-bg: rgba(255, 255, 255, 0.7); 
+            --loader-bg: rgba(245, 245, 247, 0.6);
+            --border-color: rgba(0, 0, 0, 0.05); 
+            --bento-bg: #ffffff;
+            --bento-shadow: rgba(0, 0, 0, 0.03); 
+            --bento-hover-shadow: rgba(0, 0, 0, 0.08);
+            --spotlight-color: rgba(0, 113, 227, 0.08);
+            --placeholder-bg: linear-gradient(135deg, #e2e2e2, #f9f9f9);
+            --footer-border: #d2d2d7; 
+            --btn-hover-bg: rgba(0, 0, 0, 0.05);
+            --link-color: #0071e3;
+            --primary: #0071e3; 
+            --primary-dark: #0077ed; 
+            --tag-bg: rgba(0, 113, 227, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #000000;
+            --bg-secondary: #161618;
+            --text-primary: #f5f5f7; 
+            --text-secondary: #a1a1a6;
+            --nav-bg: rgba(0, 0, 0, 0.7); 
+            --loader-bg: rgba(0, 0, 0, 0.6);
+            --border-color: rgba(255, 255, 255, 0.1); 
+            --bento-bg: #1c1c1e;
+            --bento-shadow: rgba(0, 0, 0, 0.3); 
+            --bento-hover-shadow: rgba(0, 0, 0, 0.6);
+            --spotlight-color: rgba(255, 255, 255, 0.06);
+            --placeholder-bg: linear-gradient(135deg, #1c1c1e, #2c2c2e);
+            --footer-border: #333336; 
+            --btn-hover-bg: rgba(255, 255, 255, 0.1);
+            --link-color: #2997ff;
+            --tag-bg: rgba(41, 151, 255, 0.15);
+        }
+
+        /* =========================================
+           2. 全局基础与排版
+           ========================================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+        body { background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; transition: background-color 0.5s ease, color 0.5s ease; }
+        
+        .section-padding { padding: 120px 20px; }
+        .text-center { text-align: center; }
+        .hero-title { font-size: 52px; font-weight: 700; letter-spacing: -0.005em; margin-bottom: 16px; background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-subtitle { font-size: 22px; font-weight: 400; color: var(--text-secondary); margin-bottom: 40px; transition: color 0.5s ease; line-height: 1.6; }
+        .section-title { font-size: 36px; font-weight: 600; margin-bottom: 10px; }
+        .section-desc { font-size: 18px; color: var(--text-secondary); margin-bottom: 50px; }
+
+        /* =========================================
+           3. 核心组件 (加载屏, 导航, 按钮, 全局高光)
+           ========================================= */
+        #loader { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: var(--loader-bg); backdrop-filter: saturate(180%) blur(30px); -webkit-backdrop-filter: saturate(180%) blur(30px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
+        #loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-text { font-size: 28px; font-weight: 600; margin-bottom: 20px; color: var(--text-primary); }
+        .progress-bar { width: 150px; height: 2px; background-color: var(--border-color); border-radius: 2px; overflow: hidden; position: relative; }
+        .progress-bar::after { content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 0; background-color: var(--text-primary); animation: loadingProgress 1.5s cubic-bezier(0.65, 0, 0.35, 1) forwards; }
+        @keyframes loadingProgress { 0% { width: 0; } 50% { width: 70%; } 100% { width: 100%; } }
+
+        nav { position: fixed; top: 0; width: 100%; height: 52px; background-color: var(--nav-bg); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); display: flex; justify-content: center; align-items: center; z-index: 9999; border-bottom: 1px solid var(--border-color); transition: background-color 0.5s ease, border-color 0.5s ease; }
+        .nav-container { display: flex; width: 100%; max-width: 1200px; padding: 0 20px; justify-content: space-between; align-items: center; }
+        .nav-logo { font-size: 20px; font-weight: 700; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav ul { list-style: none; display: flex; gap: 40px; }
+        nav ul li a { text-decoration: none; color: var(--text-primary); font-size: 14px; opacity: 0.8; font-weight: 500; transition: opacity 0.3s ease, color 0.5s ease; }
+        nav ul li a:hover { opacity: 1; color: var(--primary); }
+
+        #theme-toggle { background: none; border: none; cursor: pointer; color: var(--text-primary); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease, color 0.5s ease; }
+        #theme-toggle:hover { background-color: var(--btn-hover-bg); }
+        .sun-icon { display: none; } .moon-icon { display: block; }
+        [data-theme="dark"] .sun-icon { display: block; } [data-theme="dark"] .moon-icon { display: none; }
+
+        .cta-group { display: flex; gap: 16px; margin-top: 15px; justify-content: center; flex-wrap: wrap; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 14px 28px; border-radius: 980px; text-decoration: none; font-size: 16px; font-weight: 500; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0, 113, 227, 0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0, 113, 227, 0.4); }
+        .btn-secondary { background: transparent; color: var(--primary); padding: 14px 28px; border-radius: 980px; text-decoration: none; font-size: 16px; font-weight: 500; border: 2px solid var(--primary); transition: all 0.3s ease; }
+        .btn-secondary:hover { background: var(--primary); color: white; }
+        .contact-info { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; margin-bottom: 40px; }
+        .contact-item { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 15px; }
+        .contact-item i { color: var(--primary); }
+        
+        /* 复制图标按钮样式 */
+        .copy-icon {
+            margin-left: 6px;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            background: rgba(0, 113, 227, 0.1);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 10px;
+            vertical-align: middle;
+        }
+        .copy-icon:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: scale(1.1);
+        }
+        .copy-icon.copied {
+            background: #34c759;
+            color: #fff;
+        }
+        
+        /* 暗色背景下的复制图标 */
+        .hero-fullscreen-bg .copy-icon {
+            color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .hero-fullscreen-bg .copy-icon:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: #000;
+        }
+        .hero-fullscreen-bg .copy-icon.copied {
+            background: #34c759;
+            color: #fff;
+        }
+        .hero-badge { display: inline-block; font-size: 12px; font-weight: 600; color: var(--primary); background: var(--tag-bg); padding: 8px 16px; border-radius: 20px; margin-bottom: 24px; letter-spacing: 1px; }
+
+        /* --- 统一高光跟随 (Spotlight Glow) --- */
+        .hover-glow { position: relative; }
+        .hover-glow::after {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--spotlight-color), transparent 40%);
+            opacity: 0; transition: opacity 0.5s ease; z-index: 1; pointer-events: none;
+            border-radius: inherit; /* 让光晕自动适应各类便当盒的圆角 */
+        }
+        .hover-glow:hover::after { opacity: 1; }
+        .glow-content { position: relative; z-index: 2; pointer-events: none; }
+        .glow-content > * { pointer-events: auto; }
+
+        /* =========================================
+           4. 页面区块 (第一屏 & 经历区)
+           ========================================= */
+        
+        /* --- 全屏无边框首图背景专属样式 --- */
+        .hero-fullscreen-bg {
+            /* 核心：设置无缝全宽背景图，并叠加一层半透明黑膜以保证文字可读性 */
+            /* 请确保图片存放在 images 文件夹下，并命名为 hero-bg.jpg */
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.8)), url('./images/hero-bg.jpg') no-repeat center center;
+            background-size: cover;
+            width: 100vw;
+            min-height: 100vh; /* 撑满第一屏全屏 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 60px; 
+            margin: 0;
+            border-radius: 0; /* 强制直角无边框 */
+        }
+
+        /* 强制重写这块区域内的文字颜色为白色，增加阴影避免看不清 */
+        .hero-fullscreen-bg .hero-title {
+            background: none;
+            -webkit-text-fill-color: #ffffff;
+            color: #ffffff;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+        
+        .hero-fullscreen-bg .hero-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        }
+
+        .hero-fullscreen-bg .contact-item {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* 设计展板按钮在暗色背景下改为白框 */
+        .hero-fullscreen-bg .btn-secondary {
+            border-color: rgba(255, 255, 255, 0.6);
+            color: #ffffff;
+        }
+        
+        .hero-fullscreen-bg .btn-secondary:hover {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        
+        .hero-light { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%); display: flex; flex-direction: column; align-items: center; padding-top: 160px; min-height: 100vh; justify-content: center; transition: background 0.5s ease; }
+        
+        .education-section { padding: 100px 20px; background: var(--bg-primary); transition: background-color 0.5s ease; }
+        .education-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px; max-width: 1000px; margin: 0 auto; }
+        .education-card { background: var(--bento-bg); padding: 32px; border-radius: 20px; box-shadow: 0 4px 20px var(--bento-shadow); transition: all 0.3s ease; }
+        .education-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px var(--bento-hover-shadow); }
+        .education-card h3 { font-size: 20px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
+        .education-card .school { font-size: 14px; color: var(--primary); font-weight: 600; margin-bottom: 4px; }
+        .education-card .period { color: var(--text-secondary); font-size: 13px; }
+
+        .experience-section { padding: 100px 20px; background: var(--bg-secondary); transition: background-color 0.5s ease; }
+        .timeline { position: relative; max-width: 1000px; margin: 0 auto; padding-left: 40px; }
+        .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border-color); }
+        .timeline-item { position: relative; margin-bottom: 40px; width: 100%; padding: 32px; background: var(--bento-bg); border-radius: 20px; box-shadow: 0 4px 20px var(--bento-shadow); transition: all 0.3s ease; }
+        .timeline-item:hover { transform: translateY(-5px); box-shadow: 0 10px 30px var(--bento-hover-shadow); }
+        .timeline-item::before { content: ''; position: absolute; left: -36px; top: 32px; width: 16px; height: 16px; background: var(--primary); border-radius: 50%; z-index: 1; box-shadow: 0 0 0 4px var(--bg-secondary); }
+        .timeline-item h3 { font-size: 20px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
+        .timeline-item .company { font-size: 14px; color: var(--primary); font-weight: 600; margin-bottom: 4px; }
+        .timeline-item .date { color: var(--text-secondary); font-size: 13px; margin-bottom: 16px; }
+        .timeline-item ul { padding-left: 20px; margin-bottom: 16px; }
+        .timeline-item li { margin-bottom: 8px; line-height: 1.7; color: var(--text-secondary); font-size: 14px; }
+
+        .bento-section { background-color: var(--bg-primary); transition: background-color 0.5s ease; padding-top: 100px; padding-bottom: 100px; }
+        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; max-width: 1200px; margin: 0 auto; }
+        .bento-item { background-color: var(--bento-bg); border-radius: 24px; padding: 32px; box-shadow: 0 4px 20px var(--bento-shadow); display: flex; flex-direction: column; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease, background-color 0.5s ease; position: relative; overflow: hidden; text-align: left; }
+        
+        .bento-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; pointer-events: none; }
+        .bento-content > * { pointer-events: auto; }
+        
+        .tag { display: inline-block; font-size: 12px; font-weight: 600; color: var(--primary); background: var(--tag-bg); padding: 6px 12px; border-radius: 8px; margin-bottom: 16px; width: fit-content; }
+        .tag-small { background: var(--tag-bg); color: var(--primary); padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; display: inline-block; margin: 4px; pointer-events: auto; }
+        .award-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #ffd700, #ffaa00); color: #1d1d1f; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; margin-bottom: 16px; width: fit-content; }
+        
+        .bento-item h3 { font-size: 22px; font-weight: 600; margin-bottom: 12px; color: var(--text-primary); transition: color 0.5s ease; }
+        .bento-item p { font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px; transition: color 0.5s ease; }
+        
+        .bento-item:hover { transform: scale(1.02); box-shadow: 0 10px 40px var(--bento-hover-shadow); }
+
+        .item-large { grid-column: span 2; grid-row: span 2; }
+        .item-wide { grid-column: span 2; }
+        .bento-link { margin-top: auto; padding-top: 20px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 500; color: var(--link-color); text-decoration: none; pointer-events: auto; width: fit-content; transition: color 0.3s ease; }
+        .bento-link i { margin-right: 6px; }
+
+        /* =========================================
+           5. 瀑布流图集 (Gallery)
+           ========================================= */
+        .gallery-section { padding: 100px 20px; background: var(--bg-secondary); transition: background-color 0.5s ease; }
+        .masonry-grid { column-count: 3; column-gap: 24px; max-width: 1200px; margin: 0 auto; }
+        .masonry-item { break-inside: avoid; margin-bottom: 24px; border-radius: 16px; background: var(--bento-bg); box-shadow: 0 4px 20px var(--bento-shadow); transition: transform 0.3s ease, box-shadow 0.3s ease; overflow: hidden; cursor: pointer; }
+        .masonry-item:hover { transform: translateY(-5px); box-shadow: 0 12px 30px var(--bento-hover-shadow); }
+        .img-wrapper { overflow: hidden; }
+        .masonry-item img { width: 100%; display: block; height: auto; transition: transform 0.5s ease; }
+        .masonry-item:hover img { transform: scale(1.05); }
+        .gallery-caption { padding: 16px; font-size: 14px; font-weight: 500; color: var(--text-primary); text-align: center; border-top: 1px solid var(--border-color); }
+
+        /* =========================================
+           6. 年度 Top 9 瀑布流 & 放大弹窗
+           ========================================= */
+        .top9-grid {
+            column-count: 3;
+            column-gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .top9-item {
+            break-inside: avoid;
+            margin-bottom: 24px;
+            border-radius: 16px;
+            background: var(--bento-bg);
+            box-shadow: 0 4px 20px var(--bento-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            cursor: zoom-in; /* 鼠标放上去变成放大镜 */
+        }
+        .top9-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px var(--bento-hover-shadow);
+        }
+        .top9-item img {
+            width: 100%;
+            display: block;
+            height: auto;
+            transition: transform 0.5s ease;
+        }
+        .top9-item:hover img {
+            transform: scale(1.03);
+        }
+        .top9-caption {
+            padding: 12px 16px;
+            font-size: 13px;
+            color: var(--text-secondary); /* 灰色小字 */
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            line-height: 1.5;
+        }
+
+        /* 放大查看照片的底层黑膜 */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 100000; /* 保证在最顶层 */
+            padding: 40px 20px;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            object-fit: contain;
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .lightbox.active .lightbox-content {
+            transform: scale(1);
+        }
+        .lightbox-caption {
+            margin-top: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            text-align: center;
+            max-width: 80%;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: 100;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .lightbox-close:hover { color: #fff; }
+
+        /* 为瀑布流增加响应式 */
+        @media (max-width: 1024px) { .top9-grid { column-count: 3; } }
+        @media (max-width: 768px) { 
+            .top9-grid { column-count: 2; } 
+            .lightbox-close { top: 15px; right: 20px; } 
+        }
+        @media (max-width: 480px) { .top9-grid { column-count: 1; } }
+
+        /* 响应式 */
+        @media (max-width: 1024px) { 
+            .bento-grid { grid-template-columns: repeat(2, 1fr); } 
+            .item-large, .item-wide { grid-column: span 2; } 
+            .masonry-grid { column-count: 2; }
+        }
+        @media (max-width: 768px) { 
+            .hero-title { font-size: 40px; } 
+            .bento-grid { grid-template-columns: 1fr; } 
+            .item-large, .item-wide { grid-column: span 1; } 
+            .timeline { padding-left: 30px; } 
+            .timeline::before { left: 8px; } 
+            .timeline-item::before { left: -30px; } 
+            .masonry-grid { column-count: 1; }
+            nav ul { display: none; } 
+        }
+
+        /* 滚动渐显动画 */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.2s; } .delay-3 { transition-delay: 0.3s; }
+
+        footer { background-color: var(--bg-primary); color: var(--text-secondary); font-size: 14px; text-align: center; padding: 40px 20px; border-top: 1px solid var(--footer-border); transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease; }
+        .footer-links { display: flex; justify-content: center; gap: 24px; margin-top: 16px; }
+        .footer-links a { color: var(--text-secondary); font-size: 20px; transition: color 0.3s ease; }
+        .footer-links a:hover { color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="loader-text">苑泽楷</div>
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav>
+        <div class="nav-container">
+            <div class="nav-logo" style="width: 36px;">ZK</div> 
+            <ul>
+                <li><a href="#about">About Me</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#education">Background</a></li>
+            </ul>
+            <button id="theme-toggle" aria-label="切换深色模式">
+                <svg class="moon-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                <svg class="sun-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            </button>
+        </div>
+    </nav>
+
+    <section id="about" class="hero-fullscreen-bg text-center">
+        <div class="hero-badge reveal">2023级本科在读</div>
+        <h1 class="hero-title reveal delay-1">苑泽楷</h1>
+        <p class="hero-subtitle reveal delay-2">
+            哈尔滨工业大学（深圳）· 计算机科学与技术<br>
+            <span style="font-size: 32px; color: #ffffff; font-weight: 500; display: block; margin-top: 12px; text-shadow: 0 4px 12px rgba(0,0,0,0.6);">站在科技与人文的十字路口</span>
+        </p>
+        
+        <div class="contact-info reveal delay-3">
+            <div class="contact-item"><i class="fas fa-phone"></i><span id="phone-text">13905302358</span><button class="copy-icon" data-target="phone-text" title="复制"><i class="fas fa-copy"></i></button></div>
+            <div class="contact-item"><i class="fas fa-envelope"></i><span id="email-text">cdjabah13@gmail.com</span><button class="copy-icon" data-target="email-text" title="复制"><i class="fas fa-copy"></i></button></div>
+            <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span>深圳</span></div>
+        </div>
+
+        <div class="cta-group reveal delay-3">
+            <a href="mailto:cdjabah13@gmail.com" class="btn-primary"><i class="fas fa-paper-plane"></i> 联系我</a>
+        
+        </div>
+    </section>
+
+    <section id="personal-vibe" class="bento-section">
+        <div class="text-center">
+            <h2 class="section-title reveal">🌟 不止于此 🌟</h2>
+            <p class="section-desc reveal delay-1">一个带有理想主义的现实主义者</p>
+        </div>
+        
+        <div class="bento-grid">
+            <div class="bento-item reveal hover-glow" style="background: linear-gradient(135deg, #429f7d 0%, #2b6a53 100%); color: white; display: flex; align-items: center; justify-content: center; text-align: center;">
+                <div class="glow-content">
+                    <h2 style="font-size: 42px; font-weight: 700; margin-bottom: 4px; color: white;">ENFJ</h2>
+                    <p style="color: rgba(255,255,255,0.9); font-size: 16px; font-weight: 500; margin: 0;">"忠实的大剑"</p>
+                </div>
+            </div>
+
+            <div class="bento-item reveal delay-1 hover-glow">
+                <div class="glow-content">
+                    <h3 style="margin-bottom: 8px;">日常人设</h3>
+                    <p style="margin-bottom: 12px;">工科与设计的双重背景，热爱折腾的行动派。</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        <span class="tag-small" style="margin:0;">♒ 水瓶座</span>
+                        <span class="tag-small" style="margin:0;">📍 山东菏泽</span>
+                        <span class="tag-small" style="margin:0;">🎨 工业设计+计算机</span>
+                        <span class="tag-small" style="margin:0;">⚔️ DDL战士</span>
+                        <span class="tag-small" style="margin:0;">🚗 老司机(2000KM+)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bento-item item-wide reveal delay-2 hover-glow">
+                <div class="glow-content">
+                    <h3 style="margin-bottom: 8px;">主打一个「松弛感」</h3>
+                    <p style="margin-bottom: 16px;">离开屏幕后，我通常在这些事情里寻找生活灵感与能量：</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">✈️ 旅行</span>
+                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">🚶‍♂️ City Walk 爱好者</span>
+                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">🎵 李健小粉丝</span>
+                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">🍺 微醺</span>
+                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">🖼️ 看展</span>
+                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">🎤 K歌</span>
+                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">🍗 美食</span>
+                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">📹 Vlog</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="bento-section" style="padding-top: 0;">
+        <div class="text-center">
+            <h2 class="section-title reveal">📸 Gallery 📸</h2>
+            <p class="section-desc reveal delay-1">镜头里的碎片</p>
+        </div>
+        
+        <div class="top9-grid reveal delay-2">
+            <div class="top9-item hover-glow" onclick="openLightbox(this)">
+                <div class="glow-content">
+                    <div class="img-wrapper">
+                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6029.PNG" alt="Top 9 照片">
+                    </div>
+                    <div class="top9-caption">北欧·冰岛</div>
+                </div>
+            </div>
+            
+            <div class="top9-item hover-glow" onclick="openLightbox(this)">
+                <div class="glow-content">
+                    <div class="img-wrapper">
+                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6030.PNG" alt="Top 9 照片">
+                    </div>
+                    <div class="top9-caption">英国·爱丁堡</div>
+                </div>
+            </div>
+
+            <div class="top9-item hover-glow" onclick="openLightbox(this)">
+                <div class="glow-content">
+                    <div class="img-wrapper">
+                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6031.PNG" alt="Top 9 照片">
+                    </div>
+                    <div class="top9-caption">英国·白崖</div>
+                </div>
+            </div>
+
+            <div class="top9-item hover-glow" onclick="openLightbox(this)">
+                <div class="glow-content">
+                    <div class="img-wrapper">
+                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6032.PNG" alt="Top 9 照片">
+                    </div>
+                    <div class="top9-caption">北欧·冰岛</div>
+                </div>
+            </div>
+
+            <div class="top9-item hover-glow" onclick="openLightbox(this)">
+                <div class="glow-content">
+                    <div class="img-wrapper">
+                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6036.PNG" alt="Top 9 照片">
+                    </div>
+                    <div class="top9-caption">北欧·冰岛</div>
+                </div>
+            </div>
+
+            <div class="top9-item hover-glow" onclick="openLightbox(this)">
+                <div class="glow-content">
+                    <div class="img-wrapper">
+                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6037.PNG" alt="Top 9 照片">
+                    </div>
+                    <div class="top9-caption">中国·深圳</div>
+                </div>
+            </div>
+
+            <div class="top9-item hover-glow" onclick="openLightbox(this)">
+                <div class="glow-content">
+                    <div class="img-wrapper">
+                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6039.PNG" alt="Top 9 照片">
+                    </div>
+                    <div class="top9-caption">中国·深圳</div>
+                </div>
+            </div>
+
+            <div class="top9-item hover-glow" onclick="openLightbox(this)">
+                <div class="glow-content">
+                    <div class="img-wrapper">
+                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6044.PNG" alt="Top 9 照片">
+                    </div>
+                    <div class="top9-caption">中国·广州</div>
+                </div>
+            </div>
+
+            <div class="top9-item hover-glow" onclick="openLightbox(this)">
+                <div class="glow-content">
+                    <div class="img-wrapper">
+                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6045.PNG" alt="Top 9 照片">
+                    </div>
+                    <div class="top9-caption">中国·深圳</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="education" class="education-section">
+        <div class="text-center">
+            <h2 class="section-title reveal">教育背景</h2>
+            <p class="section-desc reveal delay-1">学术基础与专业训练</p>
+        </div>
+
+        <div class="education-grid">
+            <div class="education-card reveal delay-1 hover-glow">
+                <div class="glow-content">
+                    <h3>计算机科学与技术</h3>
+                    <div class="school">哈尔滨工业大学（深圳）</div>
+                    <div class="period">2024-2028（本科）· 转专业后</div>
+                </div>
+            </div>
+            <div class="education-card reveal delay-2 hover-glow">
+                <div class="glow-content">
+                    <h3>工业设计</h3>
+                    <div class="school">哈尔滨工业大学（深圳）</div>
+                    <div class="period">2023-2024（本科）· 转专业前</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="experience-section">
+        <div class="text-center">
+            <h2 class="section-title reveal">实习经历</h2>
+            <p class="section-desc reveal delay-1">在 AI 产品领域的实践与成长</p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item reveal delay-1 hover-glow">
+                <div class="glow-content">
+                    <div class="company">超参数科技 (深圳) 有限公司</div>
+                    <h3>AI 产品经理</h3>
+                    <div class="date">2025.12 - 2026.02</div>
+                    <ul>
+                        <li>深度参与平台 v1.0 版本迭代，覆盖需求评审至测试验收全流程，保障 Agent 编排引擎核心稳定性</li>
+                        <li>独立负责平台工作量评测功能，完成整体 Figma 及前端页面逻辑交互确立</li>
+                        <li>针对传统黑盒测试覆盖率低的痛点，设计基于 DAG 图谱的白盒评测方案</li>
+                        <li>创新引入"语义映射"交互，通过 LLM 将技术链路转化为可读业务场景，大幅提升评测结果可解释性</li>
+                        <li>负责平台核心 Demo 工作流策划与搭建，基于 Redis 与 Python 节点落地有状态智能体案例</li>
+                        <li>搭建设计平台工作流成本计算、可视化图表生成等 copilot-skills</li>
+                    </ul>
+                    <div>
+                        <span class="tag-small">Agent 编排</span><span class="tag-small">产品设计</span><span class="tag-small">LLM</span><span class="tag-small">Redis</span><span class="tag-small">Python</span>
+                    </div>
+                    <a href="hyperparam-detail.html" class="bento-link" style="margin-top: 16px;">阅读实习复盘详解</a>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal delay-2 hover-glow">
+                <div class="glow-content">
+                    <div class="company">ABC 咨询社 AI 智能体项目</div>
+                    <h3>PM 产品经理</h3>
+                    <div class="date">2025.09 - 2025.12</div>
+                    <ul>
+                        <li>带领 15 人跨职能团队制定数据标准化规范，确立以"岗位名称"为核心的数据清洗逻辑</li>
+                        <li>设计并落地 Natural Language to SQL (NL2SQL) 交互逻辑，搭建 Coze 工作流</li>
+                        <li>让非技术人员通过自然语言查询/修改数据库，降低 B 端用户操作门槛</li>
+                        <li>统筹"爬虫数据获取 → Coze 知识库存储 → Agent 智能分析 → BI 可视化"完整链路</li>
+                        <li>输出标准 PRD 文档并协调交付</li>
+                    </ul>
+                    <div>
+                        <span class="tag-small">团队管理</span><span class="tag-small">Coze</span><span class="tag-small">NL2SQL</span><span class="tag-small">BI可视化</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="bento-section">
+        <div class="text-center">
+            <h2 class="section-title reveal">精选项目</h2>
+            <p class="section-desc reveal delay-1">从课堂理论到工程实践</p>
+        </div>
+        
+        <div class="bento-grid" id="bento-grid">
+            <div class="bento-item item-large reveal hover-glow">
+                <div class="bento-content">
+                    <span class="tag">产品负责人</span>
+                    <h3>时间胶囊</h3>
+                    <p>面向银发人群的语音交互+AI整理产品，零一学院孵化项目</p>
+                    <p style="margin-top: 12px;"><strong>核心成果：</strong></p>
+                    <p>• 线下访谈北京中关村50+高净值银发人群</p>
+                    <p>• 定义"语音交互+AI整理"产品MVP形态</p>
+                    <p>• Coze平台搭建AI工作流，RAG约束AI输出</p>
+                    <p>• VibeCoding 24小时完成PRD到原型开发</p>
+                    <div style="margin-top: 16px;">
+                        <span class="tag-small">Coze</span><span class="tag-small">RAG</span><span class="tag-small">AI辅助编程</span><span class="tag-small">语音交互</span>
+                    </div>
+                    <a href="https://github.com/Newzil-git/time-capsule" class="bento-link" target="_blank"><i class="fab fa-github"></i> 查看 GitHub</a>
+                </div>
+            </div>
+
+            <div class="bento-item reveal delay-1 hover-glow">
+                <div class="bento-content">
+                    <div class="award-badge"><i class="fas fa-trophy"></i> iF设计奖</div>
+                    <h3>孤独症智能机器人</h3>
+                    <p>桌面智能陪伴机器人</p>
+                    <p style="margin-top: 8px; font-size: 13px; color: var(--text-secondary);">2024.09 - 2025.06</p>
+                    <p style="margin-top: 12px;">与深圳5家孤独症机构合作，300+人次实测，IP+AI+陪伴产品框架</p>
+                    <div style="margin-top: 12px;">
+                        <span class="tag-small">iF全球设计奖</span><span class="tag-small">三创赛一等奖</span><span class="tag-small">Figma</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bento-item reveal delay-2 hover-glow">
+                <div class="bento-content">
+                    <span class="tag">实习经历</span>
+                    <h3>超参数科技</h3>
+                    <p>AI 产品经理实习生</p>
+                    <p style="margin-top: 8px; font-size: 13px; color: var(--text-secondary);">2025.12 - 2026.02</p>
+                    <p style="margin-top: 12px;">平台v1.0迭代、自动化评测设计、Agent场景落地、Copilot-skills构建</p>
+                    <div style="margin-top: 12px;">
+                        <span class="tag-small">Agent编排</span><span class="tag-small">LLM</span><span class="tag-small">Redis</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bento-item item-wide reveal delay-1 hover-glow">
+                <div class="bento-content">
+                    <span class="tag">技能栈</span>
+                    <h3>AI 产品全链路能力</h3>
+                    <p style="margin-bottom: 16px;">从需求分析到产品落地的完整能力矩阵</p>
+                    <div>
+                        <span class="tag-small">PRD 文档</span><span class="tag-small">Figma 原型</span><span class="tag-small">Coze 工作流</span>
+                        <span class="tag-small">Agent 编排</span><span class="tag-small">RAG</span><span class="tag-small">NL2SQL</span>
+                        <span class="tag-small">Python</span><span class="tag-small">敏捷开发</span><span class="tag-small">用户体验地图</span><span class="tag-small">数据分析</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <footer>
+        <p>&copy; 2026 苑泽楷。保持好奇，持续构建。</p>
+        <div class="footer-links">
+            <a href="mailto:cdjabah13@gmail.com"><i class="fas fa-envelope"></i></a>
+            <a href="https://github.com/ZK-Yuan" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://www.kdocs.cn/l/cc2Jh5OQMxmN" target="_blank"><i class="fas fa-palette"></i></a>
+        </div>
+    </footer>
+    
+    <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+        <span class="lightbox-close" onclick="closeLightbox(event)">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+        <div id="lightbox-caption"></div>
+    </div>
+    
+    <script>
+        // 1. 毛玻璃加载屏逻辑
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.classList.add('hidden');
+                setTimeout(() => loader.remove(), 800);
+            }, 1200);
+        });
+
+        // 2. 深色模式切换逻辑
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        themeToggleBtn.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // 3. Scroll Reveal 滚动动画逻辑
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        });
+
+        // 4. 全局高光光晕逻辑 (基于全局监听与 requestAnimationFrame 极速渲染)
+        const glowCards = document.querySelectorAll('.hover-glow');
+        if (glowCards.length > 0) {
+            let ticking = false;
+            document.addEventListener('mousemove', e => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        for (const card of glowCards) {
+                            const rect = card.getBoundingClientRect(),
+                                  x = e.clientX - rect.left,
+                                  y = e.clientY - rect.top;
+                            card.style.setProperty("--mouse-x", `${x}px`);
+                            card.style.setProperty("--mouse-y", `${y}px`);
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        }
+
+        // 5. 导航栏平滑滚动
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 60,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 6. 复制功能
+        document.querySelectorAll('.copy-icon').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const textToCopy = document.getElementById(targetId).textContent;
+                const icon = this.querySelector('i');
+                
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    icon.className = 'fas fa-check';
+                    this.classList.add('copied');
+                    this.setAttribute('title', '已复制');
+                    
+                    setTimeout(() => {
+                        icon.className = 'fas fa-copy';
+                        this.classList.remove('copied');
+                        this.setAttribute('title', '复制');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('复制失败:', err);
+                });
+            });
+        });
+
+        // =========================================
+        // 照片点击放大 (Lightbox) 逻辑
+        // =========================================
+        function openLightbox(element) {
+            const img = element.querySelector('img');
+            const caption = element.querySelector('.top9-caption').textContent;
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+
+            lightboxImg.src = img.src;
+            lightboxCaption.textContent = caption;
+            
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // 防止背后的网页跟着一起滚动
+        }
+
+        function closeLightbox(event) {
+            // 确保只在点击背景或关闭按钮时退出，点击图片本身不退出
+            if (event && event.target.id === 'lightbox-img') return;
+            
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto'; // 恢复背后的网页滚动
+            
+            // 动画结束后清空图片
+            setTimeout(() => {
+                if(!lightbox.classList.contains('active')) {
+                    document.getElementById('lightbox-img').src = '';
+                }
+            }, 300);
+        }
+
+        // URL 参数路由分发逻辑
+        document.addEventListener("DOMContentLoaded", function() {
+            // 获取网址 ? 后的参数，例如 ?mode=hr
+            const urlParams = new URLSearchParams(window.location.search);
+            const mode = urlParams.get('mode');
+
+            // 获取各个模块的 DOM 节点
+            const navProjects = document.querySelector('a[href="#projects"]').parentNode;
+            const navEducation = document.querySelector('a[href="#education"]').parentNode;
+            const navGallery = document.querySelector('a[href="#gallery"]').parentNode;
+            
+            const secEducation = document.getElementById('education');
+            const secExperience = document.getElementById('experience');
+            const secProjects = document.getElementById('projects');
+            const secGallery = document.getElementById('gallery');
+            const secTop9 = document.getElementById('top9-gallery'); // ← 新增这一行
+
+            // 如果链接是测试模式 (mode=test)
+            if (mode === 'test') {
+                if(secEducation) secEducation.style.display = 'none'; // 隐藏教育
+                if(secExperience) secExperience.style.display = 'none'; // 隐藏工作
+                if(secProjects) secProjects.style.display = 'none'; // 隐藏项目
+            }
+            // 如果什么参数都不带，默认展示所有内容
+        });
+    </script>
+</body>
+</html>
