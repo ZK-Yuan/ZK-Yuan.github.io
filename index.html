@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>苑泽楷 - AI 产品经理</title>
+    <title>苑泽楷 - 个人主页</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script>
@@ -855,10 +855,9 @@
             const urlParams = new URLSearchParams(window.location.search);
             const mode = urlParams.get('mode');
 
-            // 获取各个模块的 DOM 节点
-            const navProjects = document.querySelector('a[href="#projects"]').parentNode;
-            const navEducation = document.querySelector('a[href="#education"]').parentNode;
-            const navGallery = document.querySelector('a[href="#gallery"]').parentNode;
+            // 获取各个模块的 DOM 节点 (增加 ?. 防止找不到元素时报错崩溃)
+            const navEducation = document.querySelector('a[href="#education"]')?.parentNode;
+            const navGallery = document.querySelector('a[href="#gallery"]')?.parentNode;
             
             const secEducation = document.getElementById('education');
             const secExperience = document.getElementById('experience');
