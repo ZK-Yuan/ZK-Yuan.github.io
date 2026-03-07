@@ -165,7 +165,40 @@
         /* =========================================
            4. 页面区块 (第一屏 & 经历区)
            ========================================= */
-        .hero-fullscreen-bg { background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.8)), url('./images/hero-bg.jpg') no-repeat center center; background-size: cover; width: 100vw; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 60px; margin: 0; border-radius: 0; }
+        /* --- 新增：向下滚动指引箭头 --- */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px; /* 距离屏幕底部 40px */
+            left: 50%;
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.6); /* 半透明白色 */
+            text-decoration: none;
+            /* 引入自定义呼吸动画：2秒循环，平滑过渡 */
+            animation: bounceDown 2s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
+            transition: color 0.3s ease;
+            z-index: 10;
+        }
+
+        .scroll-indicator:hover {
+            color: rgba(255, 255, 255, 1); /* 鼠标放上去变纯白 */
+        }
+
+        /* 核心动画逻辑：同时控制透明度(渐变)和Y轴位移(自上而下) */
+        @keyframes bounceDown {
+            0% { 
+                opacity: 0; 
+                transform: translate(-50%, -20px); 
+            }
+            50% { 
+                opacity: 1; 
+                transform: translate(-50%, 0); 
+            }
+            100% { 
+                opacity: 0; 
+                transform: translate(-50%, 20px); 
+            }
+        }
+        .hero-fullscreen-bg { position: relative; background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.8)), url('./images/hero-bg.jpg') no-repeat center center; background-size: cover; width: 100vw; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 60px; margin: 0; border-radius: 0; }
         .hero-fullscreen-bg .hero-title { background: none; -webkit-text-fill-color: #ffffff; color: #ffffff; text-shadow: 0 4px 12px rgba(0,0,0,0.4); }
         .hero-fullscreen-bg .hero-subtitle { color: rgba(255, 255, 255, 0.9); text-shadow: 0 2px 10px rgba(0,0,0,0.4); }
         .hero-fullscreen-bg .contact-item { color: rgba(255, 255, 255, 0.85); }
@@ -296,10 +329,13 @@
 
         <div class="cta-group reveal delay-3">
             <a href="mailto:cdjabah13@gmail.com" class="btn-primary"><i class="fas fa-paper-plane"></i> 联系我</a>
-            <a href="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/%E8%8B%91%E6%B3%BD%E6%A5%B7_CV%20(1)_%E5%89%AF%E6%9C%AC.pdf" target="_blank" class="btn-secondary">
+            <a href="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/CV.test.pdf" target="_blank" class="btn-secondary">
                 <i class="fas fa-file-alt" style="margin-right: 6px;"></i> 查看PDF版简历
             </a>
         </div>
+        <a href="#education" class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </a>
     </section>
 
     <section id="education" class="education-section">
@@ -309,18 +345,18 @@
         </div>
 
         <div class="education-grid">
-            <div class="education-card reveal delay-1 hover-glow">
-                <div class="glow-content">
-                    <h3>计算机科学与技术</h3>
-                    <div class="school">哈尔滨工业大学（深圳）</div>
-                    <div class="period">2024-2028（本科）· 转专业后</div>
-                </div>
-            </div>
             <div class="education-card reveal delay-2 hover-glow">
                 <div class="glow-content">
                     <h3>工业设计</h3>
                     <div class="school">哈尔滨工业大学（深圳）</div>
                     <div class="period">2023-2024（本科）· 转专业前</div>
+                </div>
+            </div>
+            <div class="education-card reveal delay-1 hover-glow">
+                <div class="glow-content">
+                    <h3>计算机科学与技术</h3>
+                    <div class="school">哈尔滨工业大学（深圳）</div>
+                    <div class="period">2024-2028（本科）· 转专业后</div>
                 </div>
             </div>
         </div>
@@ -732,7 +768,6 @@
             const secTop9 = document.getElementById('top9-gallery'); 
 
             if (mode === 'test') {
-                if(secEducation) secEducation.style.display = 'none'; 
                 if(secExperience) secExperience.style.display = 'none'; 
                 if(secProjects) secProjects.style.display = 'none'; 
             } 
