@@ -629,14 +629,22 @@
     </div>
     
     <script>
-        // 1. 毛玻璃加载屏逻辑
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const loader = document.getElementById('loader');
+        // 1. 毛玻璃加载屏逻辑 (修复无限加载卡死 Bug)
+        const hideLoader = () => {
+            const loader = document.getElementById('loader');
+            if (loader && !loader.classList.contains('hidden')) {
                 loader.classList.add('hidden');
-                setTimeout(() => loader.remove(), 800);
-            }, 1200);
+                setTimeout(() => loader.remove(), 800); // 等待 CSS 渐隐动画结束后移除 DOM
+            }
+        };
+
+        // 机制 1：HTML 骨架解析完毕后即准备关闭，无需干等大图片下载
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(hideLoader, 800);
         });
+
+        // 机制 2：极端网络环境下的强制兜底纪律（最多只允许加载屏存在 3 秒）
+        setTimeout(hideLoader, 3000);
 
         // 2. 深色模式切换逻辑
         const themeToggleBtn = document.getElementById('theme-toggle');
