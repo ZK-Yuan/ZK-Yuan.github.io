@@ -68,6 +68,9 @@
         .article-content li { margin-bottom: 12px; line-height: 1.7; }
         
         .highlight-quote { padding: 24px; background: var(--bento-bg); border-left: 4px solid var(--primary); border-radius: 0 12px 12px 0; margin: 32px 0; font-size: 16px; color: var(--text-primary); box-shadow: 0 4px 20px var(--bento-shadow); }
+        
+        /* 代码/术语标签样式 */
+        .tech-tag { background: var(--tag-bg); color: var(--primary); padding: 2px 8px; border-radius: 6px; font-size: 14px; font-family: monospace; margin: 0 2px; }
 
         /* --- 突破版心的图片/动图容器 --- */
         .breakout-media { width: 100vw; max-width: 1000px; margin: 40px 50%; transform: translateX(-50%); border-radius: 20px; overflow: hidden; background: var(--img-bg); border: 1px solid var(--border-color); }
@@ -81,7 +84,7 @@
         /* --- 数据高光便当盒 --- */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 40px 0; }
         .stat-card { background: var(--bento-bg); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center; box-shadow: 0 4px 20px var(--bento-shadow); }
-        .stat-num { font-size: 28px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+        .stat-num { font-size: 32px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
         .stat-desc { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
 
         /* 镜头对焦质感的滚动渐显动画 */
@@ -112,102 +115,108 @@
 
     <header class="article-header reveal">
         <span class="article-tag">实习项目复盘</span>
-        <h1 class="article-title">走向工业化交付：Agent 评测平台与双端成本引擎闭环</h1>
+        <h1 class="article-title">走向工业化交付：内部类 Coze/Dify 平台 1.0 上线与核心链路重构</h1>
         <div class="article-meta">
             <span><i class="fas fa-calendar-alt"></i> 2025.12 - 2026.03</span>
-            <span><i class="fas fa-building"></i> 超参数科技 (Knit 项目)</span>
-            <span><i class="fas fa-user-tie"></i> 技术型 AI 产品经理 (AIPM)</span>
+            <span><i class="fas fa-building"></i> 超参数科技 (深圳) 有限公司</span>
+            <span><i class="fas fa-user-tie"></i> AI 产品经理 (技术型 AIPM)</span>
         </div>
     </header>
 
     <div class="breakout-media reveal delay-1">
-        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Agent 评测与治理平台">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Agent 编排平台架构展示">
     </div>
-    <div class="media-caption reveal delay-1">Knit 平台 v1.0：面向 Agent 工业化交付的评测与治理看板</div>
+    <div class="media-caption reveal delay-1">平台 v1.0：面向 Agent 工业化交付的编排与治理中枢</div>
 
     <article class="article-content">
         <div class="highlight-quote reveal">
-            <strong>核心定位：</strong>在实习期间，我承担了偏<strong>“技术型 AIPM”</strong>的复合角色。一边从产品维度定义信息架构与交互范式（Agent-Driven UI），一边下场编写 Python 引擎与构建 JSON 数据库，用代码打通业务的最后一公里。
+            <strong>核心定位：</strong>在实习期间，我作为技术型 AIPM，主要负责公司内部<strong>类 Coze / Dify 平台 1.0 版本</strong>的上线闭环。深入研发交付与测试底层，推进平台在复杂 Agent 场景、白盒自动化评测与基建算力精算三大核心方向的落地。
         </div>
-
-        <p class="reveal">
-            我将工作对象严格聚焦在“AI 工作流与 Agent 的工业化交付”上，致力于解决大模型落地过程中的三大痛点：<strong>可测（EvalFlow）、可诊断（Trace 归因）、可算账（模型与基建双端 ROI）</strong>。
-        </p>
 
         <div class="stats-grid reveal">
             <div class="stat-card">
-                <div class="stat-num">v1.0</div>
-                <div class="stat-desc">独立梳理 PRD 与术语体系，打通评测架构闭环</div>
+                <div class="stat-num">30+</div>
+                <div class="stat-desc">修复 P0/P1 级核心架构缺陷</div>
             </div>
             <div class="stat-card">
-                <div class="stat-num">Data Flywheel</div>
-                <div class="stat-desc">规划线上日志转评测资产的业务逻辑</div>
+                <div class="stat-num">&lt;10<span style="font-size:18px;">min</span></div>
+                <div class="stat-desc">复杂工作流排障时间压缩</div>
             </div>
             <div class="stat-card">
-                <div class="stat-num">3 阶架构</div>
-                <div class="stat-desc">数据驱动+脚本计算+LLM总结，彻底压制幻觉</div>
+                <div class="stat-num">95%</div>
+                <div class="stat-desc">核心评测用例业务验收通过率</div>
             </div>
         </div>
 
-        <h2 class="reveal">01 / 产品架构：EvalFlow 评测平台与体验重构</h2>
+        <h2 class="reveal">01 / 研发协同与平台 1.0 交付</h2>
         <p class="reveal">
-            面对传统大模型“测试靠手工、排错靠猜”的窘境，我反向梳理并沉淀了 EvalFlow 的完整信息架构与核心术语体系，落地了可执行的模块化方案。
+            在 v1.0 版本极短的迭代周期内，我深度参与并主导了 UAT 测试验收的全流程（涵盖验收标准制定、用例设计、缺陷分级、复现定位、回归验证与上线 Check）。
+        </p>
+        <p class="reveal">
+            我利用<strong>抓包工具与后端日志联动</strong>，将系统异常精准归因到具体节点与链路环节，形成可执行的复现路径与修复建议。在此期间，成功推动修复了 <strong>30+ 项 P0/P1 级核心缺陷</strong>，包括但不限于：
         </p>
         <ul class="reveal">
-            <li><strong>完整信息架构：</strong>确立了“评测集生成/审核 → 跑批/门禁 → A/B 对撞 → 诊断修复 → 成本管理”的黄金业务链路。</li>
-            <li><strong>创新交互范式：</strong>定义并固化了 <strong>Agent-Driven UI</strong>，让 Copilot 的反馈直接驱动主视图的物理属性变更。</li>
+            <li>节点参数透传错误与变量映射异常</li>
+            <li>循环节点 Schema 错位导致的数据丢失与死锁</li>
+            <li>Webhook 路径残缺与 Redis 变量映射错误</li>
+            <li>Milvus 节点能力缺失，以及文本输入互斥与 UI 交互阻塞</li>
         </ul>
+        <p class="reveal">
+            通过严密的工程纪律测试，最终保障了 Agent 平台编排引擎核心链路按期交付上线。
+        </p>
 
         <div class="reveal">
             <div class="inline-media">
-                <img src="https://images.unsplash.com/photo-1618761714954-0b8cd0026356?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="UI 商业化打磨">
+                <img src="https://images.unsplash.com/photo-1618761714954-0b8cd0026356?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="核心链路缺陷排查与修复">
             </div>
-            <div class="media-caption">对标 LangSmith：三栏用例卡 (Input/Expected/Actual) 与性能元数据透出</div>
+            <div class="media-caption">利用抓包与日志联动，进行复杂节点的数据流转溯源与诊断</div>
         </div>
 
+        <h2 class="reveal">02 / 自动化评测平台设计 (EvalFlow)</h2>
         <p class="reveal">
-            在体验侧，我深度重构了实验管理与执行看板。将新建实验表单流进行标准化，透出 Latency / Tokens / Score 等核心性能元数据，并通过异常高亮、Trace Diff 下钻等设计，极大地提升了研发的“排错效率”。
-        </p>
-
-        <h2 class="reveal">02 / 数据飞轮：从生产环境到评测资产</h2>
-        <p class="reveal">
-            Agent 的价值在于持续迭代。我将“线上日志观测”提炼为独立的生命周期模块，设计了从 <strong>Production Logs 到 Eval Sets</strong> 的闭环流转路径。
-        </p>
-        <p class="reveal">
-            在工程约束上，明确了“线上 output 不能直接等同于 reference output”的铁律。为此，我们引入 Copilot 作为“标注与清洗”节点，将带有噪音的脏数据自动转化为可用的期望输出，真正建立起可持续转动的 <strong>Data Flywheel</strong>。
-        </p>
-
-        <h2 class="reveal">03 / 成本引擎：结构化与防幻觉的 Skill 落地</h2>
-        <p class="reveal">
-            AI 的商业化必须回答成本问题。为了从“会说”升级到“会算、算对、可复用”，我基于底层数据资产构建了两个硬核 Skill：
-        </p>
-        
-        <h3 class="reveal">Workflow Model Advisor (模型选型与降本)</h3>
-        <p class="reveal">
-            建立 `pricing_config.json`（报价/积分汇率）与 `capabilities.json`（5 维能力标签）。通过编写 `model_matcher.py` 进行硬逻辑过滤与性价比计算，彻底解决了选型过程中的“盲目性、价格幻觉与能力幻觉”。最终通过 Skill 输出稳定链路下的 Top-N 平替建议报告。
-        </p>
-
-        <h3 class="reveal">Infra Cost Advisor (基建算力精算)</h3>
-        <p class="reveal">
-            清洗并结构化多云厂商报价数据，编写 `infra_calculator.py` 实现 CPU/RAM/存储可传参的合并核算。输出明确的倍率、节省百分比与绝对金额，形成了<strong>“模型端 + 基建端”的双端 ROI 叙事闭环</strong>。
-        </p>
-
-        <div class="reveal">
-            <div class="breakout-media" style="margin-top: 30px;">
-                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="底层数据资产与脚本计算逻辑">
-            </div>
-            <div class="media-caption">数据驱动 + 脚本计算 + LLM 总结：用三层解耦架构彻底压住 LLM 幻觉风险</div>
-        </div>
-
-        <h2 class="reveal">04 / 认知沉淀：技术型 PM 的能力模型</h2>
-        <p class="reveal">
-            这段经历让我完成了从纯产品思维到“工程化交付”视角的跃迁：
+            针对传统黑盒测试覆盖率极低的痛点，我独立负责了平台工作量评测功能的从 0 到 1，完成整体 Figma 及前端页面逻辑的交互确立，打通了“评测集管理 → 实验跑批看板 → 门禁拦截 → A/B 对撞 → Trace 下钻 → 诊断报告与修复建议”的端到端链路。
         </p>
         <ul class="reveal">
-            <li><strong>产品推演能力：</strong>习惯于从“业务场景 → 用户任务 → 系统约束 → 交互闭环”倒推复杂后台的信息架构。</li>
-            <li><strong>工程与数据思维：</strong>深刻理解了如何用“数据结构+代码硬逻辑”框定不稳定 LLM 的边界，让 Agent 产出变得可回归、可验证。</li>
-            <li><strong>独立排障底气：</strong>能够在无文档的荒荒环境下，利用抓包与日志定位根因，补齐了边缘场景测试截面与防 AI 误改的安全存档机制。</li>
+            <li><strong>DAG 白盒评测方案：</strong>实现了节点级的输入/输出对比，并透出耗时、Token 等性能元数据，支持细粒度的 case-by-case diff 对比。</li>
+            <li><strong>“语义映射”交互创新：</strong>引入 LLM 将生硬的技术链路转化为可读的业务场景与失败归因。直接把节点差异翻译成<span class="tech-tag">为什么错</span>、<span class="tech-tag">错在哪</span>、<span class="tech-tag">该改哪一步</span>。</li>
         </ul>
+        <p class="reveal">
+            这套白盒评测体系将复杂工作流的缺陷定位排障时间从“小时级”暴力压缩至 <strong>10 分钟内</strong>，并使核心评测用例的业务验收通过率跃升至 <strong>95%</strong>。
+        </p>
+
+        <h2 class="reveal">03 / 复杂游戏 Agent 场景落地</h2>
+        <p class="reveal">
+            为验证引擎在复杂状态流转与多工具编排下的稳定性与可扩展性，我主导了平台核心 Demo 工作流的策划与搭建。
+        </p>
+        <p class="reveal">
+            基于 <span class="tech-tag">Redis</span>、<span class="tech-tag">Python</span>、<span class="tech-tag">JS</span>、<span class="tech-tag">Milvus</span> 等节点，成功落地了复杂的游戏状态智能体案例（包含具备长期记忆的好感度 NPC、以及遵循经济模型的动态交易员）。
+        </p>
+        <p class="reveal">
+            <strong>核心架构亮点：</strong>将“记忆与状态”抽象为可插拔的工具节点。Agent 能够根据场景动态选择策略（读取 Redis 短期记忆、冷启动时不读取、长对话中仅读取摘要/关键事实），并将记忆命中情况与注入内容完整纳入 Trace 追踪，便于后期复盘与评测。
+        </p>
+        
+        <div class="reveal">
+            <div class="breakout-media" style="margin-top: 30px;">
+                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="复杂游戏 Agent 工作流">
+            </div>
+            <div class="media-caption">标杆案例落地：可插拔状态节点支撑面向 3 家 B 端游戏开发者的商业化演示</div>
+        </div>
+
+        <h2 class="reveal">04 / 平台 Copilot-Skills 构建与双端成本核算</h2>
+        <p class="reveal">
+            AI 的工业化落地必须回答成本问题。我搭建并设计了平台工作流的成本计算与可视化图表生成等扩展 Skills，致力于降低“成本黑盒”与“选型拍脑袋”带来的投产风险。
+        </p>
+        <p class="reveal">
+            在模型选型与降本建议上，我设计了严谨的<strong>三层解耦架构</strong>：
+        </p>
+        <ul class="reveal">
+            <li><strong>数据层：</strong>建立详尽的价格与能力维度配置库。</li>
+            <li><strong>脚本计算层：</strong>作为确定性引擎，按场景/复杂度/上下文/格式稳定性/速度要求，进行硬逻辑的能力过滤与性价比排序。</li>
+            <li><strong>LLM 总结层：</strong>将生硬的计算数据封装为人类可读的高保真降本建议报告。</li>
+        </ul>
+        <p class="reveal">
+            此外，我还将核算逻辑扩展至服务器、存储等基建底座，实现了模型层与基建层双管齐下的 ROI 核算，为成本看板提供了可靠的底层支撑。
+        </p>
 
     </article>
 
