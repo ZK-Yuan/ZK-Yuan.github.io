@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script>
+        // 强制浏览器每次刷新都回到顶部
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+
         const currentTheme = localStorage.getItem('theme') || 'light';
         if (currentTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
     </script>
@@ -36,21 +42,14 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
         body { background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.7; overflow-x: hidden; transition: background-color 0.5s ease, color 0.5s ease; }
         
-        /* 全局噪点纹理 */
-        body::before {
-            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none; z-index: 99999; opacity: 0.03;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-        [data-theme="dark"] body::before { opacity: 0.05; }
-
-        /* 极简导航栏 (带返回按钮) */
+        /* 极简导航栏 */
         nav { position: fixed; top: 0; width: 100%; height: 54px; background-color: var(--nav-bg); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); display: flex; justify-content: center; align-items: center; z-index: 9999; border-bottom: 1px solid var(--border-color); transition: background-color 0.5s ease, border-color 0.5s ease; }
         .nav-container { display: flex; width: 100%; max-width: 1000px; padding: 0 20px; justify-content: space-between; align-items: center; }
         .back-link { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text-primary); font-size: 15px; font-weight: 500; opacity: 0.8; transition: opacity 0.3s ease, color 0.3s ease; }
         .back-link:hover { opacity: 1; color: var(--primary); }
-        #theme-toggle { background: none; border: none; cursor: pointer; color: var(--text-primary); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease; }
-        #theme-toggle:hover { background-color: rgba(0,0,0,0.05); }
+        
+        #theme-toggle { background: var(--bento-bg); border: 1px solid var(--border-color); cursor: pointer; color: var(--text-primary); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 2px 10px var(--bento-shadow); }
+        #theme-toggle:hover { background-color: var(--primary); color: #ffffff; transform: scale(1.1); border-color: var(--primary); box-shadow: 0 4px 15px rgba(0, 113, 227, 0.3); }
         .sun-icon { display: none; } .moon-icon { display: block; }
         [data-theme="dark"] .sun-icon { display: block; } [data-theme="dark"] .moon-icon { display: none; }
 
@@ -67,19 +66,25 @@
         .article-content strong { color: var(--text-primary); font-weight: 600; }
         .article-content ul { margin-bottom: 24px; padding-left: 20px; color: var(--text-secondary); }
         .article-content li { margin-bottom: 12px; line-height: 1.7; }
+        
+        .highlight-quote { padding: 24px; background: var(--bento-bg); border-left: 4px solid var(--primary); border-radius: 0 12px 12px 0; margin: 32px 0; font-size: 16px; color: var(--text-primary); box-shadow: 0 4px 20px var(--bento-shadow); }
 
         /* --- 突破版心的图片/动图容器 --- */
         .breakout-media { width: 100vw; max-width: 1000px; margin: 40px 50%; transform: translateX(-50%); border-radius: 20px; overflow: hidden; background: var(--img-bg); border: 1px solid var(--border-color); }
         .breakout-media img, .breakout-media video { width: 100%; height: auto; display: block; }
-        .media-caption { text-align: center; font-size: 14px; color: var(--text-secondary); margin-top: 12px; font-style: italic; }
+        
+        .inline-media { width: 100%; border-radius: 12px; overflow: hidden; background: var(--img-bg); border: 1px solid var(--border-color); margin: 32px 0 12px; }
+        .inline-media img, .inline-media video { width: 100%; height: auto; display: block; }
+        
+        .media-caption { text-align: center; font-size: 14px; color: var(--text-secondary); margin-top: 12px; margin-bottom: 32px; font-style: italic; }
 
         /* --- 数据高光便当盒 --- */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 40px 0; }
         .stat-card { background: var(--bento-bg); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center; box-shadow: 0 4px 20px var(--bento-shadow); }
-        .stat-num { font-size: 36px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+        .stat-num { font-size: 28px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
         .stat-desc { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
 
-        /* 升级版：带镜头对焦质感的滚动渐显动画 */
+        /* 镜头对焦质感的滚动渐显动画 */
         .reveal { opacity: 0; transform: translateY(40px); filter: blur(10px); transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); filter: blur(0); }
         .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.2s; }
@@ -107,83 +112,116 @@
 
     <header class="article-header reveal">
         <span class="article-tag">实习项目复盘</span>
-        <h1 class="article-title">超参数科技：Agent 编排引擎 1.0 上线与白盒评测系统设计</h1>
+        <h1 class="article-title">走向工业化交付：Agent 评测平台与双端成本引擎闭环</h1>
         <div class="article-meta">
             <span><i class="fas fa-calendar-alt"></i> 2025.12 - 2026.03</span>
-            <span><i class="fas fa-user-tie"></i> AI 产品经理</span>
+            <span><i class="fas fa-building"></i> 超参数科技 (Knit 项目)</span>
+            <span><i class="fas fa-user-tie"></i> 技术型 AI 产品经理 (AIPM)</span>
         </div>
     </header>
 
     <div class="breakout-media reveal delay-1">
-        <img src="https://images.unsplash.com/photo-1661956602116-aa6865609028?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Agent编排引擎界面">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Agent 评测与治理平台">
     </div>
+    <div class="media-caption reveal delay-1">Knit 平台 v1.0：面向 Agent 工业化交付的评测与治理看板</div>
 
     <article class="article-content">
+        <div class="highlight-quote reveal">
+            <strong>核心定位：</strong>在实习期间，我承担了偏<strong>“技术型 AIPM”</strong>的复合角色。一边从产品维度定义信息架构与交互范式（Agent-Driven UI），一边下场编写 Python 引擎与构建 JSON 数据库，用代码打通业务的最后一公里。
+        </div>
+
         <p class="reveal">
-            在超参数科技实习期间，我主要负责公司内部<strong>类 Coze/Dify 编排平台 1.0 版本</strong>的上线工作。面对复杂的大模型技术链路，我不仅深入参与了底层的研发协同交付，更独立主导了解决“Agent 幻觉调试难”的白盒评测平台设计。
+            我将工作对象严格聚焦在“AI 工作流与 Agent 的工业化交付”上，致力于解决大模型落地过程中的三大痛点：<strong>可测（EvalFlow）、可诊断（Trace 归因）、可算账（模型与基建双端 ROI）</strong>。
         </p>
 
         <div class="stats-grid reveal">
             <div class="stat-card">
-                <div class="stat-num">30+</div>
-                <div class="stat-desc">修复 P0/P1 级核心缺陷</div>
+                <div class="stat-num">v1.0</div>
+                <div class="stat-desc">独立梳理 PRD 与术语体系，打通评测架构闭环</div>
             </div>
             <div class="stat-card">
-                <div class="stat-num">&lt;10<span style="font-size:18px;">min</span></div>
-                <div class="stat-desc">排障时间大幅压缩</div>
+                <div class="stat-num">Data Flywheel</div>
+                <div class="stat-desc">规划线上日志转评测资产的业务逻辑</div>
             </div>
             <div class="stat-card">
-                <div class="stat-num">95%</div>
-                <div class="stat-desc">评测用例业务验收通过率</div>
+                <div class="stat-num">3 阶架构</div>
+                <div class="stat-desc">数据驱动+脚本计算+LLM总结，彻底压制幻觉</div>
             </div>
         </div>
 
-        <h2 class="reveal">一、 研发协同与平台 1.0 交付</h2>
+        <h2 class="reveal">01 / 产品架构：EvalFlow 评测平台与体验重构</h2>
         <p class="reveal">
-            深度参与平台 v1.0 版本迭代，主导 UAT 测试验收全流程。在极短的敏捷周期内，准确定位并推动修复了 30 余项 P0/P1 级核心缺陷（包含节点参数透传错误、UI交互阻塞等），最终保障了 Agent 平台编排引擎核心链路按期高可用交付上线。
+            面对传统大模型“测试靠手工、排错靠猜”的窘境，我反向梳理并沉淀了 EvalFlow 的完整信息架构与核心术语体系，落地了可执行的模块化方案。
         </p>
-
-        <h2 class="reveal">二、 自动化白盒评测平台设计</h2>
-        <p class="reveal">
-            <strong>痛点：</strong>传统黑盒测试覆盖率极低，开发者难以定位多步推理工作流中的卡点。<br>
-            <strong>解法：</strong>我独立负责了平台工作量评测功能，完成整体 Figma 及前端页面逻辑交互确立。针对痛点，设计了基于 <strong>DAG (有向无环图)</strong> 图谱的白盒评测方案。
-        </p>
-
-        <div class="reveal">
-            <div class="breakout-media" style="margin-top: 30px; margin-bottom: 12px;">
-                <img src="https://images.unsplash.com/photo-1618761714954-0b8cd0026356?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="DAG图谱白盒评测方案">
-            </div>
-            <div class="media-caption">Figma 页面逻辑与基于 DAG 图谱的评测交互设计</div>
-        </div>
-
-        <h3 class="reveal">引入“语义映射”交互</h3>
-        <p class="reveal">
-            创新性地引入了“语义映射”机制，通过调用 LLM 将生硬的底层技术链路（API调用、参数传递）转化为非技术人员可读的业务场景描述。这一设计将复杂工作流的缺陷定位排障时间从“小时级”压缩至 <strong>10 分钟内</strong>，核心评测用例的业务验收通过率提升至 <strong>95%</strong>。
-        </p>
-
-        <h2 class="reveal">三、 复杂游戏 Agent 场景落地</h2>
-        <p class="reveal">
-            为了验证引擎的极高稳定性，我亲自负责平台核心 Demo 工作流策划与搭建。
-        </p>
-        <p class="reveal">
-            基于 Redis、Python、JS、Milvus 向量数据库等节点，成功落地了复杂的<strong>游戏状态智能体案例</strong>（如具备长期记忆的好感度 NPC、遵循经济逻辑的动态交易员）。这套案例作为平台 V1.0 的标杆能力，强有力地支撑了销售团队面向 3 家 B 端游戏开发者客户的商业化演示。
-        </p>
-
-        <div class="reveal">
-            <div class="breakout-media" style="margin-top: 30px; margin-bottom: 12px;">
-                <video autoplay loop muted playsinline>
-                    <source src="https://cdn.dribbble.com/uploads/39417/original/1c6d32152a23eb11bda705eb55d36cff.mp4" type="video/mp4">
-                </video>
-            </div>
-            <div class="media-caption">游戏状态智能体（动态交易员）工作流演示</div>
-        </div>
-
-        <h2 class="reveal">四、 平台 Copilot-skills 构建</h2>
         <ul class="reveal">
-            <li><strong>资源评估系统：</strong>搭建设计了平台工作流的大模型 Token 及服务器资源的成本计算能力。</li>
-            <li><strong>可视化工具：</strong>实现了基于前端数据直接生成可视化图表的 Copilot 扩展技能，进一步完善了平台的生态闭环。</li>
+            <li><strong>完整信息架构：</strong>确立了“评测集生成/审核 → 跑批/门禁 → A/B 对撞 → 诊断修复 → 成本管理”的黄金业务链路。</li>
+            <li><strong>创新交互范式：</strong>定义并固化了 <strong>Agent-Driven UI</strong>，让 Copilot 的反馈直接驱动主视图的物理属性变更。</li>
         </ul>
+
+        <div class="reveal">
+            <div class="inline-media">
+                <img src="https://images.unsplash.com/photo-1618761714954-0b8cd0026356?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="UI 商业化打磨">
+            </div>
+            <div class="media-caption">对标 LangSmith：三栏用例卡 (Input/Expected/Actual) 与性能元数据透出</div>
+        </div>
+
+        <p class="reveal">
+            在体验侧，我深度重构了实验管理与执行看板。将新建实验表单流进行标准化，透出 Latency / Tokens / Score 等核心性能元数据，并通过异常高亮、Trace Diff 下钻等设计，极大地提升了研发的“排错效率”。
+        </p>
+
+        <h2 class="reveal">02 / 数据飞轮：从生产环境到评测资产</h2>
+        <p class="reveal">
+            Agent 的价值在于持续迭代。我将“线上日志观测”提炼为独立的生命周期模块，设计了从 <strong>Production Logs 到 Eval Sets</strong> 的闭环流转路径。
+        </p>
+        <p class="reveal">
+            在工程约束上，明确了“线上 output 不能直接等同于 reference output”的铁律。为此，我们引入 Copilot 作为“标注与清洗”节点，将带有噪音的脏数据自动转化为可用的期望输出，真正建立起可持续转动的 <strong>Data Flywheel</strong>。
+        </p>
+
+        <h2 class="reveal">03 / 成本引擎：结构化与防幻觉的 Skill 落地</h2>
+        <p class="reveal">
+            AI 的商业化必须回答成本问题。为了从“会说”升级到“会算、算对、可复用”，我基于底层数据资产构建了两个硬核 Skill：
+        </p>
+        
+        <h3 class="reveal">Workflow Model Advisor (模型选型与降本)</h3>
+        <p class="reveal">
+            建立 `pricing_config.json`（报价/积分汇率）与 `capabilities.json`（5 维能力标签）。通过编写 `model_matcher.py` 进行硬逻辑过滤与性价比计算，彻底解决了选型过程中的“盲目性、价格幻觉与能力幻觉”。最终通过 Skill 输出稳定链路下的 Top-N 平替建议报告。
+        </p>
+
+        <h3 class="reveal">Infra Cost Advisor (基建算力精算)</h3>
+        <p class="reveal">
+            清洗并结构化多云厂商报价数据，编写 `infra_calculator.py` 实现 CPU/RAM/存储可传参的合并核算。输出明确的倍率、节省百分比与绝对金额，形成了<strong>“模型端 + 基建端”的双端 ROI 叙事闭环</strong>。
+        </p>
+
+        <div class="reveal">
+            <div class="breakout-media" style="margin-top: 30px;">
+                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="底层数据资产与脚本计算逻辑">
+            </div>
+            <div class="media-caption">数据驱动 + 脚本计算 + LLM 总结：用三层解耦架构彻底压住 LLM 幻觉风险</div>
+        </div>
+
+        <h2 class="reveal">04 / 认知沉淀：技术型 PM 的能力模型</h2>
+        <p class="reveal">
+            这段经历让我完成了从纯产品思维到“工程化交付”视角的跃迁：
+        </p>
+        <ul class="reveal">
+            <li><strong>产品推演能力：</strong>习惯于从“业务场景 → 用户任务 → 系统约束 → 交互闭环”倒推复杂后台的信息架构。</li>
+            <li><strong>工程与数据思维：</strong>深刻理解了如何用“数据结构+代码硬逻辑”框定不稳定 LLM 的边界，让 Agent 产出变得可回归、可验证。</li>
+            <li><strong>独立排障底气：</strong>能够在无文档的荒荒环境下，利用抓包与日志定位根因，补齐了边缘场景测试截面与防 AI 误改的安全存档机制。</li>
+        </ul>
+
     </article>
+
+    <footer style="padding: 60px 20px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 40px;">
+        <h2 class="reveal" style="font-size: 28px; font-weight: 700; margin-bottom: 24px; letter-spacing: -0.02em;">
+            探讨下一个 AI 场景的可能？
+        </h2>
+        <a href="mailto:cdjabah13@gmail.com" class="btn-primary reveal delay-1" style="font-size: 16px; padding: 14px 36px; display: inline-flex; align-items: center;">
+            <i class="fas fa-paper-plane" style="margin-right: 8px;"></i> 建立连接
+        </a>
+        <div style="margin-top: 60px; color: var(--text-secondary); font-size: 13px;">
+            &copy; 2026 苑泽楷. Crafted with curiosity.
+        </div>
+    </footer>
 
     <script>
         // 深色模式逻辑
