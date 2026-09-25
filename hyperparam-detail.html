@@ -1,264 +1,219 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>超参数科技实习复盘 - 苑泽楷</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script>
-        // 强制浏览器每次刷新都回到顶部
-        if ('scrollRestoration' in history) {
-            history.scrollRestoration = 'manual';
-        }
-        window.scrollTo(0, 0);
-
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        if (currentTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-    </script>
-
-    <style>
-        /* 继承主页的变量体系 */
-        :root {
-            --bg-primary: #f5f5f7; --bg-secondary: #ffffff;
-            --text-primary: #1d1d1f; --text-secondary: #86868b;
-            --nav-bg: rgba(255, 255, 255, 0.7); 
-            --border-color: rgba(0, 0, 0, 0.05); 
-            --bento-bg: #ffffff; --bento-shadow: rgba(0, 0, 0, 0.03); 
-            --primary: #0071e3; --tag-bg: rgba(0, 113, 227, 0.1);
-            --img-bg: #e2e2e2;
-        }
-
-        [data-theme="dark"] {
-            --bg-primary: #000000; --bg-secondary: #161618;
-            --text-primary: #f5f5f7; --text-secondary: #a1a1a6;
-            --nav-bg: rgba(0, 0, 0, 0.7); 
-            --border-color: rgba(255, 255, 255, 0.1); 
-            --bento-bg: #1c1c1e; --bento-shadow: rgba(0, 0, 0, 0.3); 
-            --primary: #2997ff; --tag-bg: rgba(41, 151, 255, 0.15);
-            --img-bg: #2c2c2e;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
-        body { background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.7; overflow-x: hidden; transition: background-color 0.5s ease, color 0.5s ease; }
-        
-        /* 极简导航栏 */
-        nav { position: fixed; top: 0; width: 100%; height: 54px; background-color: var(--nav-bg); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); display: flex; justify-content: center; align-items: center; z-index: 9999; border-bottom: 1px solid var(--border-color); transition: background-color 0.5s ease, border-color 0.5s ease; }
-        .nav-container { display: flex; width: 100%; max-width: 1000px; padding: 0 20px; justify-content: space-between; align-items: center; }
-        .back-link { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text-primary); font-size: 15px; font-weight: 500; opacity: 0.8; transition: opacity 0.3s ease, color 0.3s ease; }
-        .back-link:hover { opacity: 1; color: var(--primary); }
-        
-        #theme-toggle { background: var(--bento-bg); border: 1px solid var(--border-color); cursor: pointer; color: var(--text-primary); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 2px 10px var(--bento-shadow); }
-        #theme-toggle:hover { background-color: var(--primary); color: #ffffff; transform: scale(1.1); border-color: var(--primary); box-shadow: 0 4px 15px rgba(0, 113, 227, 0.3); }
-        .sun-icon { display: none; } .moon-icon { display: block; }
-        [data-theme="dark"] .sun-icon { display: block; } [data-theme="dark"] .moon-icon { display: none; }
-
-        /* --- 文章布局核心：窄版心阅读区 --- */
-        .article-header { max-width: 800px; margin: 140px auto 40px; padding: 0 20px; text-align: center; }
-        .article-tag { display: inline-block; font-size: 13px; font-weight: 600; color: var(--primary); background: var(--tag-bg); padding: 6px 14px; border-radius: 20px; margin-bottom: 20px; }
-        .article-title { font-size: 42px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 16px; line-height: 1.2; }
-        .article-meta { font-size: 16px; color: var(--text-secondary); display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-
-        .article-content { max-width: 700px; margin: 0 auto; padding: 0 20px 100px; font-size: 17px; color: var(--text-primary); }
-        .article-content p { margin-bottom: 24px; line-height: 1.8; color: var(--text-secondary); }
-        .article-content h2 { font-size: 26px; font-weight: 600; margin: 60px 0 24px; color: var(--text-primary); letter-spacing: -0.01em; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
-        .article-content h3 { font-size: 20px; font-weight: 600; margin: 40px 0 16px; color: var(--text-primary); }
-        .article-content strong { color: var(--text-primary); font-weight: 600; }
-        .article-content ul { margin-bottom: 24px; padding-left: 20px; color: var(--text-secondary); }
-        .article-content li { margin-bottom: 12px; line-height: 1.7; }
-        
-        .highlight-quote { padding: 24px; background: var(--bento-bg); border-left: 4px solid var(--primary); border-radius: 0 12px 12px 0; margin: 32px 0; font-size: 16px; color: var(--text-primary); box-shadow: 0 4px 20px var(--bento-shadow); }
-        
-        /* 代码/术语标签样式 */
-        .tech-tag { background: var(--tag-bg); color: var(--primary); padding: 2px 8px; border-radius: 6px; font-size: 14px; font-family: monospace; margin: 0 2px; }
-
-        /* --- 突破版心的图片/动图容器 --- */
-        .breakout-media { width: 100vw; max-width: 1000px; margin: 40px 50%; transform: translateX(-50%); border-radius: 20px; overflow: hidden; background: var(--img-bg); border: 1px solid var(--border-color); }
-        .breakout-media img, .breakout-media video { width: 100%; height: auto; display: block; }
-        
-        .inline-media { width: 100%; border-radius: 12px; overflow: hidden; background: var(--img-bg); border: 1px solid var(--border-color); margin: 32px 0 12px; }
-        .inline-media img, .inline-media video { width: 100%; height: auto; display: block; }
-        
-        .media-caption { text-align: center; font-size: 14px; color: var(--text-secondary); margin-top: 12px; margin-bottom: 32px; font-style: italic; }
-
-        /* --- 数据高光便当盒 --- */
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 40px 0; }
-        .stat-card { background: var(--bento-bg); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center; box-shadow: 0 4px 20px var(--bento-shadow); }
-        .stat-num { font-size: 32px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
-        .stat-desc { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
-
-        /* 镜头对焦质感的滚动渐显动画 */
-        .reveal { opacity: 0; transform: translateY(40px); filter: blur(10px); transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); filter: blur(0); }
-        .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.2s; }
-
-        @media (max-width: 768px) {
-            .article-title { font-size: 32px; }
-            .breakout-media { width: calc(100% - 40px); margin-left: auto; margin-right: auto; transform: none; border-radius: 12px; }
-            .stats-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>从平台可用，到记忆与评测工具化 - 苑泽楷</title>
+<meta name="description" content="沿着平台质量、记忆与上下文、评测与成本三条主线，复盘一次从问题定位走向产品交付的过程。">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('theme')||'light';}catch{}</script>
+<link rel="stylesheet" href="assets/case-study.css">
 </head>
 <body>
-
-    <nav>
-        <div class="nav-container">
-            <a href="index.html#experience" class="back-link">
-                <i class="fas fa-arrow-left"></i> 返回主页
-            </a>
-            <button id="theme-toggle" aria-label="切换深色模式">
-                <svg class="moon-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                <svg class="sun-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-            </button>
-        </div>
-    </nav>
-
-    <header class="article-header reveal">
-        <span class="article-tag">实习项目复盘</span>
-        <h1 class="article-title">走向工业化交付：内部类 Coze/Dify 平台 1.0 上线与核心链路重构</h1>
-        <div class="article-meta">
-            <span><i class="fas fa-calendar-alt"></i> 2025.12 - 2026.03</span>
-            <span><i class="fas fa-building"></i> 超参数科技 (深圳) 有限公司</span>
-            <span><i class="fas fa-user-tie"></i> AI 产品经理 (技术型 AIPM)</span>
-        </div>
-    </header>
-
-    <div class="breakout-media reveal delay-1">
-        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Agent 编排平台架构展示">
-    </div>
-    <div class="media-caption reveal delay-1">平台 v1.0：面向 Agent 工业化交付的编排与治理中枢</div>
-
-    <article class="article-content">
-        <div class="highlight-quote reveal">
-            <strong>核心定位：</strong>在实习期间，我作为技术型 AIPM，主要负责公司内部<strong>类 Coze / Dify 平台 1.0 版本</strong>的上线闭环。深入研发交付与测试底层，推进平台在复杂 Agent 场景、白盒自动化评测与基建算力精算三大核心方向的落地。
-        </div>
-
-        <div class="stats-grid reveal">
-            <div class="stat-card">
-                <div class="stat-num">30+</div>
-                <div class="stat-desc">修复 P0/P1 级核心架构缺陷</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num">&lt;10<span style="font-size:18px;">min</span></div>
-                <div class="stat-desc">复杂工作流排障时间压缩</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num">95%</div>
-                <div class="stat-desc">核心评测用例业务验收通过率</div>
-            </div>
-        </div>
-
-        <h2 class="reveal">01 / 研发协同与平台 1.0 交付</h2>
-        <p class="reveal">
-            在 v1.0 版本极短的迭代周期内，我深度参与并主导了 UAT 测试验收的全流程（涵盖验收标准制定、用例设计、缺陷分级、复现定位、回归验证与上线 Check）。
-        </p>
-        <p class="reveal">
-            我利用<strong>抓包工具与后端日志联动</strong>，将系统异常精准归因到具体节点与链路环节，形成可执行的复现路径与修复建议。在此期间，成功推动修复了 <strong>30+ 项 P0/P1 级核心缺陷</strong>，包括但不限于：
-        </p>
-        <ul class="reveal">
-            <li>节点参数透传错误与变量映射异常</li>
-            <li>循环节点 Schema 错位导致的数据丢失与死锁</li>
-            <li>Webhook 路径残缺与 Redis 变量映射错误</li>
-            <li>Milvus 节点能力缺失，以及文本输入互斥与 UI 交互阻塞</li>
-        </ul>
-        <p class="reveal">
-            通过严密的工程纪律测试，最终保障了 Agent 平台编排引擎核心链路按期交付上线。
-        </p>
-
-        <div class="reveal">
-            <div class="inline-media">
-                <img src="https://images.unsplash.com/photo-1618761714954-0b8cd0026356?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="核心链路缺陷排查与修复">
-            </div>
-            <div class="media-caption">利用抓包与日志联动，进行复杂节点的数据流转溯源与诊断</div>
-        </div>
-
-        <h2 class="reveal">02 / 自动化评测平台设计 (EvalFlow)</h2>
-        <p class="reveal">
-            针对传统黑盒测试覆盖率极低的痛点，我独立负责了平台工作量评测功能的从 0 到 1，完成整体 Figma 及前端页面逻辑的交互确立，打通了“评测集管理 → 实验跑批看板 → 门禁拦截 → A/B 对撞 → Trace 下钻 → 诊断报告与修复建议”的端到端链路。
-        </p>
-        <ul class="reveal">
-            <li><strong>DAG 白盒评测方案：</strong>实现了节点级的输入/输出对比，并透出耗时、Token 等性能元数据，支持细粒度的 case-by-case diff 对比。</li>
-            <li><strong>“语义映射”交互创新：</strong>引入 LLM 将生硬的技术链路转化为可读的业务场景与失败归因。直接把节点差异翻译成<span class="tech-tag">为什么错</span>、<span class="tech-tag">错在哪</span>、<span class="tech-tag">该改哪一步</span>。</li>
-        </ul>
-        <p class="reveal">
-            这套白盒评测体系将复杂工作流的缺陷定位排障时间从“小时级”暴力压缩至 <strong>10 分钟内</strong>，并使核心评测用例的业务验收通过率跃升至 <strong>95%</strong>。
-        </p>
-
-        <h2 class="reveal">03 / 复杂游戏 Agent 场景落地</h2>
-        <p class="reveal">
-            为验证引擎在复杂状态流转与多工具编排下的稳定性与可扩展性，我主导了平台核心 Demo 工作流的策划与搭建。
-        </p>
-        <p class="reveal">
-            基于 <span class="tech-tag">Redis</span>、<span class="tech-tag">Python</span>、<span class="tech-tag">JS</span>、<span class="tech-tag">Milvus</span> 等节点，成功落地了复杂的游戏状态智能体案例（包含具备长期记忆的好感度 NPC、以及遵循经济模型的动态交易员）。
-        </p>
-        <p class="reveal">
-            <strong>核心架构亮点：</strong>将“记忆与状态”抽象为可插拔的工具节点。Agent 能够根据场景动态选择策略（读取 Redis 短期记忆、冷启动时不读取、长对话中仅读取摘要/关键事实），并将记忆命中情况与注入内容完整纳入 Trace 追踪，便于后期复盘与评测。
-        </p>
-        
-        <div class="reveal">
-            <div class="breakout-media" style="margin-top: 30px;">
-                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="复杂游戏 Agent 工作流">
-            </div>
-            <div class="media-caption">标杆案例落地：可插拔状态节点支撑面向 3 家 B 端游戏开发者的商业化演示</div>
-        </div>
-
-        <h2 class="reveal">04 / 平台 Copilot-Skills 构建与双端成本核算</h2>
-        <p class="reveal">
-            AI 的工业化落地必须回答成本问题。我搭建并设计了平台工作流的成本计算与可视化图表生成等扩展 Skills，致力于降低“成本黑盒”与“选型拍脑袋”带来的投产风险。
-        </p>
-        <p class="reveal">
-            在模型选型与降本建议上，我设计了严谨的<strong>三层解耦架构</strong>：
-        </p>
-        <ul class="reveal">
-            <li><strong>数据层：</strong>建立详尽的价格与能力维度配置库。</li>
-            <li><strong>脚本计算层：</strong>作为确定性引擎，按场景/复杂度/上下文/格式稳定性/速度要求，进行硬逻辑的能力过滤与性价比排序。</li>
-            <li><strong>LLM 总结层：</strong>将生硬的计算数据封装为人类可读的高保真降本建议报告。</li>
-        </ul>
-        <p class="reveal">
-            此外，我还将核算逻辑扩展至服务器、存储等基建底座，实现了模型层与基建层双管齐下的 ROI 核算，为成本看板提供了可靠的底层支撑。
-        </p>
-
-    </article>
-
-    <footer style="padding: 60px 20px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 40px;">
-        <h2 class="reveal" style="font-size: 28px; font-weight: 700; margin-bottom: 24px; letter-spacing: -0.02em;">
-            探讨下一个 AI 场景的可能？
-        </h2>
-        <a href="mailto:cdjabah13@gmail.com" class="btn-primary reveal delay-1" style="font-size: 16px; padding: 14px 36px; display: inline-flex; align-items: center;">
-            <i class="fas fa-paper-plane" style="margin-right: 8px;"></i> 建立连接
-        </a>
-        <div style="margin-top: 60px; color: var(--text-secondary); font-size: 13px;">
-            &copy; 2026 苑泽楷. Crafted with curiosity.
-        </div>
-    </footer>
-
-    <script>
-        // 深色模式逻辑
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        themeToggleBtn.addEventListener('click', () => {
-            let theme = document.documentElement.getAttribute('data-theme');
-            if (theme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'light');
-                localStorage.setItem('theme', 'light');
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        });
-
-        // 镜头对焦滚动显现逻辑
-        document.addEventListener("DOMContentLoaded", function() {
-            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        });
-    </script>
+<a class="skip-link" href="#content">跳至正文</a>
+<nav class="case-nav" aria-label="详情页导航">
+<div class="nav-inner">
+<a href="index.html#experience">← 返回主页</a>
+<a href="index.html#about">苑泽楷 / ZK</a>
+<button type="button" class="theme-toggle" aria-label="切换深色模式">☾</button>
+</div>
+</nav>
+<header class="case-header">
+<span class="eyebrow">超参数科技 / 实习复盘</span>
+<h1>从平台可用，到记忆与评测工具化</h1>
+<p class="lead">沿着平台质量、记忆与上下文、评测与成本三条主线，复盘一次从问题定位走向产品交付的过程。</p>
+<div class="case-meta">
+<span>AI 产品经理实习生</span>
+<span>2025.12 — 2026.03</span>
+</div>
+</header>
+<div class="case-layout">
+<aside class="case-toc" aria-label="文章目录">
+<strong>本页目录</strong>
+<a href="#overview">职责与成果</a>
+<a href="#timeline">实习时间线</a>
+<a href="#memory">记忆与上下文</a>
+<a href="#evalflow">EvalFlow</a>
+<a href="#cost">成本顾问</a>
+<a href="#reflection">方法沉淀</a>
+</aside>
+<main class="case-body" id="content">
+<section class="case-section" id="overview">
+<h2>01 / 职责与成果</h2>
+<div class="summary-box">
+<p>在内部类 Coze / Dify 工作流平台上，从测试节点、复现问题开始，逐步推进记忆工具封装、评测产品设计与成本顾问能力。</p>
+<p>
+<strong>职责：</strong>平台验收与问题定位、PRD 和交互设计、工作流 Demo 搭建；与研发协作推动平台迭代。</p>
+</div>
+<div class="stats">
+<div class="stat">
+<b>30+</b>
+<span>协作定位并推动修复 P0/P1 缺陷</span>
+</div>
+<div class="stat">
+<b>3 家</b>
+<span>复杂游戏 Agent 支撑 B 端商业演示</span>
+</div>
+<div class="stat">
+<b>5 个阶段</b>
+<span>从节点验证到评测与成本治理</span>
+</div>
+</div>
+</section>
+<section class="case-section" id="timeline">
+<h2>02 / 五个阶段的推进</h2>
+<div class="timeline-list">
+<div class="timeline-entry">
+<time>01.21 — 01.23</time>
+<h3>从现象到可复现的阻断点</h3>
+<p>围绕 Redis Set / Get / Assert 设计自动化回归思路，结合 DevTools 与日志定位 Schema、类型和变量映射问题。识别 Milvus 缺少 Insert、循环节点数据错位等阻断点。</p>
+</div>
+<div class="timeline-entry">
+<time>01.26 — 01.30</time>
+<h3>用业务闭环定义平台能力</h3>
+<p>将 Test & Eval 拆成 Dataset Hub、Eval Runner、Report；补齐变量映射和成本要求。验证 Iterator 聚合、Python 参数传递，探索 DAG 白盒评测与 NPC / 交易员 Demo。</p>
+</div>
+<div class="timeline-entry">
+<time>02.02 — 02.11</time>
+<h3>从通用组件转向场景化 Tool</h3>
+<p>围绕动态交易员和记忆胶囊封装可复用能力；采用 Read–Process–Write 与延迟处理绕过平台限制，并设计带预算控制的上下文组装器。</p>
+</div>
+<div class="timeline-entry">
+<time>02.25 — 02.28</time>
+<h3>补齐记忆闭环和动态注入</h3>
+<p>跑通短对话直通、长对话归档的路由，完成 Redis 滑窗、容错清洗与记忆读取校验；搭建 Lore Engine，加入条件触发、优先级和 Token 熔断。</p>
+</div>
+<div class="timeline-entry">
+<time>03.02 — 03.05</time>
+<h3>评测与成本能力产品化</h3>
+<p>完成 EvalFlow 前端 Demo、PRD 和页面交互迭代，打通 A/B 对撞与 Trace Diff 设计；构建价格能力底座与 Python 匹配引擎，形成成本顾问 MVP。</p>
+</div>
+</div>
+</section>
+<section class="case-section" id="memory">
+<h2>03 / 记忆能力的工具化</h2>
+<p>只提供 Redis / Milvus 节点，仍要求开发者理解状态、归档和上下文拼接。我把工作重点转向场景化 Tool，将搭建经验封装为更易复用的能力。</p>
+<figure class="figure">
+<a href="assets/cases/memory-capsule.svg" data-zoom aria-label="放大查看：记忆读取、上下文处理、写回与长短对话分流">
+<img src="assets/cases/memory-capsule.svg" alt="记忆读取、上下文处理、写回与长短对话分流" loading="lazy">
+</a>
+</figure>
+<div class="table-wrap" role="region" aria-label="遇到的限制对照表" tabindex="0">
+<table>
+<thead>
+<tr>
+<th scope="col">遇到的限制</th>
+<th scope="col">采用的方案</th>
+<th scope="col">产品价值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python 沙盒无法直接连接 Redis</td>
+<td>通过外部节点 Read → Python Process → 外部节点 Write</td>
+<td>在平台现有能力内跑通状态闭环。</td>
+</tr>
+<tr>
+<td>同步阻塞引擎不适合后台总结</td>
+<td>Lazy Processing：将耗时归档移至下一轮前置处理</td>
+<td>避开当前回复中的长时间阻塞。</td>
+</tr>
+<tr>
+<td>上下文不断增长</td>
+<td>滑动窗口、摘要 / 关键事实与优先级裁剪</td>
+<td>把 Token 预算变成可解释、可调的产品约束。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3>Lore Engine：让信息按条件进入上下文</h3>
+<p>将动态词条机制抽象为条件触发、优先级、防诱导和 Token 熔断，让内容注入更加确定。与记忆工具配合，服务好感度 NPC、动态交易员等有状态场景。</p>
+</section>
+<section class="case-section" id="evalflow">
+<h2>04 / 让评测结果可以行动</h2>
+<p>黑盒评测能发现最终输出不对，却不容易说明哪一步出了问题。EvalFlow 的设计重点是把“评测—比较—诊断—修复—再验证”串起来。</p>
+<figure class="figure">
+<a href="assets/cases/evalflow-loop.svg" data-zoom aria-label="放大查看：EvalFlow 评测集、实验跑批、AB 对撞、Trace Diff、归因与回归流程">
+<img src="assets/cases/evalflow-loop.svg" alt="EvalFlow 评测集、实验跑批、AB 对撞、Trace Diff、归因与回归流程" loading="lazy">
+</a>
+</figure>
+<ul>
+<li>
+<strong>数据与实验：</strong>明确数据集、变量映射、实验版本与成本信息。</li>
+<li>
+<strong>A/B 对撞与 Trace Diff：</strong>从整体结果下钻到节点输入输出差异和性能信息。</li>
+<li>
+<strong>语义映射：</strong>把技术差异解释成业务问题，说明为什么错、错在哪、可以改哪一步。</li>
+<li>
+<strong>交互联动：</strong>探索右侧操作与左侧画布联动，让分析过程可视化。</li>
+</ul>
+<h3>把业务目标写进评测标准</h3>
+<p>我将测试用例拆成“输入 + 预期业务目标”。例如，天气查询的验收目标是正确回应指定城市的天气信息，而不是要求回答与某句标准文本完全一致。先明确任务是否完成，再选择合适的判断方式。</p>
+<div class="table-wrap" role="region" aria-label="业务目标与评测方式" tabindex="0">
+<table class="two-column">
+<thead><tr><th scope="col">判断对象</th><th scope="col">评测方式</th></tr></thead>
+<tbody>
+<tr><td>格式与状态</td><td>用确定性规则检查必填字段、参数类型和业务状态变化，确认动作真正执行。</td></tr>
+<tr><td>语义与任务</td><td>让 LLM 对照明确的业务目标评判输出，保留判断理由，供人工复核与问题定位。</td></tr>
+<tr><td>复杂与边缘场景</td><td>人工查看执行路径、中间结果和最终输出，将新发现的问题转成可重复验证的用例。</td></tr>
+</tbody>
+</table>
+</div>
+<p>定量评测关注功能通过率、响应时间与 Token 消耗；定性分析解释失败原因，并补充评测集。两者通过“发现问题 → 提炼用例 → 回归验证”持续衔接，让指标变化能够对应到具体的产品改进。</p>
+</section>
+<section class="case-section" id="cost">
+<h2>05 / 用确定性计算支撑成本建议</h2>
+<p>成本建议需要可核查的计算基础。我将数据、计算和解释分开，先用能力约束筛选，再用确定性脚本核算，最后让模型解释结果。</p>
+<figure class="figure">
+<a href="assets/cases/cost-advisor.svg" data-zoom aria-label="放大查看：成本顾问的数据层、确定性脚本与模型解释层">
+<img src="assets/cases/cost-advisor.svg" alt="成本顾问的数据层、确定性脚本与模型解释层" loading="lazy">
+</a>
+</figure>
+<ul>
+<li>
+<strong>数据底座：</strong>整理模型价格与能力矩阵，统一比较条件。</li>
+<li>
+<strong>匹配引擎：</strong>使用 Python 做能力过滤与成本计算，减少自由生成数字带来的错误。</li>
+<li>
+<strong>双端核算：</strong>从模型调用扩展到服务器与存储，补齐基础设施成本视角。</li>
+<li>
+<strong>持续维护：</strong>通过 Git 版本控制和测试用例沉淀，让数据与计算逻辑可迭代。</li>
+</ul>
+<h3>把能力边界和决策价值一起定义</h3>
+<p>成本 Skill 的边界应停留在设计阶段的估算：根据工作流、调用次数、Token 用量和价格信息比较方案；实时账单与优惠结算交给计费系统。明确输入假设，才能解释费用差异来自哪里。</p>
+<p>下一步的交互重点是把费用较高的节点标回画布，并给出可执行的调整建议。评估这项能力时，我会同时看使用率、用户是否据此调整方案，以及因预估不足而紧急修改工作流的情况；一次点击只能说明被使用，帮助用户做出设计决策才体现价值。</p>
+</section>
+<section class="case-section" id="reflection">
+<h2>06 / 三个重要转变</h2>
+<h3>从“报 Bug”到解释业务为什么被阻断</h3>
+<p>我的排查顺序是先构建最小复现用例，再沿数据流对照每个节点的预期输入、实际输出和业务状态。单个节点通过测试，仍需验证整条业务链路：NPC 能正常回复，并不代表交易动作已经完成。</p>
+<p>提交给研发的问题应包含复现路径、中间状态、问题假设和业务影响；修复后，把触发条件补进回归用例。对失败的设计也同样重要：兜底回复要与执行状态区分，让异常可以被发现和定位。</p>
+<h3>从“组件可用”到“工具可复用”</h3>
+<p>把记忆、上下文和动态注入抽象为具体 Tool，让开发者复用经过验证的场景能力。有状态 NPC、动态交易员这样的模板，价值在于减少每次搭建时重复处理状态、异常与上下文的工作。</p>
+<p>对 B 端工作流平台，我更关注客户采用后的总成本：能否接入现有系统、由谁维护、如何管控权限，以及出现问题时能否恢复。这些条件决定一个 Demo 能否继续走向业务使用，也决定平台能力的产品优先级。</p>
+<h3>把质量与成本放进同一迭代流程</h3>
+<p>评测定位差异，Trace 支持归因，成本核算帮助选择方案。产品交付既要能演示，也要能让研发理解边界并继续迭代。</p>
+</section>
+<nav class="case-related" aria-label="相关内容">
+<div class="action-row">
+<a class="action secondary" href="bytedance-detail.html">字节实习复盘 <span aria-hidden="true">→</span>
+</a>
+</div>
+</nav>
+</main>
+</div>
+<footer class="case-footer">
+<a href="index.html#experience">← 返回经历与作品</a>
+<a href="mailto:cdjabah13@gmail.com">联系我 · cdjabah13@gmail.com</a>
+</footer>
+<dialog class="zoom-dialog" aria-label="图片放大查看">
+<button class="zoom-close" type="button">关闭 ×</button>
+<div class="zoom-viewport" tabindex="0" aria-label="放大图片，可滚动查看">
+<img alt="">
+</div>
+<p>
+</p>
+</dialog>
+<script src="assets/case-study.js">
+</script>
 </body>
 </html>

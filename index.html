@@ -224,6 +224,7 @@
         .timeline-item h3 { font-size: 20px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
         .timeline-item .company { font-size: 14px; color: var(--primary); font-weight: 600; margin-bottom: 4px; }
         .timeline-item .date { color: var(--text-secondary); font-size: 13px; margin-bottom: 16px; }
+        .resume-project-title { font-size: 15px; font-weight: 600; line-height: 1.7; margin: 20px 0 8px; color: var(--text-primary); }
         .timeline-item ul { padding-left: 20px; margin-bottom: 16px; }
         .timeline-item li { margin-bottom: 8px; line-height: 1.7; color: var(--text-secondary); font-size: 14px; }
 
@@ -278,6 +279,16 @@
         .footer-links { display: flex; justify-content: center; gap: 24px; margin-top: 16px; }
         .footer-links a { color: var(--text-secondary); font-size: 20px; transition: color 0.3s ease; }
         .footer-links a:hover { color: var(--primary); }
+
+        @media (max-width: 380px) { .education-grid { grid-template-columns: minmax(0, 1fr); } }
+
+        /* 经历与项目详情入口：沿用原站蓝色与圆角 */
+        .resume-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+        .resume-detail-link { display: inline-flex; align-items: center; justify-content: center; gap: 18px; padding: 11px 20px; border-radius: 999px; background: var(--primary); color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; min-height: 44px; transition: background-color .2s, transform .2s; }
+        .resume-detail-link:hover { transform: translateY(-2px); filter: brightness(.93); }
+        .resume-detail-link:focus-visible { outline: 3px solid var(--text-primary); outline-offset: 4px; }
+        .resume-secondary-link { color: var(--link-color); font-size: 14px; text-underline-offset: 4px; padding: 8px 0; }
+        [data-theme="dark"] .resume-detail-link { color: #fff; }
     </style>
 </head>
 <body>
@@ -306,7 +317,7 @@
         <h1 class="hero-title reveal delay-1" style="font-size: 60px; letter-spacing: 0.05em;">苑泽楷</h1>
         <p class="hero-subtitle reveal delay-2">
             哈尔滨工业大学（深圳） <br>
-            <span style="font-size: 18px; color: rgba(255,255,255,0.8); display: block; margin-top: 6px;">2023级本科在读</span>
+            <span style="font-size: 18px; color: rgba(255,255,255,0.8); display: block; margin-top: 6px;">计算机科学与技术本科 · 2028.06 毕业</span>
             <span style="font-size: 32px; color: #ffffff; font-weight: 500; display: block; margin-top: 16px; text-shadow: 0 4px 12px rgba(0,0,0,0.6);">站在科技与人文的十字路口</span>
         </p>
         
@@ -329,7 +340,7 @@
 
         <div class="cta-group reveal delay-3">
             <a href="mailto:cdjabah13@gmail.com" class="btn-primary"><i class="fas fa-paper-plane"></i> 联系我</a>
-            <a href="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/CV.test.pdf" target="_blank" class="btn-secondary">
+            <a href="assets/zekai-yuan-cv.pdf" target="_blank" class="btn-secondary">
                 <i class="fas fa-file-alt" style="margin-right: 6px;"></i> 查看PDF版简历
             </a>
         </div>
@@ -345,6 +356,13 @@
         </div>
 
         <div class="education-grid">
+            <div class="education-card reveal delay-1 hover-glow">
+                <div class="glow-content">
+                    <h3>计算机科学与技术</h3>
+                    <div class="school">哈尔滨工业大学（深圳）</div>
+                    <div class="period">2024-2028（本科）· 2028.06 毕业</div>
+                </div>
+            </div>
             <div class="education-card reveal delay-2 hover-glow">
                 <div class="glow-content">
                     <h3>工业设计</h3>
@@ -352,40 +370,83 @@
                     <div class="period">2023-2024（本科）· 转专业前</div>
                 </div>
             </div>
-            <div class="education-card reveal delay-1 hover-glow">
-                <div class="glow-content">
-                    <h3>计算机科学与技术</h3>
-                    <div class="school">哈尔滨工业大学（深圳）</div>
-                    <div class="period">2024-2028（本科）· 转专业后</div>
-                </div>
-            </div>
         </div>
     </section>
 
     <section id="experience" class="experience-section">
         <div class="text-center">
-            <h2 class="section-title reveal">实习经历</h2>
+            <h2 class="section-title reveal">实习与项目经历</h2>
             <p class="section-desc reveal delay-1">在 AI 产品领域的实践与成长</p>
         </div>
 
         <div class="timeline">
             <div class="timeline-item reveal delay-1 hover-glow">
                 <div class="glow-content">
-                    <div class="company">超参数科技 (深圳) 有限公司</div>
-                    <h3>AI 产品经理</h3>
-                    <div class="date">2025.12 - 2026.02</div>
+                    <div class="company">腾讯·混元大模型基础模型部</div>
+                    <h3>AI 策略产品经理</h3>
+                    <div class="date">2026.4-至今</div>
+
+                </div>
+            </div>
+
+            <div class="timeline-item reveal delay-1 hover-glow">
+                <div class="glow-content">
+                    <div class="company">字节跳动 · 火山引擎</div>
+                    <h3>AI 产品经理实习生</h3>
+                    <div class="date">2026.04 - 2026.08</div>
+                    <h4 class="resume-project-title">项目一：某手机厂商手机助手 Agent 架构升级与类落地（agent 评测/架构）</h4>
                     <ul>
-                        <li>深度参与平台 v1.0 版本迭代，覆盖需求评审至测试验收全流程，保障 Agent 编排引擎核心稳定性</li>
-                        <li>独立负责平台工作流评测功能，完成整体 Figma 及前端可交互 demo 搭建</li>
-                        <li>针对传统黑盒测试覆盖率低的痛点，设计基于 DAG 图谱的白盒评测方案</li>
-                        <li>创新引入"语义映射"交互，通过 LLM 将技术链路转化为可读业务场景，大幅提升评测结果可解释性</li>
-                        <li>负责平台核心 Demo 工作流策划与搭建，基于 Redis、Python、JS、Milvus等 agent 常用节点落地有状态智能体案例</li>
-                        <li>搭建设计平台工作流成本计算、可视化图表生成等 copilot-skills</li>
+                        <li><strong>架构升级：</strong>参与推动手机助手 agent 从端到端单链路向模块化 Agent 架构转型，将 agent 拆解为 query 改写、意图识别、工具路由、MCP/搜索增强等模块。重点负责 agent 购物推荐意图识别方向</li>
+                        <li><strong>意图与路由：</strong>协同算法定义 15 类行业与 9 类意图的路由逻辑与 MCP、tool use 等标准，基于万条离线 Query 意图识别模型选型（准确率 95%）后训练与工具路由的需求定义、评测与验收</li>
+                    </ul>
+                    <h4 class="resume-project-title">项目二：LLM-as-Judge 自动化评测与归因系统搭建</h4>
+                    <ul>
+                        <li><strong>评测闭环：</strong>基于 LangGraph 独立搭建 LLM-as-Judge 评测 Harness，设计状态流转、条件路由、联网工具调用、低置信度复核、人工介入和版本回归机制，定义 “7+1 维度”机评标准，沉淀一批 case 与机评提示词。单次模型版本评测周期从一周人工归因一次压缩到一天自动出报告。</li>
+                        <li><strong>提效成果：</strong>在真实线上回流 case 上实现机评-人评一致率 60% 到 85% 的提升，有效解决了评测中位置偏见、事实性问题幻觉多、打分漂移等问题，支撑了模型能力的快速迭代。</li>
+                    </ul>
+                    <h4 class="resume-project-title">项目三：benchmark 建设与数据标注链路制定</h4>
+                    <ul>
+                        <li><strong>标注标准制定：</strong>负责抓取归类线上回流 case，带领数据标注团队进行 Benchmark 构建与标注标准细则制定，成功推动购物推荐垂类率先开流上线</li>
+                        <li><strong>Benchmark 建设：</strong>对同一批 benchmark 用机评打分线上链路输出，判断新链路相对线上基线是否有收益。形成业务链路：线上日志回流 → 语义聚类抽样 → 上下文重写 → 豆包 C 端对比 → 机评 rubrics 生成打分 → 人工质检</li>
+                    </ul>
+                    <div>
+                        <span class="tag-small">Agent 架构</span><span class="tag-small">LangGraph</span><span class="tag-small">LLM-as-Judge</span><span class="tag-small">MCP</span><span class="tag-small">Benchmark</span>
+                    </div>
+                    <div class="resume-actions"><a href="bytedance-detail.html" class="resume-detail-link">查看实习复盘 <span aria-hidden="true">→</span></a><a href="bytedance-evaluation.html" class="resume-secondary-link">评测方法与案例</a></div>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal delay-2 hover-glow">
+                <div class="glow-content">
+                    <div class="company">New 来（Hseek）校园匹配平台</div>
+                    <h3>产品负责人 &amp; 独立全栈开发</h3>
+                    <div class="date">2026.03 - 至今</div>
+                    <ul>
+                        <li><strong>AI 全栈交付：</strong>在零后端基础下，通过 Vibe Coding 2 天内完成云服务器部署、鉴权登录注册、邮件系统、后台管理系统等全栈开发，通过生产、测试环境隔离实现快速迭代。</li>
+                        <li><strong>数据、用户：</strong>设计“月老牵线”与“双向奔赴”社交玩法促进平台裂变传播，上线首日注册突破 500 人，5 天内覆盖 2000+ 用户，实现校内现象级裂变。建立 A/B 测试框架，通过分析线上点击行为及问卷填写数据，优化平台的匹配问卷填写</li>
+                        <li><strong>产品规划：</strong>负责校园匹配产品的需求拆解与业务规则设计，规划注册认证、问卷、周期匹配、补配雷达及 AI 分身社区等用户流程；定义双向确认、隐私揭晓、候选超时与异常处理规则，建设运营审核和任务监控管理后台。</li>
+                        <li><strong>全栈开发：</strong>使用 React/TypeScript、Node.js/Express、tRPC、Drizzle 与 MySQL 端到端实现校园匹配平台；开发问卷评分与稳定匹配算法、雷达候选状态机及持久化后台任务，并实现注册认证、权限控制、隐私过滤和管理后台。</li>
+                    </ul>
+                    <div>
+                        <span class="tag-small">React / TypeScript</span><span class="tag-small">Node.js / tRPC</span><span class="tag-small">MySQL</span><span class="tag-small">稳定匹配</span><span class="tag-small">AI 社区</span>
+                    </div>
+                    <div class="resume-actions"><a href="newlai-detail.html" class="resume-detail-link">查看项目详情 <span aria-hidden="true">→</span></a><a href="https://hseek.cn" class="resume-secondary-link">访问 Hseek ↗</a></div>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal delay-1 hover-glow">
+                <div class="glow-content">
+                    <div class="company">超参数科技 (深圳) 有限公司</div>
+                    <h3>AI 产品经理实习生</h3>
+                    <div class="date">2025.12 - 2026.03</div>
+                    <ul>
+                        <li><strong>智能体落地：</strong>策划并搭建基于 Redis/Python/Milvus 的复杂游戏 Agent 案例（好感度 NPC、动态交易员），支撑 3 家 B 端客户商业演示，验证了平台在较为复杂游戏场景下的稳定性。</li>
+                        <li><strong>与研发对接：</strong>负责类似 Coze/Dify 的内部平台 V1.0 上线，定位并修复 30+ 项 P0/P1 级核心缺陷</li>
                     </ul>
                     <div>
                         <span class="tag-small">Agent 编排</span><span class="tag-small">产品设计</span><span class="tag-small">LLM</span><span class="tag-small">Redis</span><span class="tag-small">Python</span>
                     </div>
-                    <a href="hyperparam-detail.html" class="bento-link" style="margin-top: 16px;">阅读实习复盘详解</a>
+                    <div class="resume-actions"><a href="hyperparam-detail.html" class="resume-detail-link">查看实习复盘 <span aria-hidden="true">→</span></a></div>
                 </div>
             </div>
 
@@ -404,71 +465,30 @@
                     <div>
                         <span class="tag-small">团队管理</span><span class="tag-small">Coze</span><span class="tag-small">NL2SQL</span><span class="tag-small">BI可视化</span>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="projects" class="bento-section">
-        <div class="text-center">
-            <h2 class="section-title reveal">精选项目</h2>
-            <p class="section-desc reveal delay-1">从课堂理论到工程实践</p>
-        </div>
-        
-        <div class="bento-grid" id="bento-grid">
-            <div class="bento-item item-large reveal hover-glow">
-                <div class="bento-content">
-                    <span class="tag">产品负责人</span>
-                    <h3>时间胶囊</h3>
-                    <p>面向银发人群的语音交互+AI整理产品，零一学院孵化项目</p>
-                    <p style="margin-top: 12px;"><strong>核心成果：</strong></p>
-                    <p>• 线下访谈北京中关村50+高净值银发人群</p>
-                    <p>• 定义"语音交互+AI整理"产品MVP形态</p>
-                    <p>• Coze平台搭建AI工作流，RAG约束AI输出</p>
-                    <p>• VibeCoding 24小时完成PRD到原型开发</p>
-                    <div style="margin-top: 16px;">
-                        <span class="tag-small">Coze</span><span class="tag-small">RAG</span><span class="tag-small">AI辅助编程</span><span class="tag-small">语音交互</span>
-                    </div>
-                    <a href="https://github.com/Newzil-git/time-capsule" class="bento-link" target="_blank"><i class="fab fa-github"></i> 查看 GitHub</a>
+                    <div class="resume-actions"><a href="abc-detail.html" class="resume-detail-link">查看项目详情 <span aria-hidden="true">→</span></a></div>
                 </div>
             </div>
 
-            <div class="bento-item reveal delay-1 hover-glow">
-                <div class="bento-content">
+            <div class="timeline-item reveal delay-1 hover-glow">
+                <div class="glow-content">
+                    <div class="company">深圳市零一学院 · 时间胶囊</div>
+                    <h3>项目负责人 &amp; 核心开发者</h3>
+                    <ul>
+                        <li><strong>银发场景洞察：</strong>深度访谈 50+ 位高净值银发人群，定义“语音交互 + AI 整理”的 MVP 形态，解决老年人数字化能力弱但分享欲强的痛点。</li>
+                        <li><strong>RAG 架构落地：</strong>在 Coze 平台构建“非结构化语音转结构化文本”Workflow，通过 RAG 约束解决大模型幻觉与口述逻辑混乱问题。</li>
+                    </ul>
+                    <div><span class="tag-small">Coze</span><span class="tag-small">RAG</span><span class="tag-small">语音交互</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal delay-2 hover-glow">
+                <div class="glow-content">
                     <div class="award-badge"><i class="fas fa-trophy"></i> iF设计奖</div>
                     <h3>孤独症智能机器人</h3>
-                    <p>桌面智能陪伴机器人</p>
-                    <p style="margin-top: 8px; font-size: 13px; color: var(--text-secondary);">2024.09 - 2025.06</p>
-                    <p style="margin-top: 12px;">与深圳5家孤独症机构合作，300+人次实测，IP+AI+陪伴产品框架</p>
-                    <div style="margin-top: 12px;">
-                        <span class="tag-small">iF全球设计奖</span><span class="tag-small">三创赛一等奖</span><span class="tag-small">Figma</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bento-item reveal delay-2 hover-glow">
-                <div class="bento-content">
-                    <span class="tag">实习经历</span>
-                    <h3>超参数科技</h3>
-                    <p>AI 产品经理实习生</p>
-                    <p style="margin-top: 8px; font-size: 13px; color: var(--text-secondary);">2025.12 - 2026.02</p>
-                    <p style="margin-top: 12px;">平台v1.0迭代、自动化评测设计、Agent场景落地、Copilot-skills构建</p>
-                    <div style="margin-top: 12px;">
-                        <span class="tag-small">Agent编排</span><span class="tag-small">LLM</span><span class="tag-small">Redis</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bento-item item-wide reveal delay-1 hover-glow">
-                <div class="bento-content">
-                    <span class="tag">技能栈</span>
-                    <h3>AI 产品全链路能力</h3>
-                    <p style="margin-bottom: 16px;">从需求分析到产品落地的完整能力矩阵</p>
-                    <div>
-                        <span class="tag-small">PRD 文档</span><span class="tag-small">Figma 原型</span><span class="tag-small">Coze 工作流</span>
-                        <span class="tag-small">Agent 编排</span><span class="tag-small">RAG</span><span class="tag-small">NL2SQL</span>
-                        <span class="tag-small">Python</span><span class="tag-small">敏捷开发</span><span class="tag-small">用户体验地图</span><span class="tag-small">数据分析</span>
-                    </div>
+                    <ul>
+                        <li>桌面智能陪伴机器人，与深圳5家孤独症机构合作，300+人次实测，IP+AI+陪伴产品框架</li>
+                    </ul>
+                    <div><span class="tag-small">iF全球设计奖</span><span class="tag-small">三创赛一等奖</span><span class="tag-small">Figma</span></div>
                 </div>
             </div>
         </div>
@@ -771,13 +791,11 @@
             
             const secEducation = document.getElementById('education');
             const secExperience = document.getElementById('experience');
-            const secProjects = document.getElementById('projects');
             const secGallery = document.getElementById('gallery');
             const secTop9 = document.getElementById('top9-gallery'); 
 
             if (mode === 'test') {
                 if(secExperience) secExperience.style.display = 'none'; 
-                if(secProjects) secProjects.style.display = 'none'; 
             } 
         });
     </script>

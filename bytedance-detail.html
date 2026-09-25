@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>让 Agent 的迭代可评测、可归因 - 苑泽楷</title>
+<meta name="description" content="从手机助手模块化架构，到自动化评测与数据闭环：围绕真实业务问题建立可重复的判断依据。">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('theme')||'light';}catch{}</script>
+<link rel="stylesheet" href="assets/case-study.css">
+</head>
+<body>
+<a class="skip-link" href="#content">跳至正文</a>
+<nav class="case-nav" aria-label="详情页导航">
+<div class="nav-inner">
+<a href="index.html#experience">← 返回主页</a>
+<a href="index.html#about">苑泽楷 / ZK</a>
+<button type="button" class="theme-toggle" aria-label="切换深色模式">☾</button>
+</div>
+</nav>
+<header class="case-header">
+<span class="eyebrow">字节跳动 · 火山引擎 / 实习复盘</span>
+<h1>让 Agent 的迭代可评测、可归因</h1>
+<p class="lead">从手机助手模块化架构，到自动化评测与数据闭环：围绕真实业务问题建立可重复的判断依据。</p>
+<div class="case-meta">
+<span>AI 产品经理实习生</span>
+<span>2026.04 — 2026.08</span>
+</div>
+</header>
+<div class="case-layout">
+<aside class="case-toc" aria-label="文章目录">
+<strong>本页目录</strong>
+<a href="#overview">工作与成果</a>
+<a href="#architecture">Agent 架构</a>
+<a href="#evaluation">自动化评测</a>
+<a href="#data-loop">数据闭环</a>
+<a href="#reflection">复盘与边界</a>
+</aside>
+<main class="case-body" id="content">
+<section class="case-section" id="overview">
+<h2>01 / 工作与成果</h2>
+<div class="summary-box">
+<p>
+<strong>工作背景：</strong>手机助手既要理解开放式问题，也要正确使用搜索和工具。单看最终回答，很难判断错误来自意图识别、路由、证据还是生成。</p>
+<p>
+<strong>我的工作：</strong>围绕需求定义、评测标准、Bad Case 归因与验收，把模块化 Agent 的迭代变成可以对比、追踪和回归的过程。</p>
+</div>
+<div class="stats">
+<div class="stat">
+<b>1 周 → 1 天</b>
+<span>单次模型版本评测周期</span>
+</div>
+<div class="stat">
+<b>60% → 85%</b>
+<span>线上回流 Case 的机评与人评一致率</span>
+</div>
+<div class="stat">
+<b>15 × 9</b>
+<span>行业分类 × 意图分类</span>
+</div>
+</div>
+<div class="table-wrap" role="region" aria-label="职责范围对照表" tabindex="0">
+<table>
+<thead>
+<tr>
+<th scope="col">职责范围</th>
+<th scope="col">具体内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>负责</td>
+<td>Rubric / Judge Prompt 优化、评测链路组装、模型选型与参数调整、结果分析、Bad Case 归因。</td>
+</tr>
+<tr>
+<td>协同</td>
+<td>与算法共同定义意图与工具路由的评测口径；基于团队提供的 LangGraph 组件搭建批量评测。</td>
+</tr>
+<tr>
+<td>参与</td>
+<td>Agent 架构方案讨论、模型基座选型及跨团队交付；模型训练与底层架构由算法团队主导。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="case-section" id="architecture">
+<h2>02 / 模块化 Agent 与垂类评测</h2>
+<p>原链路的主要问题是能力耦合：回答出错后难以定位，也不容易独立调整某个模块。我参与模块化架构升级，协同算法定义意图分流和工具路由的需求、评测与验收。</p>
+<figure class="figure">
+<a href="assets/cases/assistant-architecture.svg" data-zoom aria-label="放大查看：手机助手意图理解、搜索、MCP 工具与回答生成的模块关系">
+<img src="assets/cases/assistant-architecture.svg" alt="手机助手意图理解、搜索、MCP 工具与回答生成的模块关系" loading="lazy">
+</a>
+</figure>
+<h3>三个关键取舍</h3>
+<div class="table-wrap" role="region" aria-label="选择对照表" tabindex="0">
+<table>
+<thead>
+<tr>
+<th scope="col">选择</th>
+<th scope="col">原因与边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>拆解意图、路由、搜索、生成</td>
+<td>让各模块可以独立评测；最终回答的错误可以追溯到具体环节。</td>
+</tr>
+<tr>
+<td>意图识别与工具路由并行</td>
+<td>在手机助手的时延约束下，兼顾判断准确性、响应速度与成本。训练与参数调优由算法承担。</td>
+</tr>
+<tr>
+<td>分垂类验收、逐步放量</td>
+<td>以分场景效果判断准入，避免总分提升掩盖某个意图的退化。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>在垂类工作中，我承担购物推荐意图方向的需求与评测，并参与教育等专项 Benchmark 的清洗、机评适配和结果对齐。评测集整合既有数据、线上回流与客户反馈。</p>
+</section>
+<section class="case-section" id="evaluation">
+<h2>03 / 自动化评测闭环</h2>
+<p>将一次模型评价拆成“标准生成—事实核查—裁判打分—结果聚合”。我基于团队的 LangGraph 底座完成模块化组装，重点推进 Rubric、Judge Prompt、事实核查增强和批量跑评。</p>
+<figure class="figure">
+<a href="assets/cases/evaluation-pipeline.svg" data-zoom aria-label="放大查看：Rubric、事实核查、双向 Judge 与人工复核组成的评测流程">
+<img src="assets/cases/evaluation-pipeline.svg" alt="Rubric、事实核查、双向 Judge 与人工复核组成的评测流程" loading="lazy">
+</a>
+</figure>
+<ul>
+<li>
+<strong>标准：</strong>定义“7+1 维度”机评口径，将用户约束拆成可判断的原子化 Rubric。</li>
+<li>
+<strong>可信度：</strong>AB / BA 双向对比，定位位置偏见；事实证据与 Judge 判断分离，低置信样本进入复核。</li>
+<li>
+<strong>诊断：</strong>对 69 条人机偏好分歧 Case 进行分析，推动多个 Judge Prompt 版本迭代。</li>
+<li>
+<strong>工程：</strong>支撑 2000 条级批量评测，通过结构化落盘与断点续跑降低长任务中断损失。</li>
+</ul>
+<div class="action-row">
+<a class="action" href="bytedance-evaluation.html">展开评测方法与具体案例 <span aria-hidden="true">→</span>
+</a>
+</div>
+</section>
+<section class="case-section" id="data-loop">
+<h2>04 / 从数据治理到模型验收</h2>
+<p>将不同批次的日志、人工评测与客户反馈整理为可用于版本比较的数据。核心不是单纯增加题量，而是保留代表性、减少重复，并让每条题目能够稳定判断。</p>
+<ol class="process">
+<li>
+<strong>数据治理</strong>统一字段、还原上下文、过滤无效样本与重复表达。</li>
+<li>
+<strong>分层与抽样</strong>按行业、意图、工具、复杂度组织样本，覆盖高频与重要长尾。</li>
+<li>
+<strong>质检与回归</strong>补齐标注与质检信息，用机评试跑发现歧义和低区分度题目。</li>
+</ol>
+<h3>中控 Agent：用 Bad Case 驱动下一轮迭代</h3>
+<p>在另一条手机中控 Agent 项目中，我负责 Bad Case 分型、评分标准、质检到精标的流程设计与效果验收；算法团队负责 SFT 训练和超参数选择。</p>
+<ol class="process">
+<li>
+<strong>质检与精标</strong>区分工具选错、参数错误、缺少二次确认等失败类型。</li>
+<li>
+<strong>生成训练数据</strong>严格任务提供 GT；开放答案使用 Rubric 生成后再人工核验。</li>
+<li>
+<strong>离线选优</strong>对比候选版本，检查主要错误类型是否改善。</li>
+</ol>
+<div class="chart" role="img" aria-label="中控 Agent 离线迭代结果：满分率从66.99%提升到78.64%；Bad Case率从21.36%降至12.62%。">
+<h3>中控 Agent 离线迭代结果</h3>
+<div class="bar-group">
+<strong>满分率 · 越高越好</strong>
+<div class="bar-row">
+<span>迭代前</span>
+<div class="track">
+<div class="bar before" style="width:66.99%">
+</div>
+</div>
+<b>66.99%</b>
+</div>
+<div class="bar-row">
+<span>迭代后</span>
+<div class="track">
+<div class="bar" style="width:78.64%">
+</div>
+</div>
+<b>78.64%</b>
+</div>
+</div>
+<div class="bar-group">
+<strong>Bad Case 率 · 越低越好</strong>
+<div class="bar-row">
+<span>迭代前</span>
+<div class="track">
+<div class="bar before" style="width:21.36%">
+</div>
+</div>
+<b>21.36%</b>
+</div>
+<div class="bar-row">
+<span>迭代后</span>
+<div class="track">
+<div class="bar" style="width:12.62%">
+</div>
+</div>
+<b>12.62%</b>
+</div>
+</div>
+<div class="axis">
+<span>0%</span>
+<span>100%</span>
+</div>
+</div>
+</section>
+<section class="case-section" id="reflection">
+<h2>05 / 复盘与方法沉淀</h2>
+<h3>把总分转化为可执行的问题</h3>
+<p>评测报告需要说明问题来自哪个模块、影响哪些任务、下一步由谁处理。平均分之外，还要看分意图表现、关键错误与稳定性。</p>
+<h3>评测系统也需要被评测</h3>
+<p>Judge 的规则可能误伤合理回答；更严格不一定更准确。我在提示词迭代中关注 False Tie、语言规则和事实门禁之间的影响，避免用一条规则牺牲另一类任务。</p>
+<h3>AIGC 相关探索 <span class="status">参与 / 学习整理</span>
+</h3>
+<p>参与推荐反馈与 AIGC 创意优化方案讨论，整理业务目标、实验指标和发布检查项。奖励建模、强化学习训练与 Serving 由算法主导。</p>
+</section>
+<nav class="case-related" aria-label="相关内容">
+<div class="action-row">
+<a class="action secondary" href="bytedance-evaluation.html">评测方法与案例 <span aria-hidden="true">→</span>
+</a>
+<a class="action secondary" href="hyperparam-detail.html">超参数实习复盘 <span aria-hidden="true">→</span>
+</a>
+</div>
+</nav>
+</main>
+</div>
+<footer class="case-footer">
+<a href="index.html#experience">← 返回经历与作品</a>
+<a href="mailto:cdjabah13@gmail.com">联系我 · cdjabah13@gmail.com</a>
+</footer>
+<dialog class="zoom-dialog" aria-label="图片放大查看">
+<button class="zoom-close" type="button">关闭 ×</button>
+<div class="zoom-viewport" tabindex="0" aria-label="放大图片，可滚动查看">
+<img alt="">
+</div>
+<p>
+</p>
+</dialog>
+<script src="assets/case-study.js">
+</script>
+</body>
+</html>
