@@ -1,803 +1,259 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<!doctype html>
+<html lang="en" data-lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>苑泽楷 - 个人主页</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script>
-        // 【优化 1】强制浏览器每次刷新都回到顶部，禁止记住滚动位置跳到中部
-        if ('scrollRestoration' in history) {
-            history.scrollRestoration = 'manual';
-        }
-        window.scrollTo(0, 0);
-
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        if (currentTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-    </script>
-
-    <style>
-        /* =========================================
-           1. CSS 变量与主题系统
-           ========================================= */
-        :root {
-            --bg-primary: #f5f5f7;
-            --bg-secondary: #fbfbfd;
-            --text-primary: #1d1d1f; 
-            --text-secondary: #86868b;
-            --nav-bg: rgba(255, 255, 255, 0.7); 
-            --loader-bg: rgba(245, 245, 247, 0.6);
-            --border-color: rgba(0, 0, 0, 0.05); 
-            --bento-bg: #ffffff;
-            --bento-shadow: rgba(0, 0, 0, 0.03); 
-            --bento-hover-shadow: rgba(0, 0, 0, 0.08);
-            --spotlight-color: rgba(0, 113, 227, 0.08);
-            --placeholder-bg: linear-gradient(135deg, #e2e2e2, #f9f9f9);
-            --footer-border: #d2d2d7; 
-            --btn-hover-bg: rgba(0, 0, 0, 0.05);
-            --link-color: #0071e3;
-            --primary: #0071e3; 
-            --primary-dark: #0077ed; 
-            --tag-bg: rgba(0, 113, 227, 0.1);
-        }
-
-        [data-theme="dark"] {
-            --bg-primary: #000000;
-            --bg-secondary: #161618;
-            --text-primary: #f5f5f7; 
-            --text-secondary: #a1a1a6;
-            --nav-bg: rgba(0, 0, 0, 0.7); 
-            --loader-bg: rgba(0, 0, 0, 0.6);
-            --border-color: rgba(255, 255, 255, 0.1); 
-            --bento-bg: #1c1c1e;
-            --bento-shadow: rgba(0, 0, 0, 0.3); 
-            --bento-hover-shadow: rgba(0, 0, 0, 0.6);
-            --spotlight-color: rgba(255, 255, 255, 0.06);
-            --placeholder-bg: linear-gradient(135deg, #1c1c1e, #2c2c2e);
-            --footer-border: #333336; 
-            --btn-hover-bg: rgba(255, 255, 255, 0.1);
-            --link-color: #2997ff;
-            --tag-bg: rgba(41, 151, 255, 0.15);
-        }
-
-        /* =========================================
-           2. 全局基础与排版
-           ========================================= */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
-        body { background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; transition: background-color 0.5s ease, color 0.5s ease; }
-        
-
-        .section-padding { padding: 120px 20px; }
-        .text-center { text-align: center; }
-        .hero-title { font-size: 52px; font-weight: 700; letter-spacing: -0.005em; margin-bottom: 16px; background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero-subtitle { font-size: 22px; font-weight: 400; color: var(--text-secondary); margin-bottom: 40px; transition: color 0.5s ease; line-height: 1.6; }
-        .section-title { font-size: 36px; font-weight: 600; margin-bottom: 10px; }
-        .section-desc { font-size: 18px; color: var(--text-secondary); margin-bottom: 50px; }
-
-        /* =========================================
-           3. 核心组件 (加载屏, 导航, 按钮, 全局高光)
-           ========================================= */
-        #loader { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: var(--loader-bg); backdrop-filter: saturate(180%) blur(30px); -webkit-backdrop-filter: saturate(180%) blur(30px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
-        #loader.hidden { opacity: 0; visibility: hidden; }
-        .loader-text { font-size: 28px; font-weight: 600; margin-bottom: 20px; color: var(--text-primary); }
-        .progress-bar { width: 150px; height: 2px; background-color: var(--border-color); border-radius: 2px; overflow: hidden; position: relative; }
-        .progress-bar::after { content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 0; background-color: var(--text-primary); animation: loadingProgress 1.5s cubic-bezier(0.65, 0, 0.35, 1) forwards; }
-        @keyframes loadingProgress { 0% { width: 0; } 50% { width: 70%; } 100% { width: 100%; } }
-
-        nav { position: fixed; top: 0; width: 100%; height: 52px; background-color: var(--nav-bg); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); display: flex; justify-content: center; align-items: center; z-index: 9999; border-bottom: 1px solid var(--border-color); transition: background-color 0.5s ease, border-color 0.5s ease; }
-        .nav-container { display: flex; width: 100%; max-width: 1200px; padding: 0 20px; justify-content: space-between; align-items: center; }
-        .nav-logo { font-size: 20px; font-weight: 700; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        nav ul { list-style: none; display: flex; gap: 40px; }
-        nav ul li a { text-decoration: none; color: var(--text-primary); font-size: 14px; opacity: 0.8; font-weight: 500; transition: opacity 0.3s ease, color 0.5s ease; }
-        nav ul li a:hover { opacity: 1; color: var(--primary); }
-
-        /* 【优化 2】更显眼的 Apple 风深色模式切换按钮 */
-        #theme-toggle { 
-            background: var(--bento-bg); 
-            border: 1px solid var(--border-color); 
-            cursor: pointer; 
-            color: var(--text-primary); 
-            width: 38px; 
-            height: 38px; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            box-shadow: 0 2px 10px var(--bento-shadow);
-        }
-        #theme-toggle:hover { 
-            background-color: var(--primary); 
-            color: #ffffff; 
-            transform: scale(1.1); 
-            border-color: var(--primary);
-            box-shadow: 0 4px 15px rgba(0, 113, 227, 0.3);
-        }
-        .sun-icon { display: none; } .moon-icon { display: block; }
-        [data-theme="dark"] .sun-icon { display: block; } [data-theme="dark"] .moon-icon { display: none; }
-
-        .cta-group { display: flex; gap: 16px; margin-top: 15px; justify-content: center; flex-wrap: wrap; }
-        .btn-primary { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 14px 28px; border-radius: 980px; text-decoration: none; font-size: 16px; font-weight: 500; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0, 113, 227, 0.3); }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0, 113, 227, 0.4); }
-        .btn-secondary { background: transparent; color: var(--primary); padding: 14px 28px; border-radius: 980px; text-decoration: none; font-size: 16px; font-weight: 500; border: 2px solid var(--primary); transition: all 0.3s ease; }
-        .btn-secondary:hover { background: var(--primary); color: white; }
-        .contact-info { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; margin-bottom: 40px; }
-        .contact-item { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 15px; }
-        .contact-item > svg { width: 18px; height: 18px; margin-right: 2px; stroke-width: 1.5px; color: currentColor; opacity: 0.9; }
-
-        /* 复制图标基础样式 */
-        .copy-icon {
-            margin-left: 6px; width: 20px; height: 20px;
-            display: inline-flex; align-items: center; justify-content: center;
-            color: var(--primary); background: rgba(0, 113, 227, 0.1);
-            border: none; border-radius: 50%; cursor: pointer;
-            transition: all 0.2s ease; font-size: 10px; vertical-align: middle;
-        }
-        .copy-icon:hover { background: var(--primary); color: #fff; transform: scale(1.1); }
-        .copy-icon.copied { background: #34c759; color: #fff; }
-        
-        /* 【优化 3】首图（深色背景）下的纯白色复制图标 */
-        .hero-fullscreen-bg .copy-icon {
-            background: #ffffff; /* 纯白色底 */
-            color: #1d1d1f;      /* 深灰色/近黑色图标 */
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-        .hero-fullscreen-bg .copy-icon:hover {
-            background: #ffffff;
-            color: var(--primary); /* 悬浮变成蓝色 */
-            transform: scale(1.15);
-            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
-        }
-        .hero-fullscreen-bg .copy-icon.copied {
-            background: #34c759;
-            color: #fff;
-        }
-
-        .hero-badge { display: inline-block; font-size: 12px; font-weight: 600; color: var(--primary); background: var(--tag-bg); padding: 8px 16px; border-radius: 20px; margin-bottom: 24px; letter-spacing: 1px; }
-
-        .hover-glow { position: relative; }
-        .hover-glow::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--spotlight-color), transparent 40%); opacity: 0; transition: opacity 0.5s ease; z-index: 1; pointer-events: none; border-radius: inherit; }
-        .hover-glow:hover::after { opacity: 1; }
-        .glow-content { position: relative; z-index: 2; pointer-events: none; }
-        .glow-content > * { pointer-events: auto; }
-
-        /* =========================================
-           4. 页面区块 (第一屏 & 经历区)
-           ========================================= */
-        /* --- 新增：向下滚动指引箭头 --- */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px; /* 距离屏幕底部 40px */
-            left: 50%;
-            font-size: 24px;
-            color: rgba(255, 255, 255, 0.6); /* 半透明白色 */
-            text-decoration: none;
-            /* 引入自定义呼吸动画：2秒循环，平滑过渡 */
-            animation: bounceDown 2s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
-            transition: color 0.3s ease;
-            z-index: 10;
-        }
-
-        .scroll-indicator:hover {
-            color: rgba(255, 255, 255, 1); /* 鼠标放上去变纯白 */
-        }
-
-        /* 核心动画逻辑：同时控制透明度(渐变)和Y轴位移(自上而下) */
-        @keyframes bounceDown {
-            0% { 
-                opacity: 0; 
-                transform: translate(-50%, -20px); 
-            }
-            50% { 
-                opacity: 1; 
-                transform: translate(-50%, 0); 
-            }
-            100% { 
-                opacity: 0; 
-                transform: translate(-50%, 20px); 
-            }
-        }
-        .hero-fullscreen-bg { position: relative; background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.8)), url('./images/hero-bg.jpg') no-repeat center center; background-size: cover; width: 100vw; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 60px; margin: 0; border-radius: 0; }
-        .hero-fullscreen-bg .hero-title { background: none; -webkit-text-fill-color: #ffffff; color: #ffffff; text-shadow: 0 4px 12px rgba(0,0,0,0.4); }
-        .hero-fullscreen-bg .hero-subtitle { color: rgba(255, 255, 255, 0.9); text-shadow: 0 2px 10px rgba(0,0,0,0.4); }
-        .hero-fullscreen-bg .contact-item { color: rgba(255, 255, 255, 0.85); }
-        .hero-fullscreen-bg .btn-secondary { border-color: rgba(255, 255, 255, 0.6); color: #ffffff; }
-        .hero-fullscreen-bg .btn-secondary:hover { background-color: #ffffff; color: #000000; }
-        
-        .hero-light { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%); display: flex; flex-direction: column; align-items: center; padding-top: 160px; min-height: 100vh; justify-content: center; transition: background 0.5s ease; }
-        
-        .education-section { padding: 100px 20px; background: var(--bg-primary); transition: background-color 0.5s ease; }
-        .education-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px; max-width: 1000px; margin: 0 auto; }
-        .education-card { background: var(--bento-bg); padding: 32px; border-radius: 20px; box-shadow: 0 4px 20px var(--bento-shadow); transition: all 0.3s ease; }
-        .education-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px var(--bento-hover-shadow); }
-        .education-card h3 { font-size: 20px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
-        .education-card .school { font-size: 14px; color: var(--primary); font-weight: 600; margin-bottom: 4px; }
-        .education-card .period { color: var(--text-secondary); font-size: 13px; }
-
-        .experience-section { padding: 100px 20px; background: var(--bg-secondary); transition: background-color 0.5s ease; }
-        .timeline { position: relative; max-width: 1000px; margin: 0 auto; padding-left: 40px; }
-        .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border-color); }
-        .timeline-item { position: relative; margin-bottom: 40px; width: 100%; padding: 32px; background: var(--bento-bg); border-radius: 20px; box-shadow: 0 4px 20px var(--bento-shadow); transition: all 0.3s ease; }
-        .timeline-item:hover { transform: translateY(-5px); box-shadow: 0 10px 30px var(--bento-hover-shadow); }
-        .timeline-item::before { content: ''; position: absolute; left: -36px; top: 32px; width: 16px; height: 16px; background: var(--primary); border-radius: 50%; z-index: 1; box-shadow: 0 0 0 4px var(--bg-secondary); }
-        .timeline-item h3 { font-size: 20px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
-        .timeline-item .company { font-size: 14px; color: var(--primary); font-weight: 600; margin-bottom: 4px; }
-        .timeline-item .date { color: var(--text-secondary); font-size: 13px; margin-bottom: 16px; }
-        .resume-project-title { font-size: 15px; font-weight: 600; line-height: 1.7; margin: 20px 0 8px; color: var(--text-primary); }
-        .timeline-item ul { padding-left: 20px; margin-bottom: 16px; }
-        .timeline-item li { margin-bottom: 8px; line-height: 1.7; color: var(--text-secondary); font-size: 14px; }
-
-        .bento-section { background-color: var(--bg-primary); transition: background-color 0.5s ease; padding-top: 100px; padding-bottom: 100px; }
-        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; max-width: 1200px; margin: 0 auto; }
-        .bento-item { background-color: var(--bento-bg); border-radius: 24px; padding: 32px; box-shadow: 0 4px 20px var(--bento-shadow); display: flex; flex-direction: column; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease, background-color 0.5s ease; position: relative; overflow: hidden; text-align: left; }
-        .bento-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; pointer-events: none; }
-        .bento-content > * { pointer-events: auto; }
-        .tag { display: inline-block; font-size: 12px; font-weight: 600; color: var(--primary); background: var(--tag-bg); padding: 6px 12px; border-radius: 8px; margin-bottom: 16px; width: fit-content; }
-        .tag-small { background: var(--tag-bg); color: var(--primary); padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; display: inline-block; margin: 4px; pointer-events: auto; }
-        .award-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #ffd700, #ffaa00); color: #1d1d1f; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; margin-bottom: 16px; width: fit-content; }
-        .bento-item h3 { font-size: 22px; font-weight: 600; margin-bottom: 12px; color: var(--text-primary); transition: color 0.5s ease; }
-        .bento-item p { font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px; transition: color 0.5s ease; }
-        .bento-item:hover { transform: scale(1.02); box-shadow: 0 10px 40px var(--bento-hover-shadow); }
-        .item-large { grid-column: span 2; grid-row: span 2; }
-        .item-wide { grid-column: span 2; }
-        .bento-link { margin-top: auto; padding-top: 20px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 500; color: var(--link-color); text-decoration: none; pointer-events: auto; width: fit-content; transition: color 0.3s ease; }
-        .bento-link i { margin-right: 6px; }
-
-        /* =========================================
-           5. 年度 Top 9 瀑布流 & 放大弹窗
-           ========================================= */
-        .top9-grid { column-count: 3; column-gap: 24px; max-width: 1200px; margin: 0 auto; }
-        .top9-item { break-inside: avoid; margin-bottom: 24px; border-radius: 16px; background: var(--bento-bg); box-shadow: 0 4px 20px var(--bento-shadow); transition: transform 0.3s ease, box-shadow 0.3s ease; overflow: hidden; cursor: zoom-in; }
-        .top9-item:hover { transform: translateY(-5px); box-shadow: 0 12px 30px var(--bento-hover-shadow); }
-        .top9-item img { width: 100%; display: block; height: auto; transition: transform 0.5s ease; }
-        .top9-item:hover img { transform: scale(1.03); }
-        .top9-caption { padding: 12px 16px; font-size: 13px; color: var(--text-secondary); text-align: center; border-top: 1px solid var(--border-color); line-height: 1.5; }
-
-        .lightbox { display: none; position: fixed; z-index: 100000; padding: 40px 20px; left: 0; top: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); align-items: center; justify-content: center; flex-direction: column; opacity: 0; transition: opacity 0.3s ease; }
-        .lightbox.active { display: flex; opacity: 1; }
-        .lightbox-content { max-width: 90%; max-height: 80vh; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); object-fit: contain; transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
-        .lightbox.active .lightbox-content { transform: scale(1); }
-        .lightbox-caption { margin-top: 16px; color: rgba(255, 255, 255, 0.8); font-size: 14px; text-align: center; max-width: 80%; }
-        .lightbox-close { position: absolute; top: 30px; right: 40px; color: #f1f1f1; font-size: 40px; font-weight: 100; cursor: pointer; transition: color 0.3s ease; }
-        .lightbox-close:hover { color: #fff; }
-
-        @media (max-width: 1024px) { .top9-grid { column-count: 3; } }
-        @media (max-width: 768px) { .top9-grid { column-count: 2; } .lightbox-close { top: 15px; right: 20px; } }
-        @media (max-width: 480px) { .top9-grid { column-count: 1; } }
-
-        /* 响应式 */
-        @media (max-width: 1024px) { .bento-grid { grid-template-columns: repeat(2, 1fr); } .item-large, .item-wide { grid-column: span 2; } }
-        @media (max-width: 768px) { .hero-title { font-size: 40px; } .bento-grid { grid-template-columns: 1fr; } .item-large, .item-wide { grid-column: span 1; } .timeline { padding-left: 30px; } .timeline::before { left: 8px; } .timeline-item::before { left: -30px; } nav ul { display: none; } }
-
-        /* 高级渐显模糊动画 */
-        .reveal { opacity: 0; transform: translateY(40px); filter: blur(10px); transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); filter: blur(0); }
-        .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.2s; } .delay-3 { transition-delay: 0.3s; }
-
-        footer { background-color: var(--bg-primary); color: var(--text-secondary); font-size: 14px; text-align: center; padding: 40px 20px; border-top: 1px solid var(--footer-border); transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease; }
-        .footer-links { display: flex; justify-content: center; gap: 24px; margin-top: 16px; }
-        .footer-links a { color: var(--text-secondary); font-size: 20px; transition: color 0.3s ease; }
-        .footer-links a:hover { color: var(--primary); }
-
-        @media (max-width: 380px) { .education-grid { grid-template-columns: minmax(0, 1fr); } }
-
-        /* 经历与项目详情入口：沿用原站蓝色与圆角 */
-        .resume-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
-        .resume-detail-link { display: inline-flex; align-items: center; justify-content: center; gap: 18px; padding: 11px 20px; border-radius: 999px; background: var(--primary); color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; min-height: 44px; transition: background-color .2s, transform .2s; }
-        .resume-detail-link:hover { transform: translateY(-2px); filter: brightness(.93); }
-        .resume-detail-link:focus-visible { outline: 3px solid var(--text-primary); outline-offset: 4px; }
-        .resume-secondary-link { color: var(--link-color); font-size: 14px; text-underline-offset: 4px; padding: 8px 0; }
-        [data-theme="dark"] .resume-detail-link { color: #fff; }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zekai Yuan · 苑泽楷</title>
+<meta name="description" content="Zekai Yuan (苑泽楷) is a designer turned engineer, building benchmarks and judges that show what multimodal AI can really do. Multimodal evaluation at Tencent HY, computer science at HIT Shenzhen.">
+<meta property="og:title" content="Zekai Yuan · 苑泽楷">
+<meta property="og:description" content="Designer turned engineer, building benchmarks and judges for multimodal AI.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://zk-yuan.github.io/">
+<meta property="og:image" content="https://zk-yuan.github.io/images/v3/iceland.jpg">
+<meta name="theme-color" content="#F2F1EC">
+<link rel="preload" href="assets/fonts/inter-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/v3.css">
+<script>
+(function () {
+  var d = document.documentElement;
+  d.className += ' js';
+  try {
+    var l = localStorage.getItem('lang');
+    if (!l) l = (navigator.language || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+    d.setAttribute('data-lang', l);
+    d.lang = l === 'zh' ? 'zh-CN' : 'en';
+  } catch (e) {}
+})();
+</script>
 </head>
 <body>
+<a class="skip" href="#about"><span class="en">Skip to content</span><span class="zh">跳到正文</span></a>
 
-    <div id="loader">
-        <div class="loader-text">苑泽楷</div>
-        <div class="progress-bar"></div>
+<!-- top bar -->
+<header class="bar">
+  <a class="bar-name" href="#top">Zekai Yuan <span>苑泽楷</span></a>
+  <p class="bar-clock" aria-label="Local time in Shenzhen"><span class="en">Shenzhen</span><span class="zh">深圳</span> <b id="clock">--:--</b> <i>GMT+8</i></p>
+  <nav class="bar-nav" aria-label="Primary">
+    <a href="#experience"><span class="en">Experience</span><span class="zh">经历</span></a>
+    <a href="#projects"><span class="en">Projects</span><span class="zh">作品</span></a>
+    <a href="#contact"><span class="en">Contact</span><span class="zh">联系</span></a>
+    <span class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang-btn="zh" aria-pressed="false">中</button>
+    </span>
+    <a class="bar-cv" href="assets/zekai-yuan-cv.pdf" target="_blank" rel="noopener">CV ↗</a>
+  </nav>
+</header>
+
+<main>
+
+<!-- ============ INTRO ============ -->
+<section id="top" class="intro">
+  <p class="intro-label"><span class="en">Portfolio &amp; résumé — 2026</span><span class="zh">作品集与简历 — 2026</span></p>
+
+  <h1 class="statement">
+    <span class="en" data-split>Zekai Yuan <span class="pill" data-token><img src="images/v3/iceland.jpg" alt="" aria-hidden="true"></span> is a <em>designer</em> turned engineer, building benchmarks <span class="pill pill-wide" data-token><img src="images/v3/spacetrack.jpg" alt="" aria-hidden="true"></span> and judges that show what multimodal AI can <em>really</em> do.</span>
+    <span class="zh" data-split>苑泽楷 <span class="pill" data-token><img src="images/v3/iceland.jpg" alt="" aria-hidden="true"></span> 从<em>工业设计</em>走向工程，为多模态 AI 搭建基准 <span class="pill pill-wide" data-token><img src="images/v3/spacetrack.jpg" alt="" aria-hidden="true"></span> 与裁判，看清它<em>真正</em>能做什么。</span>
+  </h1>
+
+  <dl class="intro-meta">
+    <div><dt><span class="en">Now</span><span class="zh">现在</span></dt><dd><span class="en">Multimodal Evaluation Intern, Tencent HY</span><span class="zh">腾讯混元 · 多模态评测实习生</span></dd></div>
+    <div><dt><span class="en">Studying</span><span class="zh">在读</span></dt><dd><span class="en">Computer Science, HIT Shenzhen ’28</span><span class="zh">哈工深 · 计算机科学与技术 · 2028 届</span></dd></div>
+    <div><dt><span class="en">Before</span><span class="zh">之前</span></dt><dd><span class="en">ByteDance · Parametrix · Industrial design</span><span class="zh">字节跳动 · 超参数科技 · 工业设计</span></dd></div>
+    <div><dt><span class="en">Based in</span><span class="zh">所在地</span></dt><dd><span class="en">Shenzhen, from Heze</span><span class="zh">深圳，来自山东菏泽</span></dd></div>
+  </dl>
+
+  <a class="scroll-cue" href="#about"><span class="en">Scroll</span><span class="zh">向下</span><i></i></a>
+</section>
+
+<!-- ============ RESUME (two columns) ============ -->
+<div class="cv">
+  <aside class="cv-side">
+    <div class="side-in">
+      <figure class="side-photo">
+        <img src="images/v3/iceland.jpg" alt="Zekai Yuan walking on snow in Iceland at dusk">
+        <figcaption><span class="en">Iceland, at dusk</span><span class="zh">冰岛，黄昏</span></figcaption>
+      </figure>
+      <h2 class="side-name">Zekai Yuan <span>苑泽楷</span></h2>
+      <p class="side-role"><span class="en">Multimodal Evaluation Intern at Tencent HY</span><span class="zh">腾讯混元 · 多模态评测实习生</span></p>
+      <p class="side-quote"><span class="en">“A realist with a streak of idealism.”</span><span class="zh">“一个带有理想主义的现实主义者。”</span></p>
+      <nav class="side-nav" aria-label="Sections">
+        <a href="#about"><i>01</i><span class="en">About</span><span class="zh">关于我</span></a>
+        <a href="#experience"><i>02</i><span class="en">Experience</span><span class="zh">经历</span></a>
+        <a href="#research"><i>03</i><span class="en">Research</span><span class="zh">研究</span></a>
+        <a href="#projects"><i>04</i><span class="en">Projects</span><span class="zh">作品</span></a>
+        <a href="#life"><i>05</i><span class="en">Life</span><span class="zh">生活</span></a>
+      </nav>
+      <p class="side-links">
+        <a href="mailto:cdjabah13@gmail.com">Email</a>
+        <a href="https://github.com/ZK-Yuan" target="_blank" rel="noopener">GitHub ↗</a>
+        <a href="assets/zekai-yuan-cv.pdf" target="_blank" rel="noopener"><span class="en">Résumé ↗</span><span class="zh">简历 ↗</span></a>
+      </p>
     </div>
+  </aside>
 
-    <nav>
-        <div class="nav-container">
-            <div class="nav-logo" style="width: 36px;">ZK</div> 
-            <ul>
-                <li><a href="#about">About Me</a></li>
-                <li><a href="#education">Work Background</a></li>
-                <li><a href="#personal-vibe">Daily Life</a></li>
-            </ul>
-            <button id="theme-toggle" aria-label="切换深色模式">
-                <svg class="moon-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                <svg class="sun-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-            </button>
-        </div>
-    </nav>
+  <div class="cv-main">
 
-    <section id="about" class="hero-fullscreen-bg text-center">
-        <h1 class="hero-title reveal delay-1" style="font-size: 60px; letter-spacing: 0.05em;">苑泽楷</h1>
-        <p class="hero-subtitle reveal delay-2">
-            哈尔滨工业大学（深圳） <br>
-            <span style="font-size: 18px; color: rgba(255,255,255,0.8); display: block; margin-top: 6px;">计算机科学与技术本科 · 2028.06 毕业</span>
-            <span style="font-size: 32px; color: #ffffff; font-weight: 500; display: block; margin-top: 16px; text-shadow: 0 4px 12px rgba(0,0,0,0.6);">站在科技与人文的十字路口</span>
-        </p>
-        
-        <div class="contact-info reveal delay-3">
-            <div class="contact-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                <span id="phone-text">13905302358</span>
-                <button class="copy-icon" data-target="phone-text" title="复制"><i class="fas fa-copy"></i></button>
-            </div>
-            <div class="contact-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                <span id="email-text">cdjabah13@gmail.com</span>
-                <button class="copy-icon" data-target="email-text" title="复制"><i class="fas fa-copy"></i></button>
-            </div>
-            <div class="contact-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                <span>深圳</span>
-            </div>
-        </div>
-
-        <div class="cta-group reveal delay-3">
-            <a href="mailto:cdjabah13@gmail.com" class="btn-primary"><i class="fas fa-paper-plane"></i> 联系我</a>
-            <a href="assets/zekai-yuan-cv.pdf" target="_blank" class="btn-secondary">
-                <i class="fas fa-file-alt" style="margin-right: 6px;"></i> 查看PDF版简历
-            </a>
-        </div>
-        <a href="#education" class="scroll-indicator">
-            <i class="fas fa-chevron-down"></i>
-        </a>
+    <!-- About -->
+    <section id="about" class="block" aria-labelledby="h-about">
+      <h2 class="block-h" id="h-about"><i>01</i><span class="en">About</span><span class="zh">关于我</span></h2>
+      <div class="prose">
+        <p class="lead r"><span class="en">I started university in <b>industrial design</b>. A companion robot for autistic children that I worked on there was tested with five institutions and won an <b>iF Design Award</b>.</span><span class="zh">大学第一年我读的是<b>工业设计</b>，那时参与的孤独症儿童陪伴机器人和 5 家机构合作实测，拿到了 <b>iF 设计奖</b>。</span></p>
+        <p class="r"><span class="en">After switching to computer science, I spent two years on the product side of AI: game agents at <b>Parametrix</b>, agent evaluation at <b>ByteDance</b>, and <a href="https://hseek.cn" target="_blank" rel="noopener">Hseek</a>, a campus app I built on my own that reached 2,000 people in five days.</span><span class="zh">转到计算机之后，我在 AI 产品这一侧做了两年：在<b>超参数科技</b>做游戏智能体，在<b>字节跳动</b>做 Agent 评测，还独立做了校园应用 <a href="https://hseek.cn" target="_blank" rel="noopener">Hseek</a>，5 天覆盖 2,000 多人。</span></p>
+        <p class="r"><span class="en">Now, at <b>Tencent HY</b>, I build the things that tell a team where its models really fail: closed-loop 3D benchmarks, sandboxes for code-generated visuals, and rubric-and-judge pipelines. Next, I want to turn those signals into training.</span><span class="zh">现在在<b>腾讯混元</b>，我做的是告诉团队“模型到底在哪里失败”的东西：三维闭环空间基准、代码生成视觉内容的隔离沙箱，以及 Rubric 与裁判链路。下一步，我想把这些信号用到训练里。</span></p>
+      </div>
     </section>
 
-    <section id="education" class="education-section">
-        <div class="text-center">
-            <h2 class="section-title reveal">教育背景</h2>
-            <p class="section-desc reveal delay-1">学术基础与专业训练</p>
+    <!-- Experience -->
+    <section id="experience" class="block" aria-labelledby="h-exp">
+      <h2 class="block-h" id="h-exp"><i>02</i><span class="en">Experience</span><span class="zh">经历</span></h2>
+      <ol class="exp">
+        <li class="job r">
+          <span class="job-date">2026.08 — <span class="en">Now</span><span class="zh">至今</span></span>
+          <div class="job-main">
+            <h3><span class="en">Multimodal Evaluation Intern</span><span class="zh">多模态评测实习生</span> <span class="at">· <span class="en">Tencent HY</span><span class="zh">腾讯混元</span></span></h3>
+            <p><span class="en">Co-first author on two 3D spatial-reasoning benchmarks. Built benchmarks for code-generated video and STEM diagrams, and the rubric-and-judge pipeline that scores them.</span><span class="zh">作为共同一作完成两项三维空间推理基准；搭建代码生成视频与理科作图基准，以及给它们打分的 Rubric 与裁判链路。</span></p>
+            <ul class="tags"><li>Benchmarks</li><li>Agentic vision</li><li>LLM-as-judge</li><li>Python</li><li>Three.js</li></ul>
+          </div>
+        </li>
+        <li class="job r">
+          <span class="job-date">2026.04 — 2026.08</span>
+          <div class="job-main">
+            <h3><a href="bytedance-detail.html"><span class="en">AI Product Intern</span><span class="zh">AI 产品经理实习生</span> <span class="at">· <span class="en">ByteDance Volcano Engine</span><span class="zh">字节跳动 · 火山引擎</span></span> <span class="arr">↗</span></a></h3>
+            <p><span class="en">Built the LangGraph LLM-as-judge harness behind every release review: agreement with human review went from 60% to 85%, and a week of review became a day.</span><span class="zh">搭建团队每次发版都要用的 LangGraph LLM-as-Judge 链路：机评与人评一致率从 60% 提到 85%，一周的评审压缩到一天。</span></p>
+            <ul class="tags"><li>LangGraph</li><li>Evaluation</li><li>Agents</li><li>MCP</li></ul>
+          </div>
+        </li>
+        <li class="job r">
+          <span class="job-date">2026.03 — <span class="en">Now</span><span class="zh">至今</span></span>
+          <div class="job-main">
+            <h3><a href="https://hseek.cn" target="_blank" rel="noopener"><span class="en">Founder &amp; Full-stack Developer</span><span class="zh">创始人 · 独立全栈开发</span> <span class="at">· Hseek</span> <span class="arr">↗</span></a></h3>
+            <p><span class="en">Designed and shipped a campus matching app in two days with no backend experience. 2,000+ users in the first five days.</span><span class="zh">零后端基础，两天设计并上线一个校园匹配平台，5 天覆盖 2,000 多名用户。</span></p>
+            <ul class="tags"><li>React</li><li>TypeScript</li><li>tRPC</li><li>MySQL</li></ul>
+          </div>
+        </li>
+        <li class="job r">
+          <span class="job-date">2025.12 — 2026.03</span>
+          <div class="job-main">
+            <h3><a href="hyperparam-detail.html"><span class="en">AI Product Intern</span><span class="zh">AI 产品经理实习生</span> <span class="at">· <span class="en">Parametrix</span><span class="zh">超参数科技</span></span> <span class="arr">↗</span></a></h3>
+            <p><span class="en">Built game-agent demos for three B2B clients and helped ship v1.0 of an agent-building platform, tracking down 30+ critical bugs.</span><span class="zh">为 3 家 B 端客户搭建游戏智能体演示，定位修复 30 多个关键缺陷，推动智能体平台 V1.0 上线。</span></p>
+            <ul class="tags"><li>Python</li><li>Redis</li><li>Milvus</li></ul>
+          </div>
+        </li>
+        <li class="job r">
+          <span class="job-date">2025.09 — 2025.12</span>
+          <div class="job-main">
+            <h3><a href="abc-detail.html"><span class="en">Product Lead</span><span class="zh">产品负责人</span> <span class="at">· <span class="en">ABC Consulting Club</span><span class="zh">ABC 咨询社</span></span> <span class="arr">↗</span></a></h3>
+            <p><span class="en">Led a 15-person student team building an NL2SQL agent so non-technical members could query job-market data in plain language.</span><span class="zh">带领 15 人学生团队，做出让非技术同学用自然语言查询岗位数据的 NL2SQL 智能体。</span></p>
+            <ul class="tags"><li>Coze</li><li>NL2SQL</li><li>BI</li></ul>
+          </div>
+        </li>
+      </ol>
+      <div class="edu r">
+        <span class="job-date"><span class="en">Education</span><span class="zh">教育</span></span>
+        <div>
+          <h3><span class="en">Harbin Institute of Technology, Shenzhen</span><span class="zh">哈尔滨工业大学（深圳）</span></h3>
+          <p><span class="en">B.Eng. Computer Science, 2024 — 2028 · Industrial Design, 2023 — 2024</span><span class="zh">计算机科学与技术，2024 — 2028 · 工业设计，2023 — 2024</span></p>
         </div>
-
-        <div class="education-grid">
-            <div class="education-card reveal delay-1 hover-glow">
-                <div class="glow-content">
-                    <h3>计算机科学与技术</h3>
-                    <div class="school">哈尔滨工业大学（深圳）</div>
-                    <div class="period">2024-2028（本科）· 2028.06 毕业</div>
-                </div>
-            </div>
-            <div class="education-card reveal delay-2 hover-glow">
-                <div class="glow-content">
-                    <h3>工业设计</h3>
-                    <div class="school">哈尔滨工业大学（深圳）</div>
-                    <div class="period">2023-2024（本科）· 转专业前</div>
-                </div>
-            </div>
-        </div>
+      </div>
+      <a class="more r" href="assets/zekai-yuan-cv.pdf" target="_blank" rel="noopener"><span class="en">View full résumé</span><span class="zh">查看完整简历</span> <span class="arr">↗</span></a>
     </section>
 
-    <section id="experience" class="experience-section">
-        <div class="text-center">
-            <h2 class="section-title reveal">实习与项目经历</h2>
-            <p class="section-desc reveal delay-1">在 AI 产品领域的实践与成长</p>
+    <!-- Research -->
+    <section id="research" class="block" aria-labelledby="h-res">
+      <h2 class="block-h" id="h-res"><i>03</i><span class="en">Research</span><span class="zh">研究</span></h2>
+      <article class="paper r">
+        <a class="paper-thumb" href="https://zk-yuan.github.io/spacetrack/" target="_blank" rel="noopener"><img loading="lazy" src="images/v3/spacetrack.jpg" alt="First-person view of the detective's office world in Space Track"></a>
+        <div>
+          <h3><a href="https://zk-yuan.github.io/spacetrack/" target="_blank" rel="noopener">Space Track: How Multimodal Agents Perceive, Update, and Act in Changing 3D Worlds <span class="arr">↗</span></a></h3>
+          <p class="paper-by">Chenglong Shi*, <b>Zekai Yuan*</b>, Yue Song, Jon Pu, Will Wu · 2026</p>
+          <p><span class="en">Five first-person 3D worlds that change as the agent acts. Agents notice the change, then fail to act on it.</span><span class="zh">五个会随智能体行动而改变的第一人称三维世界。智能体能注意到变化，却没法据此行动。</span></p>
+          <p class="paper-links"><a href="https://zk-yuan.github.io/spacetrack/" target="_blank" rel="noopener"><span class="en">Project &amp; demos</span><span class="zh">项目与演示</span></a><a href="https://zk-yuan.github.io/spacetrack/paper.pdf" target="_blank" rel="noopener">PDF</a></p>
         </div>
-
-        <div class="timeline">
-            <div class="timeline-item reveal delay-1 hover-glow">
-                <div class="glow-content">
-                    <div class="company">腾讯·混元大模型基础模型部</div>
-                    <h3>AI 策略产品经理</h3>
-                    <div class="date">2026.4-至今</div>
-
-                </div>
-            </div>
-
-            <div class="timeline-item reveal delay-1 hover-glow">
-                <div class="glow-content">
-                    <div class="company">字节跳动 · 火山引擎</div>
-                    <h3>AI 产品经理实习生</h3>
-                    <div class="date">2026.04 - 2026.08</div>
-                    <h4 class="resume-project-title">项目一：某手机厂商手机助手 Agent 架构升级与类落地（agent 评测/架构）</h4>
-                    <ul>
-                        <li><strong>架构升级：</strong>参与推动手机助手 agent 从端到端单链路向模块化 Agent 架构转型，将 agent 拆解为 query 改写、意图识别、工具路由、MCP/搜索增强等模块。重点负责 agent 购物推荐意图识别方向</li>
-                        <li><strong>意图与路由：</strong>协同算法定义 15 类行业与 9 类意图的路由逻辑与 MCP、tool use 等标准，基于万条离线 Query 意图识别模型选型（准确率 95%）后训练与工具路由的需求定义、评测与验收</li>
-                    </ul>
-                    <h4 class="resume-project-title">项目二：LLM-as-Judge 自动化评测与归因系统搭建</h4>
-                    <ul>
-                        <li><strong>评测闭环：</strong>基于 LangGraph 独立搭建 LLM-as-Judge 评测 Harness，设计状态流转、条件路由、联网工具调用、低置信度复核、人工介入和版本回归机制，定义 “7+1 维度”机评标准，沉淀一批 case 与机评提示词。单次模型版本评测周期从一周人工归因一次压缩到一天自动出报告。</li>
-                        <li><strong>提效成果：</strong>在真实线上回流 case 上实现机评-人评一致率 60% 到 85% 的提升，有效解决了评测中位置偏见、事实性问题幻觉多、打分漂移等问题，支撑了模型能力的快速迭代。</li>
-                    </ul>
-                    <h4 class="resume-project-title">项目三：benchmark 建设与数据标注链路制定</h4>
-                    <ul>
-                        <li><strong>标注标准制定：</strong>负责抓取归类线上回流 case，带领数据标注团队进行 Benchmark 构建与标注标准细则制定，成功推动购物推荐垂类率先开流上线</li>
-                        <li><strong>Benchmark 建设：</strong>对同一批 benchmark 用机评打分线上链路输出，判断新链路相对线上基线是否有收益。形成业务链路：线上日志回流 → 语义聚类抽样 → 上下文重写 → 豆包 C 端对比 → 机评 rubrics 生成打分 → 人工质检</li>
-                    </ul>
-                    <div>
-                        <span class="tag-small">Agent 架构</span><span class="tag-small">LangGraph</span><span class="tag-small">LLM-as-Judge</span><span class="tag-small">MCP</span><span class="tag-small">Benchmark</span>
-                    </div>
-                    <div class="resume-actions"><a href="bytedance-detail.html" class="resume-detail-link">查看实习复盘 <span aria-hidden="true">→</span></a><a href="bytedance-evaluation.html" class="resume-secondary-link">评测方法与案例</a></div>
-                </div>
-            </div>
-
-            <div class="timeline-item reveal delay-2 hover-glow">
-                <div class="glow-content">
-                    <div class="company">New 来（Hseek）校园匹配平台</div>
-                    <h3>产品负责人 &amp; 独立全栈开发</h3>
-                    <div class="date">2026.03 - 至今</div>
-                    <ul>
-                        <li><strong>AI 全栈交付：</strong>在零后端基础下，通过 Vibe Coding 2 天内完成云服务器部署、鉴权登录注册、邮件系统、后台管理系统等全栈开发，通过生产、测试环境隔离实现快速迭代。</li>
-                        <li><strong>数据、用户：</strong>设计“月老牵线”与“双向奔赴”社交玩法促进平台裂变传播，上线首日注册突破 500 人，5 天内覆盖 2000+ 用户，实现校内现象级裂变。建立 A/B 测试框架，通过分析线上点击行为及问卷填写数据，优化平台的匹配问卷填写</li>
-                        <li><strong>产品规划：</strong>负责校园匹配产品的需求拆解与业务规则设计，规划注册认证、问卷、周期匹配、补配雷达及 AI 分身社区等用户流程；定义双向确认、隐私揭晓、候选超时与异常处理规则，建设运营审核和任务监控管理后台。</li>
-                        <li><strong>全栈开发：</strong>使用 React/TypeScript、Node.js/Express、tRPC、Drizzle 与 MySQL 端到端实现校园匹配平台；开发问卷评分与稳定匹配算法、雷达候选状态机及持久化后台任务，并实现注册认证、权限控制、隐私过滤和管理后台。</li>
-                    </ul>
-                    <div>
-                        <span class="tag-small">React / TypeScript</span><span class="tag-small">Node.js / tRPC</span><span class="tag-small">MySQL</span><span class="tag-small">稳定匹配</span><span class="tag-small">AI 社区</span>
-                    </div>
-                    <div class="resume-actions"><a href="newlai-detail.html" class="resume-detail-link">查看项目详情 <span aria-hidden="true">→</span></a><a href="https://hseek.cn" class="resume-secondary-link">访问 Hseek ↗</a></div>
-                </div>
-            </div>
-
-            <div class="timeline-item reveal delay-1 hover-glow">
-                <div class="glow-content">
-                    <div class="company">超参数科技 (深圳) 有限公司</div>
-                    <h3>AI 产品经理实习生</h3>
-                    <div class="date">2025.12 - 2026.03</div>
-                    <ul>
-                        <li><strong>智能体落地：</strong>策划并搭建基于 Redis/Python/Milvus 的复杂游戏 Agent 案例（好感度 NPC、动态交易员），支撑 3 家 B 端客户商业演示，验证了平台在较为复杂游戏场景下的稳定性。</li>
-                        <li><strong>与研发对接：</strong>负责类似 Coze/Dify 的内部平台 V1.0 上线，定位并修复 30+ 项 P0/P1 级核心缺陷</li>
-                    </ul>
-                    <div>
-                        <span class="tag-small">Agent 编排</span><span class="tag-small">产品设计</span><span class="tag-small">LLM</span><span class="tag-small">Redis</span><span class="tag-small">Python</span>
-                    </div>
-                    <div class="resume-actions"><a href="hyperparam-detail.html" class="resume-detail-link">查看实习复盘 <span aria-hidden="true">→</span></a></div>
-                </div>
-            </div>
-
-            <div class="timeline-item reveal delay-2 hover-glow">
-                <div class="glow-content">
-                    <div class="company">ABC 咨询社 AI 智能体项目</div>
-                    <h3>PM 产品经理</h3>
-                    <div class="date">2025.09 - 2025.12</div>
-                    <ul>
-                        <li>带领 15 人跨职能团队制定数据标准化规范，确立以"岗位名称"为核心的数据清洗逻辑</li>
-                        <li>设计并落地 Natural Language to SQL (NL2SQL) 交互逻辑，搭建 Coze 工作流</li>
-                        <li>让非技术人员通过自然语言查询/修改数据库，降低 B 端用户操作门槛</li>
-                        <li>统筹"爬虫数据获取 → Coze 知识库存储 → Agent 智能分析 → BI 可视化"完整链路</li>
-                        <li>输出标准 PRD 文档并协调交付</li>
-                    </ul>
-                    <div>
-                        <span class="tag-small">团队管理</span><span class="tag-small">Coze</span><span class="tag-small">NL2SQL</span><span class="tag-small">BI可视化</span>
-                    </div>
-                    <div class="resume-actions"><a href="abc-detail.html" class="resume-detail-link">查看项目详情 <span aria-hidden="true">→</span></a></div>
-                </div>
-            </div>
-
-            <div class="timeline-item reveal delay-1 hover-glow">
-                <div class="glow-content">
-                    <div class="company">深圳市零一学院 · 时间胶囊</div>
-                    <h3>项目负责人 &amp; 核心开发者</h3>
-                    <ul>
-                        <li><strong>银发场景洞察：</strong>深度访谈 50+ 位高净值银发人群，定义“语音交互 + AI 整理”的 MVP 形态，解决老年人数字化能力弱但分享欲强的痛点。</li>
-                        <li><strong>RAG 架构落地：</strong>在 Coze 平台构建“非结构化语音转结构化文本”Workflow，通过 RAG 约束解决大模型幻觉与口述逻辑混乱问题。</li>
-                    </ul>
-                    <div><span class="tag-small">Coze</span><span class="tag-small">RAG</span><span class="tag-small">语音交互</span></div>
-                </div>
-            </div>
-
-            <div class="timeline-item reveal delay-2 hover-glow">
-                <div class="glow-content">
-                    <div class="award-badge"><i class="fas fa-trophy"></i> iF设计奖</div>
-                    <h3>孤独症智能机器人</h3>
-                    <ul>
-                        <li>桌面智能陪伴机器人，与深圳5家孤独症机构合作，300+人次实测，IP+AI+陪伴产品框架</li>
-                    </ul>
-                    <div><span class="tag-small">iF全球设计奖</span><span class="tag-small">三创赛一等奖</span><span class="tag-small">Figma</span></div>
-                </div>
-            </div>
+      </article>
+      <article class="paper r">
+        <div class="paper-thumb paper-tile" aria-hidden="true"><span>RGB<br><em>only</em></span></div>
+        <div>
+          <h3><span class="en">A closed-loop benchmark for 3D action from RGB alone</span><span class="zh">仅凭 RGB 的三维闭环行动基准</span></h3>
+          <p class="paper-by"><span class="en">Co-first author · under double-blind review</span><span class="zh">共同一作 · 双盲审稿中</span></p>
+          <p><span class="en">Brick building and mechanical puzzles with no privileged coordinates. The bottleneck turns out to be 3D geometry, not planning.</span><span class="zh">积木搭建与机械解谜，不给任何特权坐标。结果发现瓶颈在三维几何，而不在规划。</span></p>
         </div>
+      </article>
     </section>
 
-    <section id="personal-vibe" class="bento-section">
-        <div class="text-center">
-            <h2 class="section-title reveal">🌟 不止于此 🌟</h2>
-            <p class="section-desc reveal delay-1">一个带有理想主义的现实主义者</p>
-        </div>
-        
-        <div class="bento-grid">
-            <div class="bento-item reveal hover-glow" style="background: linear-gradient(135deg, #429f7d 0%, #2b6a53 100%); color: white; display: flex; align-items: center; justify-content: center; text-align: center;">
-                <div class="glow-content">
-                    <h2 style="font-size: 42px; font-weight: 700; margin-bottom: 4px; color: white;">ENFJ</h2>
-                    <p style="color: rgba(255,255,255,0.9); font-size: 16px; font-weight: 500; margin: 0;">"忠实的大剑"</p>
-                </div>
-            </div>
-
-            <div class="bento-item reveal delay-1 hover-glow">
-                <div class="glow-content">
-                    <h3 style="margin-bottom: 8px;">日常人设</h3>
-                    <p style="margin-bottom: 12px;">工科与设计的双重背景，热爱折腾的行动派。</p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                        <span class="tag-small" style="margin:0;">♒ 水瓶座</span>
-                        <span class="tag-small" style="margin:0;">📍 山东菏泽</span>
-                        <span class="tag-small" style="margin:0;">🎨 工业设计+计算机</span>
-                        <span class="tag-small" style="margin:0;">⚔️ DDL战士</span>
-                        <span class="tag-small" style="margin:0;">🚗 老司机(2000KM+)</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bento-item item-wide reveal delay-2 hover-glow">
-                <div class="glow-content">
-                    <h3 style="margin-bottom: 8px;">主打一个「松弛感」</h3>
-                    <p style="margin-bottom: 16px;">离开屏幕后，我通常在这些事情里寻找生活灵感与能量：</p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">✈️ 旅行</span>
-                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">🚶‍♂️ City Walk 爱好者</span>
-                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">🎵 李健小粉丝</span>
-                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">🍺 微醺</span>
-                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">🖼️ 看展</span>
-                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">🎤 K歌</span>
-                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">🍗 美食</span>
-                        <span class="tag-small" style="background: rgba(134, 134, 139, 0.1); color: var(--text-primary); font-size: 14px; padding: 6px 12px; margin:0;">📹 Vlog</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Projects -->
+    <section id="projects" class="block" aria-labelledby="h-proj">
+      <h2 class="block-h" id="h-proj"><i>04</i><span class="en">Projects</span><span class="zh">作品</span></h2>
+      <ul class="works">
+        <li><a class="work r" href="https://zk-yuan.github.io/spacetrack/" target="_blank" rel="noopener" data-preview="img" data-src="images/v3/spacetrack-2.jpg">
+          <span class="w-n">01</span><span class="w-t">Space Track</span><span class="w-c"><span class="en">Interactive 3D benchmark</span><span class="zh">交互式三维基准</span></span><span class="w-y">2026</span></a></li>
+        <li><a class="work r" href="https://hseek.cn" target="_blank" rel="noopener" data-preview="img" data-src="images/v3/hseek.jpg">
+          <span class="w-n">02</span><span class="w-t">Hseek <small>New 来</small></span><span class="w-c"><span class="en">Campus matching app</span><span class="zh">校园匹配应用</span></span><span class="w-y">2026</span></a></li>
+        <li><div class="work r" data-preview="tile" data-tile="20 fps" data-sub-en="frame-by-frame edit judge" data-sub-zh="逐帧修改判分">
+          <span class="w-n">03</span><span class="w-t"><span class="en">Edit-aware video judge</span><span class="zh">逐帧视频修改判分</span></span><span class="w-c"><span class="en">Code-to-video benchmark</span><span class="zh">代码生成视频基准</span></span><span class="w-y">2026</span></div></li>
+        <li><div class="work r" data-preview="tile" data-tile="Must / Nice" data-sub-en="rubrics written blind" data-sub-zh="不看答案写 Rubric">
+          <span class="w-n">04</span><span class="w-t"><span class="en">Blind rubric pipeline</span><span class="zh">盲产 Rubric 链路</span></span><span class="w-c"><span class="en">Evaluation engineering</span><span class="zh">评测工程</span></span><span class="w-y">2026</span></div></li>
+        <li><div class="work r" data-preview="tile" data-tile="iF" data-sub-en="iF Design Award" data-sub-zh="iF 设计奖">
+          <span class="w-n">05</span><span class="w-t"><span class="en">Companion robot</span><span class="zh">孤独症儿童陪伴机器人</span></span><span class="w-c"><span class="en">Industrial design</span><span class="zh">工业设计</span></span><span class="w-y"><span class="en">Earlier</span><span class="zh">更早</span></span></div></li>
+        <li><div class="work r" data-preview="tile" data-tile="50+" data-sub-en="older adults interviewed" data-sub-zh="位长辈深度访谈">
+          <span class="w-n">06</span><span class="w-t"><span class="en">Time Capsule</span><span class="zh">时间胶囊</span></span><span class="w-c"><span class="en">Voice + AI memory keeper</span><span class="zh">语音 + AI 回忆记录</span></span><span class="w-y"><span class="en">Earlier</span><span class="zh">更早</span></span></div></li>
+      </ul>
     </section>
 
-    <section id="gallery" class="bento-section" style="padding-top: 0;">
-        <div class="text-center">
-            <h2 class="section-title reveal">📸 Gallery 📸</h2>
-            <p class="section-desc reveal delay-1">镜头里的碎片</p>
-        </div>
-        
-        <div class="top9-grid">
-            <div class="top9-item reveal hover-glow" onclick="openLightbox(this)">
-                <div class="glow-content">
-                    <div class="img-wrapper">
-                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6029.PNG" alt="Top 9 照片">
-                    </div>
-                    <div class="top9-caption">北欧·冰岛</div>
-                </div>
-            </div>
-            
-            <div class="top9-item reveal delay-1 hover-glow" onclick="openLightbox(this)">
-                <div class="glow-content">
-                    <div class="img-wrapper">
-                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6030.PNG" alt="Top 9 照片">
-                    </div>
-                    <div class="top9-caption">英国·爱丁堡</div>
-                </div>
-            </div>
-
-            <div class="top9-item reveal delay-2 hover-glow" onclick="openLightbox(this)">
-                <div class="glow-content">
-                    <div class="img-wrapper">
-                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6031.PNG" alt="Top 9 照片">
-                    </div>
-                    <div class="top9-caption">英国·白崖</div>
-                </div>
-            </div>
-
-            <div class="top9-item reveal hover-glow" onclick="openLightbox(this)">
-                <div class="glow-content">
-                    <div class="img-wrapper">
-                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6032.PNG" alt="Top 9 照片">
-                    </div>
-                    <div class="top9-caption">北欧·冰岛</div>
-                </div>
-            </div>
-
-            <div class="top9-item reveal delay-1 hover-glow" onclick="openLightbox(this)">
-                <div class="glow-content">
-                    <div class="img-wrapper">
-                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6036.PNG" alt="Top 9 照片">
-                    </div>
-                    <div class="top9-caption">北欧·冰岛</div>
-                </div>
-            </div>
-
-            <div class="top9-item reveal delay-2 hover-glow" onclick="openLightbox(this)">
-                <div class="glow-content">
-                    <div class="img-wrapper">
-                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6037.PNG" alt="Top 9 照片">
-                    </div>
-                    <div class="top9-caption">中国·深圳</div>
-                </div>
-            </div>
-
-            <div class="top9-item reveal hover-glow" onclick="openLightbox(this)">
-                <div class="glow-content">
-                    <div class="img-wrapper">
-                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6039.PNG" alt="Top 9 照片">
-                    </div>
-                    <div class="top9-caption">中国·深圳</div>
-                </div>
-            </div>
-
-            <div class="top9-item reveal delay-1 hover-glow" onclick="openLightbox(this)">
-                <div class="glow-content">
-                    <div class="img-wrapper">
-                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6044.PNG" alt="Top 9 照片">
-                    </div>
-                    <div class="top9-caption">中国·广州</div>
-                </div>
-            </div>
-
-            <div class="top9-item reveal delay-2 hover-glow" onclick="openLightbox(this)">
-                <div class="glow-content">
-                    <div class="img-wrapper">
-                        <img src="https://cdn.jsdelivr.net/gh/ZK-Yuan/image-hosting@main/images/IMG_6045.PNG" alt="Top 9 照片">
-                    </div>
-                    <div class="top9-caption">中国·深圳</div>
-                </div>
-            </div>
-
-        </div>
+    <!-- Life -->
+    <section id="life" class="block" aria-labelledby="h-life">
+      <h2 class="block-h" id="h-life"><i>05</i><span class="en">Life</span><span class="zh">生活</span></h2>
+      <div class="prose">
+        <p class="r"><span class="en">Off screen I go looking for a little ease. I travel whenever I can and make a magazine cover for each trip; I like city walks, exhibitions, Li Jian’s music, karaoke and good food.</span><span class="zh">离开屏幕，主打一个松弛感。有机会就去旅行，并给每段旅程做一期杂志封面；喜欢 City Walk、看展、李健的歌、K 歌和美食。</span></p>
+      </div>
+      <ul class="chips r">
+        <li>ENFJ</li>
+        <li><span class="en">Aquarius</span><span class="zh">水瓶座</span></li>
+        <li><span class="en">Deadline fighter</span><span class="zh">DDL 战士</span></li>
+        <li><span class="en">2,000+ km road trips</span><span class="zh">自驾 2000 公里+</span></li>
+        <li><span class="en">Design + CS</span><span class="zh">设计 + 计算机</span></li>
+      </ul>
     </section>
+  </div>
+</div>
 
+<!-- covers marquee -->
+<section class="covers" aria-label="Travel covers">
+  <div class="covers-track">
+    <img loading="lazy" src="images/v3/cover-6029.jpg" alt="The 2025 Collection, Iceland">
+    <img loading="lazy" src="images/v3/cover-6030.jpg" alt="Edinburgh Chronicles">
+    <img loading="lazy" src="images/v3/cover-6031.jpg" alt="White Cliffs of Dover">
+    <img loading="lazy" src="images/v3/cover-6032.jpg" alt="Icelandic Road Trip">
+    <img loading="lazy" src="images/v3/cover-6036.jpg" alt="Silent Horizons, Iceland">
+    <img loading="lazy" src="images/v3/cover-6037.jpg" alt="Twilight Shores, Shenzhen">
+    <img loading="lazy" src="images/v3/cover-6039.jpg" alt="Horizon's Glow, Shenzhen">
+    <img loading="lazy" src="images/v3/cover-6044.jpg" alt="Under the Lights, Guangzhou">
+    <img loading="lazy" src="images/v3/cover-6045.jpg" alt="Shenzhen Nights">
+  </div>
+</section>
 
-    <footer>
-        <p>&copy; 2026 苑泽楷。保持好奇，持续构建。</p>
-        <div class="footer-links">
-            <a href="mailto:cdjabah13@gmail.com"><i class="fas fa-envelope"></i></a>
-            <a href="https://github.com/ZK-Yuan" target="_blank"><i class="fab fa-github"></i></a>
-            <a href="https://www.kdocs.cn/l/cc2Jh5OQMxmN" target="_blank"><i class="fas fa-palette"></i></a>
-        </div>
-    </footer>
-    
-    <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
-        <span class="lightbox-close" onclick="closeLightbox(event)">&times;</span>
-        <img class="lightbox-content" id="lightbox-img">
-        <div id="lightbox-caption"></div>
-    </div>
-    
-    <script>
-        // 1. 毛玻璃加载屏逻辑 (修复无限加载卡死 Bug)
-        const hideLoader = () => {
-            const loader = document.getElementById('loader');
-            if (loader && !loader.classList.contains('hidden')) {
-                loader.classList.add('hidden');
-                setTimeout(() => loader.remove(), 800); // 等待 CSS 渐隐动画结束后移除 DOM
-            }
-        };
+</main>
 
-        // 机制 1：HTML 骨架解析完毕后即准备关闭，无需干等大图片下载
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(hideLoader, 800);
-        });
+<!-- ============ CONTACT ============ -->
+<footer id="contact" class="cta">
+  <div class="cta-in">
+    <p class="cta-label"><span class="en">Contact</span><span class="zh">联系</span></p>
+    <h2 class="cta-title"><span class="en">Let’s <em>talk.</em></span><span class="zh">一起<em>聊聊</em>。</span></h2>
+    <p class="cta-sub"><span class="en">About evaluation, agents, design, or a trip worth taking.</span><span class="zh">聊评测、智能体、设计，或者一段值得去的旅行。</span></p>
+    <a class="mail magnetic" href="mailto:cdjabah13@gmail.com"><span>cdjabah13@gmail.com</span></a>
+    <p class="cta-links"><a href="https://github.com/ZK-Yuan" target="_blank" rel="noopener">GitHub ↗</a><a href="assets/zekai-yuan-cv.pdf" target="_blank" rel="noopener"><span class="en">Résumé ↗</span><span class="zh">简历 ↗</span></a><a href="https://zk-yuan.github.io/spacetrack/" target="_blank" rel="noopener">Space Track ↗</a></p>
+  </div>
+  <div class="bigname" aria-hidden="true"><div class="bigname-track"><span>Zekai Yuan — 苑泽楷 — </span><span>Zekai Yuan — 苑泽楷 — </span></div></div>
+  <div class="cta-foot">
+    <span>© 2026 Zekai Yuan</span>
+    <span class="en">Set in Inter &amp; Instrument Serif.</span><span class="zh">字体：Inter 与 Instrument Serif。</span>
+    <a href="#top"><span class="en">Back to top ↑</span><span class="zh">回到顶部 ↑</span></a>
+  </div>
+</footer>
 
-        // 机制 2：极端网络环境下的强制兜底纪律（最多只允许加载屏存在 3 秒）
-        setTimeout(hideLoader, 3000);
+<div class="preview" aria-hidden="true"><div class="preview-in"></div></div>
 
-        // 2. 深色模式切换逻辑
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        themeToggleBtn.addEventListener('click', () => {
-            let theme = document.documentElement.getAttribute('data-theme');
-            if (theme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'light');
-                localStorage.setItem('theme', 'light');
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        });
-
-        // 3. Scroll Reveal 滚动动画逻辑
-        document.addEventListener("DOMContentLoaded", function() {
-            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        });
-
-        // 4. 全局高光光晕逻辑
-        const glowCards = document.querySelectorAll('.hover-glow');
-        if (glowCards.length > 0) {
-            let ticking = false;
-            document.addEventListener('mousemove', e => {
-                if (!ticking) {
-                    window.requestAnimationFrame(() => {
-                        for (const card of glowCards) {
-                            const rect = card.getBoundingClientRect(),
-                                  x = e.clientX - rect.left,
-                                  y = e.clientY - rect.top;
-                            card.style.setProperty("--mouse-x", `${x}px`);
-                            card.style.setProperty("--mouse-y", `${y}px`);
-                        }
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            });
-        }
-
-        // 5. 导航栏平滑滚动
-        document.querySelectorAll('nav a').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 60,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        // 6. 复制功能
-        document.querySelectorAll('.copy-icon').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const targetId = this.getAttribute('data-target');
-                const textToCopy = document.getElementById(targetId).textContent;
-                const icon = this.querySelector('i');
-                
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    icon.className = 'fas fa-check';
-                    this.classList.add('copied');
-                    this.setAttribute('title', '已复制');
-                    
-                    setTimeout(() => {
-                        icon.className = 'fas fa-copy';
-                        this.classList.remove('copied');
-                        this.setAttribute('title', '复制');
-                    }, 2000);
-                }).catch(err => {
-                    console.error('复制失败:', err);
-                });
-            });
-        });
-
-        // 7. 照片点击放大 (Lightbox) 逻辑
-        function openLightbox(element) {
-            const img = element.querySelector('img');
-            const caption = element.querySelector('.top9-caption').textContent;
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImg = document.getElementById('lightbox-img');
-            const lightboxCaption = document.getElementById('lightbox-caption');
-
-            lightboxImg.src = img.src;
-            lightboxCaption.textContent = caption;
-            
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden'; 
-        }
-
-        function closeLightbox(event) {
-            if (event && event.target.id === 'lightbox-img') return;
-            
-            const lightbox = document.getElementById('lightbox');
-            lightbox.classList.remove('active');
-            document.body.style.overflow = 'auto'; 
-            
-            setTimeout(() => {
-                if(!lightbox.classList.contains('active')) {
-                    document.getElementById('lightbox-img').src = '';
-                }
-            }, 300);
-        }
-
-        // 8. URL 参数路由分发逻辑
-        document.addEventListener("DOMContentLoaded", function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const mode = urlParams.get('mode');
-
-            const navEducation = document.querySelector('a[href="#education"]')?.parentNode;
-            const navGallery = document.querySelector('a[href="#gallery"]')?.parentNode;
-            
-            const secEducation = document.getElementById('education');
-            const secExperience = document.getElementById('experience');
-            const secGallery = document.getElementById('gallery');
-            const secTop9 = document.getElementById('top9-gallery'); 
-
-            if (mode === 'test') {
-                if(secExperience) secExperience.style.display = 'none'; 
-            } 
-        });
-    </script>
+<script src="assets/v3.js" defer></script>
 </body>
 </html>
