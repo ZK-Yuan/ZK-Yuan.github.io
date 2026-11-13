@@ -10,8 +10,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://zk-yuan.github.io/">
 <meta property="og:image" content="https://zk-yuan.github.io/images/v4/og.jpg">
-<meta name="theme-color" content="#d3d3d4">
-<link rel="preload" href="assets/fonts/inter-wght.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#f5f5f7">
 <link rel="preload" href="images/v4/portrait.jpg" as="image">
 <link rel="stylesheet" href="assets/site.css">
 <script>
@@ -68,7 +67,6 @@
 
 <!-- ============ RESUME ============ -->
 <div class="page">
-  <div class="spot" aria-hidden="true"></div>
   <div class="wrap">
 
     <aside class="side">
@@ -92,7 +90,7 @@
           <li><a href="mailto:cdjabah13@gmail.com" aria-label="Email" title="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a></li>
           <li><a href="assets/zekai-yuan-cv.pdf" target="_blank" rel="noopener" aria-label="Résumé (opens in a new tab)" title="CV"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></a></li>
         </ul>
-        <span class="lang lang-dark" role="group" aria-label="Language">
+        <span class="lang" role="group" aria-label="Language">
           <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
           <button type="button" data-lang-btn="zh" aria-pressed="false">中</button>
         </span>
@@ -126,7 +124,6 @@
         <ul class="list">
           <li>
             <div class="card card-media">
-              <div class="card-bg"></div>
               <div class="card-body">
                 <h3><a href="https://zk-yuan.github.io/spacetrack/" target="_blank" rel="noopener">Space Track: How Multimodal Agents Perceive, Update, and Act in Changing 3D Worlds<svg class="arr" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/></svg></a></h3>
                 <p class="card-sub">Chenglong Shi*, <b>Zekai Yuan*</b>, Yue Song, Jon Pu, Will Wu · 2026</p>
@@ -142,7 +139,6 @@
           </li>
           <li>
             <div class="card card-media">
-              <div class="card-bg"></div>
               <div class="card-body">
                 <h3><span class="en">A closed-loop 3D benchmark from first-person RGB alone</span><span class="zh">仅凭第一人称 RGB 的三维闭环交互基准</span></h3>
                 <p class="card-sub"><span class="en">Co-first author · under double-blind review, name withheld</span><span class="zh">共同一作 · 双盲在投，暂隐去名称</span></p>
@@ -154,7 +150,6 @@
           </li>
           <li>
             <div class="card card-media">
-              <div class="card-bg"></div>
               <div class="card-body">
                 <h3><span class="en">From failed trajectories to training suggestions</span><span class="zh">从失败轨迹到训练建议</span></h3>
                 <p><span class="en">I built an Agent Trace inspection operator that attributes every multi-turn episode and maps failures onto an embodied atomic-skill taxonomy. Four causes dominate for the in-house model: it misjudges first-person distance and turning angle and burns its step budget on tiny aiming corrections; it keeps no external state on long explorations and calls solvable tasks “impossible”; it ignores failure feedback and calls tools from other environments; and it cannot infer motion cycles from multiple frames. From this I proposed three data types (metric perception, exploration with external memory, multi-frame timing), recovery trajectories for SFT, and RL penalties on invalid calls and wasted steps with step-level process supervision.</span><span class="zh">自建 Agent Trace 质检算子对多轮轨迹逐局归因，并映射到具身原子能力 taxonomy，定位自研模型四类主因：第一人称距离 / 转角估不准，步数耗在反复微调瞄准；长程探索不记外部状态，迷路后误判“无解”；对失败反馈不归因、跨环境误调工具；不会从多帧画面推算运动周期。据此提出补第一人称度量感知、长程探索 + 外部记忆、多帧时序推算三类数据，SFT 补“失败→验证→回退”纠错轨迹，RL 对非法调用与步数浪费加惩罚并做步级过程监督。</span></p>
@@ -172,7 +167,6 @@
         <ol class="list">
           <li>
             <div class="card">
-              <div class="card-bg"></div>
               <p class="card-date">2026.08 — <span class="en">Present</span><span class="zh">至今</span></p>
               <div class="card-body">
                 <h3><span class="en">Evaluation &amp; Benchmark Intern · Tencent, Foundation Model Dept.</span><span class="zh">评测 Benchmark 实习 · 腾讯 · 基础模型部</span></h3>
@@ -187,7 +181,6 @@
           </li>
           <li>
             <div class="card">
-              <div class="card-bg"></div>
               <p class="card-date">2026.04 — 2026.08</p>
               <div class="card-body">
                 <h3><a href="bytedance-detail.html"><span class="en">Agent Evaluation &amp; Product Intern · ByteDance, Volcano Engine</span><span class="zh">Agent 评测/产品实习 · 字节跳动 · 火山引擎</span><svg class="arr" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/></svg></a></h3>
@@ -198,7 +191,6 @@
           </li>
           <li>
             <div class="card">
-              <div class="card-bg"></div>
               <p class="card-date">2025.12 — 2026.03</p>
               <div class="card-body">
                 <h3><a href="hyperparam-detail.html"><span class="en">AI NPC Agent · Parametrix</span><span class="zh">AI NPC Agent · 超参数科技</span><svg class="arr" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/></svg></a></h3>
@@ -217,7 +209,6 @@
         <ul class="list">
           <li>
             <div class="card card-media">
-              <div class="card-bg"></div>
               <div class="card-body">
                 <h3><a href="https://hseek.cn" target="_blank" rel="noopener"><span class="en">Hseek (New 来): campus matching platform</span><span class="zh">哈机觅 Hseek（New 来）：校园匹配平台</span><svg class="arr" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/></svg></a></h3>
                 <p class="card-sub"><span class="en">Personal startup · founder, solo full-stack · 2026.03 — present</span><span class="zh">个人创业项目 · 创始人 / 独立全栈开发 · 2026.03 至今</span></p>
@@ -230,7 +221,6 @@
           </li>
           <li>
             <div class="card card-media">
-              <div class="card-bg"></div>
               <div class="card-body">
                 <h3><a href="https://ifdesign.com/en/winner-ranking/project/ecure/706776" target="_blank" rel="noopener"><span class="en">Ecure: intervention robot for autistic children</span><span class="zh">Ecure 孤独症儿童智能干预机器人</span><svg class="arr" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/></svg></a></h3>
                 <p class="card-sub"><span class="en">iF DESIGN AWARD 2025 · Professional Concept: Product Design · team member</span><span class="zh">iF DESIGN AWARD 2025（专业概念：产品设计）· 团队成员</span></p>

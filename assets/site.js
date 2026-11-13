@@ -2,7 +2,6 @@
   'use strict';
   var root = document.documentElement;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   function $(s, r) { return (r || document).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
 
@@ -96,18 +95,5 @@
     window.addEventListener('scroll', updateNav, { passive: true });
     window.addEventListener('resize', updateNav);
     updateNav();
-  }
-
-  /* spotlight that follows the cursor over the résumé */
-  var page = $('.page');
-  if (page && finePointer) {
-    var cx = -1000, cy = -1000;
-    var paint = function () {
-      var r = page.getBoundingClientRect();
-      page.style.setProperty('--sx', (cx - r.left) + 'px');
-      page.style.setProperty('--sy', (cy - r.top) + 'px');
-    };
-    window.addEventListener('pointermove', function (e) { cx = e.clientX; cy = e.clientY; paint(); }, { passive: true });
-    window.addEventListener('scroll', paint, { passive: true });
   }
 })();
