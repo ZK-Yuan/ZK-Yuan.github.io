@@ -158,10 +158,11 @@ a.hl:hover { text-decoration: underline; }
 .sec > .tags li { background: var(--card); }
 
 .explore { list-style: none; margin: 14px 0 0; padding: 14px 0 0; border-top: 1px solid #e8e8ed; }
-.explore li { margin-top: 8px; font-size: 15px; line-height: 1.6; color: var(--ink-2); }
+.explore li { margin-top: 10px; font-size: 15px; line-height: 1.6; color: var(--ink-2); }
 .explore li:first-child { margin-top: 0; }
 [data-lang="zh"] .explore li { line-height: 1.85; }
 .explore em { margin-right: 8px; font-style: normal; font-size: 13px; font-weight: 600; color: var(--orange); }
+.card code { padding: 1px 6px; border-radius: 5px; background: var(--bg); color: var(--ink); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; }
 
 .card-media { display: grid; grid-template-columns: 188px minmax(0, 1fr); gap: 28px; align-items: start; }
 .card-media .card-body { order: 2; min-width: 0; }
