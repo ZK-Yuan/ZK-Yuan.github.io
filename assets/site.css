@@ -198,9 +198,7 @@ a.hl:hover { color: var(--teal); }
 .mail:hover svg { transform: translate(4px, -3px); }
 
 .credit { max-width: 28rem; font-size: 14px; color: var(--s500); }
-.credit p { margin: 0 0 8px; }
-.credit a { font-weight: 500; color: var(--s400); transition: color 0.2s; }
-.credit a:hover { color: var(--teal); }
+.credit p { margin: 0; }
 
 /* ---------- responsive ---------- */
 @media (max-width: 1023px) {
