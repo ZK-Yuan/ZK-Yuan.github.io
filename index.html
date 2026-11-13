@@ -4,16 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Zekai Yuan · 苑泽楷</title>
-<meta name="description" content="Zekai Yuan (苑泽楷) is a designer turned engineer, building benchmarks and judges that show what multimodal AI can really do. Evaluation and benchmarks at Tencent Foundation Model Dept., computer science at HIT Shenzhen.">
+<meta name="description" content="Zekai Yuan (苑泽楷) builds benchmarks and judges for multimodal AI. Evaluation & Benchmark Intern at Tencent Foundation Model Dept.; computer science at Harbin Institute of Technology (Shenzhen).">
 <meta property="og:title" content="Zekai Yuan · 苑泽楷">
-<meta property="og:description" content="Designer turned engineer, building benchmarks and judges for multimodal AI.">
+<meta property="og:description" content="Evaluation & benchmarks for multimodal AI. Tencent Foundation Model Dept. · HIT Shenzhen.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://zk-yuan.github.io/">
-<meta property="og:image" content="https://zk-yuan.github.io/images/v3/iceland.jpg">
-<meta name="theme-color" content="#F2F1EC">
+<meta property="og:image" content="https://zk-yuan.github.io/images/v4/og.jpg">
+<meta name="theme-color" content="#d3d3d4">
 <link rel="preload" href="assets/fonts/inter-wght.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/v3.css">
+<link rel="preload" href="images/v4/portrait.jpg" as="image">
+<link rel="stylesheet" href="assets/site.css">
 <script>
 (function () {
   var d = document.documentElement;
@@ -23,222 +23,268 @@
     if (!l) l = (navigator.language || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
     d.setAttribute('data-lang', l);
     d.lang = l === 'zh' ? 'zh-CN' : 'en';
-  } catch (e) {}
+    if (sessionStorage.getItem('seen') || matchMedia('(prefers-reduced-motion: reduce)').matches) d.className += ' skip-loader';
+  } catch (e) { d.className += ' skip-loader'; }
 })();
 </script>
 </head>
 <body>
-<a class="skip" href="#about"><span class="en">Skip to content</span><span class="zh">跳到正文</span></a>
+<a class="skip" href="#content"><span class="en">Skip to content</span><span class="zh">跳到正文</span></a>
 
-<!-- top bar -->
-<header class="bar">
-  <a class="bar-name" href="#top">Zekai Yuan <span>苑泽楷</span></a>
-  <p class="bar-clock" aria-label="Local time in Shenzhen"><span class="en">Shenzhen</span><span class="zh">深圳</span> <b id="clock">--:--</b> <i>GMT+8</i></p>
-  <nav class="bar-nav" aria-label="Primary">
-    <a href="#experience"><span class="en">Experience</span><span class="zh">经历</span></a>
-    <a href="#projects"><span class="en">Projects</span><span class="zh">作品</span></a>
-    <a href="#contact"><span class="en">Contact</span><span class="zh">联系</span></a>
-    <span class="lang" role="group" aria-label="Language">
-      <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
-      <button type="button" data-lang-btn="zh" aria-pressed="false">中</button>
-    </span>
-    <a class="bar-cv" href="assets/zekai-yuan-cv.pdf" target="_blank" rel="noopener">CV ↗</a>
+<div class="loader" aria-hidden="true">
+  <p class="loader-word"><i></i><span><span class="en">Hello</span><span class="zh">你好</span></span></p>
+  <div class="loader-curve"></div>
+</div>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="top">
+  <nav class="hero-nav" aria-label="Primary">
+    <a class="hero-logo" href="#top" aria-label="Zekai Yuan, back to top"><span>©</span><span class="roll"><span>Zekai Yuan</span><span>苑泽楷</span></span></a>
+    <div class="hero-links">
+      <a href="#about"><span class="en">About</span><span class="zh">关于</span></a>
+      <a href="#experience"><span class="en">Experience</span><span class="zh">经历</span></a>
+      <a href="#projects"><span class="en">Projects</span><span class="zh">作品</span></a>
+      <a href="#contact"><span class="en">Contact</span><span class="zh">联系</span></a>
+      <span class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang-btn="zh" aria-pressed="false">中</button>
+      </span>
+      <a class="hero-cv" href="assets/zekai-yuan-cv.pdf" target="_blank" rel="noopener">CV ↗</a>
+    </div>
   </nav>
+
+  <div class="hero-figure"><img src="images/v4/portrait.jpg" width="853" height="1024" alt="Portrait of Zekai Yuan in a black sweater against a light grey background" fetchpriority="high"></div>
+
+  <div class="hero-loc">
+    <p><span class="en">Based<br>in Shenzhen,<br>China</span><span class="zh">坐标<br>中国 · 深圳</span></p>
+    <span class="globe" aria-hidden="true">
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="16" cy="16" r="13"/><path d="M3 16h26M5.2 9.5h21.6M5.2 22.5h21.6"/><ellipse class="mer" cx="16" cy="16" rx="13" ry="13"/><ellipse class="mer" cx="16" cy="16" rx="13" ry="13"/><ellipse class="mer" cx="16" cy="16" rx="13" ry="13"/></svg>
+    </span>
+  </div>
+
+  <div class="hero-role">
+    <svg class="hero-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 8v11H8"/></svg>
+    <p><span class="en">Evaluation &amp; Benchmarks<br>for Multimodal AI</span><span class="zh">多模态大模型<br>评测与 Benchmark</span></p>
+  </div>
+
+  <div class="hero-name" aria-hidden="true"><div class="hero-track"><span>Zekai Yuan — 苑泽楷 —&nbsp;</span><span>Zekai Yuan — 苑泽楷 —&nbsp;</span></div></div>
+  <h1 class="sr-only">Zekai Yuan 苑泽楷: evaluation and benchmarks for multimodal AI</h1>
 </header>
 
-<main>
+<!-- ============ RESUME ============ -->
+<div class="page">
+  <div class="spot" aria-hidden="true"></div>
+  <div class="wrap">
 
-<!-- ============ INTRO ============ -->
-<section id="top" class="intro">
-  <p class="intro-label"><span class="en">Portfolio &amp; résumé — 2026</span><span class="zh">作品集与简历 — 2026</span></p>
-
-  <h1 class="statement">
-    <span class="en" data-split>Zekai Yuan <span class="pill" data-token><img src="images/v3/iceland.jpg" alt="" aria-hidden="true"></span> is a <em>designer</em> turned engineer, building benchmarks <span class="pill pill-wide" data-token><img src="images/v3/spacetrack.jpg" alt="" aria-hidden="true"></span> and judges that show what multimodal AI can <em>really</em> do.</span>
-    <span class="zh" data-split>苑泽楷 <span class="pill" data-token><img src="images/v3/iceland.jpg" alt="" aria-hidden="true"></span> 从<em>工业设计</em>走向工程，为多模态 AI 搭建基准 <span class="pill pill-wide" data-token><img src="images/v3/spacetrack.jpg" alt="" aria-hidden="true"></span> 与裁判，看清它<em>真正</em>能做什么。</span>
-  </h1>
-
-  <dl class="intro-meta">
-    <div><dt><span class="en">Now</span><span class="zh">现在</span></dt><dd><span class="en">Evaluation &amp; Benchmark Intern, Tencent Foundation Model Dept.</span><span class="zh">腾讯 · 基础模型部 · 评测 Benchmark 实习</span></dd></div>
-    <div><dt><span class="en">Studying</span><span class="zh">在读</span></dt><dd><span class="en">Computer Science, HIT Shenzhen ’28</span><span class="zh">哈工深 · 计算机科学与技术 · 2028 届</span></dd></div>
-    <div><dt><span class="en">Before</span><span class="zh">之前</span></dt><dd><span class="en">ByteDance · Parametrix · Industrial design</span><span class="zh">字节跳动 · 超参数科技 · 工业设计</span></dd></div>
-    <div><dt><span class="en">Based in</span><span class="zh">所在地</span></dt><dd><span class="en">Shenzhen, from Heze</span><span class="zh">深圳，来自山东菏泽</span></dd></div>
-  </dl>
-
-  <a class="scroll-cue" href="#about"><span class="en">Scroll</span><span class="zh">向下</span><i></i></a>
-</section>
-
-<!-- ============ RESUME (two columns) ============ -->
-<div class="cv">
-  <aside class="cv-side">
-    <div class="side-in">
-      <figure class="side-photo">
-        <img src="images/v3/iceland.jpg" alt="Zekai Yuan walking on snow in Iceland at dusk">
-        <figcaption><span class="en">Iceland, at dusk</span><span class="zh">冰岛，黄昏</span></figcaption>
-      </figure>
-      <h2 class="side-name">Zekai Yuan <span>苑泽楷</span></h2>
-      <p class="side-role"><span class="en">Evaluation &amp; Benchmark Intern, Tencent Foundation Model Dept.</span><span class="zh">腾讯 · 基础模型部 · 评测 Benchmark 实习</span></p>
-      <p class="side-quote"><span class="en">“A realist with a streak of idealism.”</span><span class="zh">“一个带有理想主义的现实主义者。”</span></p>
-      <nav class="side-nav" aria-label="Sections">
-        <a href="#about"><i>01</i><span class="en">About</span><span class="zh">关于我</span></a>
-        <a href="#research"><i>02</i><span class="en">Research</span><span class="zh">研究</span></a>
-        <a href="#projects"><i>03</i><span class="en">Projects</span><span class="zh">作品</span></a>
-        <a href="#experience"><i>04</i><span class="en">Experience</span><span class="zh">经历</span></a>
-        <a href="#life"><i>05</i><span class="en">Life</span><span class="zh">生活</span></a>
-      </nav>
-      <p class="side-links">
-        <a href="mailto:cdjabah13@gmail.com">Email</a>
-        <a href="https://github.com/ZK-Yuan" target="_blank" rel="noopener">GitHub ↗</a>
-        <a href="assets/zekai-yuan-cv.pdf" target="_blank" rel="noopener"><span class="en">Résumé ↗</span><span class="zh">简历 ↗</span></a>
-      </p>
-    </div>
-  </aside>
-
-  <div class="cv-main">
-
-    <!-- About -->
-    <section id="about" class="block" aria-labelledby="h-about">
-      <h2 class="block-h" id="h-about"><i>01</i><span class="en">About</span><span class="zh">关于我</span></h2>
-      <div class="prose">
-        <p class="lead r"><span class="en">I started university in <b>industrial design</b>. A companion robot for autistic children that I worked on there was tested with five institutions and won an <b>iF Design Award</b>.</span><span class="zh">大学第一年我读的是<b>工业设计</b>，那时参与的孤独症儿童陪伴机器人和 5 家机构合作实测，拿到了 <b>iF 设计奖</b>。</span></p>
-        <p class="r"><span class="en">After switching to computer science, I spent two years on the product side of AI: game agents at <b>Parametrix</b>, agent evaluation at <b>ByteDance</b>, and <a href="https://hseek.cn" target="_blank" rel="noopener">Hseek</a>, a campus app I built on my own that reached 2,000 people in five days.</span><span class="zh">转到计算机之后，我在 AI 产品这一侧做了两年：在<b>超参数科技</b>做游戏智能体，在<b>字节跳动</b>做 Agent 评测，还独立做了校园应用 <a href="https://hseek.cn" target="_blank" rel="noopener">Hseek</a>，5 天覆盖 2,000 多人。</span></p>
-        <p class="r"><span class="en">Now, in <b>Tencent’s Foundation Model Dept.</b>, I build the things that tell a team where its models really fail: closed-loop 3D benchmarks, sandboxes for code-generated visuals, and rubric-and-judge pipelines. Next, I want to turn those signals into training.</span><span class="zh">现在在<b>腾讯基础模型部</b>，我做的是告诉团队“模型到底在哪里失败”的东西：三维闭环空间基准、代码生成视觉内容的隔离沙箱，以及 Rubric 与裁判链路。下一步，我想把这些信号用到训练里。</span></p>
+    <aside class="side">
+      <div>
+        <h2 class="side-name"><a href="#top"><span class="en">Zekai Yuan</span><span class="zh">苑泽楷</span></a></h2>
+        <p class="side-role"><span class="en">Evaluation &amp; Benchmark Intern, Tencent</span><span class="zh">腾讯 · 基础模型部 · 评测 Benchmark 实习</span></p>
+        <p class="side-tag"><span class="en">I build benchmarks and judges that show what multimodal AI can really do.</span><span class="zh">为多模态大模型搭建基准与裁判，看清它真正能做什么。</span></p>
+        <nav class="side-nav" aria-label="In-page jump links">
+          <ul>
+            <li><a href="#about"><span class="ind"></span><span class="txt"><span class="en">About</span><span class="zh">关于</span></span></a></li>
+            <li><a href="#research"><span class="ind"></span><span class="txt"><span class="en">Research</span><span class="zh">研究</span></span></a></li>
+            <li><a href="#experience"><span class="ind"></span><span class="txt"><span class="en">Experience</span><span class="zh">经历</span></span></a></li>
+            <li><a href="#projects"><span class="ind"></span><span class="txt"><span class="en">Projects</span><span class="zh">作品</span></span></a></li>
+            <li><a href="#life"><span class="ind"></span><span class="txt"><span class="en">Life</span><span class="zh">生活</span></span></a></li>
+          </ul>
+        </nav>
       </div>
-    </section>
-
-    <!-- Research -->
-    <section id="research" class="block" aria-labelledby="h-res">
-      <h2 class="block-h" id="h-res"><i>02</i><span class="en">Research</span><span class="zh">研究</span></h2>
-      <article class="paper r">
-        <a class="paper-thumb" href="https://zk-yuan.github.io/spacetrack/" target="_blank" rel="noopener"><img loading="lazy" src="images/v3/spacetrack.jpg" alt="First-person view of the detective's office world in Space Track"></a>
-        <div>
-          <h3><a href="https://zk-yuan.github.io/spacetrack/" target="_blank" rel="noopener">Space Track: How Multimodal Agents Perceive, Update, and Act in Changing 3D Worlds <span class="arr">↗</span></a></h3>
-          <p class="paper-by">Chenglong Shi*, <b>Zekai Yuan*</b>, Yue Song, Jon Pu, Will Wu · 2026</p>
-          <p><span class="en">Five first-person 3D worlds that change as the agent acts. Agents notice the change, then fail to act on it.</span><span class="zh">五个会随智能体行动而改变的第一人称三维世界。智能体能注意到变化，却没法据此行动。</span></p>
-          <p class="paper-links"><a href="https://zk-yuan.github.io/spacetrack/" target="_blank" rel="noopener"><span class="en">Project &amp; demos</span><span class="zh">项目与演示</span></a><a href="https://zk-yuan.github.io/spacetrack/paper.pdf" target="_blank" rel="noopener">PDF</a><a href="https://github.com/ZK-Yuan/spacetrack" target="_blank" rel="noopener"><span class="en">Code</span><span class="zh">代码</span></a></p>
-        </div>
-      </article>
-      <article class="paper r">
-        <div class="paper-thumb paper-tile" aria-hidden="true"><span>RGB<br><em>only</em></span></div>
-        <div>
-          <h3><span class="en">A closed-loop benchmark for 3D action from RGB alone</span><span class="zh">仅凭 RGB 的三维闭环行动基准</span></h3>
-          <p class="paper-by"><span class="en">Co-first author · under double-blind review</span><span class="zh">共同一作 · 双盲审稿中</span></p>
-          <p><span class="en">Brick building and mechanical puzzles with no privileged coordinates. The bottleneck turns out to be 3D geometry, not planning.</span><span class="zh">积木搭建与机械解谜，不给任何特权坐标。结果发现瓶颈在三维几何，而不在规划。</span></p>
-        </div>
-      </article>
-    </section>
-
-    <!-- Projects -->
-    <section id="projects" class="block" aria-labelledby="h-proj">
-      <h2 class="block-h" id="h-proj"><i>03</i><span class="en">Projects</span><span class="zh">作品</span></h2>
-      <ul class="works">
-        <li><a class="work r" href="https://zk-yuan.github.io/spacetrack/" target="_blank" rel="noopener" data-preview="img" data-src="images/v3/spacetrack-2.jpg">
-          <span class="w-n">01</span><span class="w-t">Space Track</span><span class="w-c"><span class="en">Interactive 3D benchmark</span><span class="zh">交互式三维基准</span></span><span class="w-y">2026</span></a></li>
-        <li><a class="work r" href="https://hseek.cn" target="_blank" rel="noopener" data-preview="img" data-src="images/v3/hseek.jpg">
-          <span class="w-n">02</span><span class="w-t">Hseek <small>New 来</small></span><span class="w-c"><span class="en">Campus matching app</span><span class="zh">校园匹配应用</span></span><span class="w-y">2026</span></a></li>
-        <li><div class="work r" data-preview="tile" data-tile="20 fps" data-sub-en="frame-by-frame edit judge" data-sub-zh="逐帧修改判分">
-          <span class="w-n">03</span><span class="w-t"><span class="en">Edit-aware video judge</span><span class="zh">逐帧视频修改判分</span></span><span class="w-c"><span class="en">Code-to-video benchmark</span><span class="zh">代码生成视频基准</span></span><span class="w-y">2026</span></div></li>
-        <li><div class="work r" data-preview="tile" data-tile="Must / Nice" data-sub-en="rubrics written blind" data-sub-zh="不看答案写 Rubric">
-          <span class="w-n">04</span><span class="w-t"><span class="en">Blind rubric pipeline</span><span class="zh">盲产 Rubric 链路</span></span><span class="w-c"><span class="en">Evaluation engineering</span><span class="zh">评测工程</span></span><span class="w-y">2026</span></div></li>
-        <li><a class="work r" href="https://ifdesign.com/en/winner-ranking/project/ecure/706776" target="_blank" rel="noopener" data-preview="tile" data-tile="iF" data-sub-en="iF Design Award 2025" data-sub-zh="iF 设计奖 2025">
-          <span class="w-n">05</span><span class="w-t">Ecure <small><span class="en">companion robot</span><span class="zh">孤独症儿童陪伴机器人</span></small></span><span class="w-c"><span class="en">Industrial design</span><span class="zh">工业设计</span></span><span class="w-y">2025</span></a></li>
-        <li><div class="work r" data-preview="tile" data-tile="50+" data-sub-en="older adults interviewed" data-sub-zh="位长辈深度访谈">
-          <span class="w-n">06</span><span class="w-t"><span class="en">Time Capsule</span><span class="zh">时间胶囊</span></span><span class="w-c"><span class="en">Voice + AI memory keeper</span><span class="zh">语音 + AI 回忆记录</span></span><span class="w-y"><span class="en">Earlier</span><span class="zh">更早</span></span></div></li>
-      </ul>
-    </section>
-
-    <!-- Experience -->
-    <section id="experience" class="block" aria-labelledby="h-exp">
-      <h2 class="block-h" id="h-exp"><i>04</i><span class="en">Experience</span><span class="zh">经历</span></h2>
-      <ol class="exp">
-        <li class="job r">
-          <span class="job-date">2026.08 — <span class="en">Present</span><span class="zh">至今</span></span>
-          <div class="job-main">
-            <h3><span class="en">Evaluation &amp; Benchmark Intern</span><span class="zh">评测 Benchmark 实习</span> <span class="at">· <span class="en">Tencent, Foundation Model Dept.</span><span class="zh">腾讯 · 基础模型部</span></span></h3>
-            <p><span class="en">Co-first author on two closed-loop 3D spatial benchmark papers. Led evaluation for scientific 3D exploration, code-generated video and STEM diagrams, and built a five-stage blind rubric pipeline with judge auditing and data feedback (93.9% agreement).</span><span class="zh">共同一作完成两项三维空间闭环交互基准论文；主导科学三维探索、代码生成视频与 STEM 作图评测体系，搭建 5 阶段盲产 Rubric 与 Judge 排雷回流链路（一致率 93.9%）。</span></p>
-            <ul class="tags"><li>Benchmarks</li><li>Agentic vision</li><li>Rubrics</li><li>LLM-as-judge</li><li>Python</li></ul>
-          </div>
-        </li>
-        <li class="job r">
-          <span class="job-date">2026.04 — 2026.08</span>
-          <div class="job-main">
-            <h3><a href="bytedance-detail.html"><span class="en">Agent Evaluation &amp; Product Intern</span><span class="zh">Agent 评测/产品实习</span> <span class="at">· <span class="en">ByteDance, Volcano Engine</span><span class="zh">字节跳动 · 火山引擎</span></span> <span class="arr">↗</span></a></h3>
-            <p><span class="en">Built a state-machine LLM-as-judge attribution harness on LangGraph on my own (agreement on live traffic 60% → 85%, review cycle 7 days → 1). Co-defined modular routing evaluation across 15 industries × 9 intents (95% accuracy).</span><span class="zh">独立基于 LangGraph 搭建状态机 LLM-as-Judge 归因 Harness（线上回流一致率 60%→85%，评测周期 7 天→1 天）；协同定义 15 行业×9 意图模块化路由评测（准确率 95%）。</span></p>
-            <ul class="tags"><li>LangGraph</li><li>LLM-as-judge</li><li>Agents</li><li>MCP</li></ul>
-          </div>
-        </li>
-        <li class="job r">
-          <span class="job-date">2025.12 — 2026.03</span>
-          <div class="job-main">
-            <h3><a href="hyperparam-detail.html"><span class="en">AI NPC Agent</span><span class="zh">AI NPC Agent</span> <span class="at">· <span class="en">Parametrix</span><span class="zh">超参数科技</span></span> <span class="arr">↗</span></a></h3>
-            <p><span class="en">Built dynamic game agents with long-term memory and state machines on Python, Redis and Milvus; orchestrated complex workflows on the company’s Coze-like platform and tracked down 30+ core defects in its v1.0.</span><span class="zh">基于 Python / Redis / Milvus 构建带长期记忆与状态机的动态游戏智能体，在公司内部类 Coze 平台上编排复杂工作流，定位修复编排平台 V1.0 的 30+ 项核心缺陷。</span></p>
-            <ul class="tags"><li>Python</li><li>Redis</li><li>Milvus</li><li>Agents</li></ul>
-          </div>
-        </li>
-        <li class="job r">
-          <span class="job-date"><span class="en">Education &amp; Builder</span><span class="zh">教育与作品</span></span>
-          <div class="job-main">
-            <h3><a href="https://hseek.cn" target="_blank" rel="noopener"><span class="en">B.Eng. Computer Science (from Industrial Design)</span><span class="zh">计算机科学与技术（转自工业设计）</span> <span class="at">· <span class="en">HIT Shenzhen</span><span class="zh">哈尔滨工业大学（深圳）</span></span> <span class="arr">↗</span></a></h3>
-            <p><span class="en">Built Hseek, a campus platform with stable matching, full-stack on my own (2,000+ users in five days). iF Design Award 2025 for Ecure.</span><span class="zh">独立全栈实现稳定匹配算法与校园平台 Hseek（5 天覆盖 2,000+ 用户）；Ecure 获 iF Design Award 2025。</span></p>
-            <ul class="tags"><li>React</li><li>TypeScript</li><li>tRPC</li><li>Industrial design</li></ul>
-          </div>
-        </li>
-      </ol>
-      <a class="more r" href="assets/zekai-yuan-cv.pdf" target="_blank" rel="noopener"><span class="en">View full résumé</span><span class="zh">查看完整简历</span> <span class="arr">↗</span></a>
-    </section>
-
-    <!-- Life -->
-    <section id="life" class="block" aria-labelledby="h-life">
-      <h2 class="block-h" id="h-life"><i>05</i><span class="en">Life</span><span class="zh">生活</span></h2>
-      <div class="prose">
-        <p class="r"><span class="en">Off screen I go looking for a little ease. I travel whenever I can and make a magazine cover for each trip; I like city walks, exhibitions, Li Jian’s music, karaoke and good food.</span><span class="zh">离开屏幕，主打一个松弛感。有机会就去旅行，并给每段旅程做一期杂志封面；喜欢 City Walk、看展、李健的歌、K 歌和美食。</span></p>
+      <div class="side-foot">
+        <ul class="socials" aria-label="Social media">
+          <li><a href="https://github.com/ZK-Yuan" target="_blank" rel="noopener" aria-label="GitHub (opens in a new tab)" title="GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></li>
+          <li><a href="mailto:cdjabah13@gmail.com" aria-label="Email" title="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a></li>
+          <li><a href="assets/zekai-yuan-cv.pdf" target="_blank" rel="noopener" aria-label="Résumé (opens in a new tab)" title="CV"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></a></li>
+        </ul>
+        <span class="lang lang-dark" role="group" aria-label="Language">
+          <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang-btn="zh" aria-pressed="false">中</button>
+        </span>
       </div>
-      <ul class="chips r">
-        <li>ENFJ</li>
-        <li><span class="en">Aquarius</span><span class="zh">水瓶座</span></li>
-        <li><span class="en">Deadline fighter</span><span class="zh">DDL 战士</span></li>
-        <li><span class="en">2,000+ km road trips</span><span class="zh">自驾 2000 公里+</span></li>
-        <li><span class="en">Design + CS</span><span class="zh">设计 + 计算机</span></li>
-      </ul>
-    </section>
+    </aside>
+
+    <main class="content" id="content">
+
+      <!-- About -->
+      <section id="about" class="sec" aria-label="About me">
+        <div class="sec-h"><h2><span class="en">About</span><span class="zh">关于</span></h2></div>
+        <p><span class="en">Hi, I’m Zekai. I study computer science at Harbin Institute of Technology (Shenzhen), after switching from industrial design. <a class="hl" href="https://ifdesign.com/en/winner-ranking/project/ecure/706776" target="_blank" rel="noopener">Ecure</a>, an intervention robot for autistic children that I worked on as a design student, won an iF DESIGN AWARD 2025.</span><span class="zh">你好，我是苑泽楷，哈尔滨工业大学（深圳）计算机科学与技术专业本科生，转专业前学的是工业设计。读设计时参与的孤独症儿童智能干预机器人 <a class="hl" href="https://ifdesign.com/en/winner-ranking/project/ecure/706776" target="_blank" rel="noopener">Ecure</a>，获得了 iF DESIGN AWARD 2025。</span></p>
+        <p><span class="en">I’m currently an Evaluation &amp; Benchmark Intern at <b>Tencent’s Foundation Model Dept.</b> I’m co-first author on two closed-loop 3D spatial benchmarks, built an automated rubric-and-judge pipeline that agrees with human graders 93.9% of the time, and turn failure analysis of agent trajectories into data and reward suggestions for training.</span><span class="zh">现在我在<b>腾讯基础模型部</b>做评测 Benchmark 实习：共同一作完成两项三维空间闭环交互基准，搭建了 Rubric 与 Judge 自动化评测链路（机评-人评一致率 93.9%），并把智能体轨迹的失败归因转成训练侧的数据与奖励建议。</span></p>
+        <p><span class="en">Before that, I worked on agent evaluation and product at <b>ByteDance (Volcano Engine)</b> and on AI NPC agents at <b>Parametrix</b>. I also built <a class="hl" href="https://hseek.cn" target="_blank" rel="noopener">Hseek</a>, a campus matching platform, on my own; it reached 2,000+ users in five days.</span><span class="zh">在这之前，我在<b>字节跳动 · 火山引擎</b>做 Agent 评测/产品实习，在<b>超参数科技</b>做 AI NPC Agent；也独立做了校园匹配平台<a class="hl" href="https://hseek.cn" target="_blank" rel="noopener">哈机觅 Hseek</a>，5 天覆盖 2,000+ 用户。</span></p>
+        <p><span class="en">Away from the screen, I travel whenever I can and make a magazine cover for each trip. I also like city walks, exhibitions, Li Jian’s songs, karaoke and good food.</span><span class="zh">离开屏幕时，我喜欢旅行，并给每段旅程做一期杂志封面；也喜欢 City Walk、看展、李健的歌、K 歌和美食。</span></p>
+      </section>
+
+      <!-- Research -->
+      <section id="research" class="sec" aria-label="Research">
+        <div class="sec-h"><h2><span class="en">Research</span><span class="zh">研究</span></h2></div>
+        <ul class="list">
+          <li>
+            <div class="card card-media">
+              <div class="card-bg"></div>
+              <div class="card-body">
+                <h3><a href="https://zk-yuan.github.io/spacetrack/" target="_blank" rel="noopener">Space Track: How Multimodal Agents Perceive, Update, and Act in Changing 3D Worlds<svg class="arr" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/></svg></a></h3>
+                <p class="card-sub">Chenglong Shi*, <b>Zekai Yuan*</b>, Yue Song, Jon Pu, Will Wu · 2026</p>
+                <p><span class="en">Five walkable first-person 3D worlds that change as the agent acts, with 59 long-horizon tasks (15 of them counterfactual controls); seeds are oracle-verified and an isolated server audits every run. Across 9 frontier models, 885 episodes and 46k steps, the best completion rate is only 55%: agents can describe a change yet fail to act on it, and a ground-truth map lifts success from 25% to 47%.</span><span class="zh">5 个随行动变化的可行走第一人称三维世界、59 个长程任务（含 15 个反事实对照），种子经 Oracle 验证、隔离服务端审计防作弊。跑测 9 个前沿模型、885 局 / 4.6 万步，最强完成率仅 55%：智能体能描述变化却无法据此行动，给真值地图后成功率 25% → 47%。</span></p>
+                <ul class="card-links" aria-label="Related links">
+                  <li><a href="https://zk-yuan.github.io/spacetrack/paper.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z"/><path d="M11.603 7.963a.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.667l-3 3a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 105.656 5.656l3-3a4 4 0 00-.225-5.865z"/></svg><span class="en">Paper</span><span class="zh">论文</span></a></li>
+                  <li><a href="https://github.com/ZK-Yuan/spacetrack" target="_blank" rel="noopener"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z"/><path d="M11.603 7.963a.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.667l-3 3a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 105.656 5.656l3-3a4 4 0 00-.225-5.865z"/></svg><span class="en">Code</span><span class="zh">代码</span></a></li>
+                </ul>
+                <ul class="tags" aria-label="Topics"><li><span class="en">Co-first author</span><span class="zh">共同一作</span></li><li>3D Benchmark</li><li>Agentic Vision</li></ul>
+              </div>
+              <img class="thumb" loading="lazy" src="images/v3/spacetrack.jpg" width="200" height="125" alt="First-person view of the detective’s office world in Space Track">
+            </div>
+          </li>
+          <li>
+            <div class="card card-media">
+              <div class="card-bg"></div>
+              <div class="card-body">
+                <h3><span class="en">A closed-loop 3D benchmark from first-person RGB alone</span><span class="zh">仅凭第一人称 RGB 的三维闭环交互基准</span></h3>
+                <p class="card-sub"><span class="en">Co-first author · under double-blind review, name withheld</span><span class="zh">共同一作 · 双盲在投，暂隐去名称</span></p>
+                <p><span class="en">Lego bricks and mechanical puzzles test physical manipulation and mechanism reasoning with no privileged coordinates: 6 categories, 36 task families and 108 instances. Run on 12 models, including two in-house Hunyuan versions.</span><span class="zh">以乐高积木与机械谜题考察物理操作与机制推理，不给特权坐标，共 6 大类、36 题族 / 108 实例；跑测 12 个模型（含混元自研 2 版）。</span></p>
+                <ul class="tags" aria-label="Topics"><li><span class="en">Co-first author</span><span class="zh">共同一作</span></li><li><span class="en">Under review</span><span class="zh">在投</span></li></ul>
+              </div>
+              <div class="thumb thumb-tile" aria-hidden="true"><span>RGB<small>only</small></span></div>
+            </div>
+          </li>
+          <li>
+            <div class="card card-media">
+              <div class="card-bg"></div>
+              <div class="card-body">
+                <h3><span class="en">From failed trajectories to training suggestions</span><span class="zh">从失败轨迹到训练建议</span></h3>
+                <p><span class="en">I built an Agent Trace inspection operator that attributes every multi-turn episode and maps failures onto an embodied atomic-skill taxonomy. Four causes dominate for the in-house model: it misjudges first-person distance and turning angle and burns its step budget on tiny aiming corrections; it keeps no external state on long explorations and calls solvable tasks “impossible”; it ignores failure feedback and calls tools from other environments; and it cannot infer motion cycles from multiple frames. From this I proposed three data types (metric perception, exploration with external memory, multi-frame timing), recovery trajectories for SFT, and RL penalties on invalid calls and wasted steps with step-level process supervision.</span><span class="zh">自建 Agent Trace 质检算子对多轮轨迹逐局归因，并映射到具身原子能力 taxonomy，定位自研模型四类主因：第一人称距离 / 转角估不准，步数耗在反复微调瞄准；长程探索不记外部状态，迷路后误判“无解”；对失败反馈不归因、跨环境误调工具；不会从多帧画面推算运动周期。据此提出补第一人称度量感知、长程探索 + 外部记忆、多帧时序推算三类数据，SFT 补“失败→验证→回退”纠错轨迹，RL 对非法调用与步数浪费加惩罚并做步级过程监督。</span></p>
+                <ul class="tags" aria-label="Topics"><li><span class="en">Failure attribution</span><span class="zh">失败归因</span></li><li><span class="en">SFT data</span><span class="zh">SFT 数据</span></li><li><span class="en">RL reward</span><span class="zh">RL 奖励</span></li></ul>
+              </div>
+              <div class="thumb thumb-tile" aria-hidden="true"><span>SFT<small>· RL</small></span></div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Experience -->
+      <section id="experience" class="sec" aria-label="Work experience">
+        <div class="sec-h"><h2><span class="en">Experience</span><span class="zh">经历</span></h2></div>
+        <ol class="list">
+          <li>
+            <div class="card">
+              <div class="card-bg"></div>
+              <p class="card-date">2026.08 — <span class="en">Present</span><span class="zh">至今</span></p>
+              <div class="card-body">
+                <h3><span class="en">Evaluation &amp; Benchmark Intern · Tencent, Foundation Model Dept.</span><span class="zh">评测 Benchmark 实习 · 腾讯 · 基础模型部</span></h3>
+                <p><span class="en">Co-first author on the two 3D benchmarks above. Built EyeBench-HY, a visual benchmark reverse-engineered from community feedback, with an automatic generation pipeline (proportional sampling → scripted ground truth → multi-model pass@1 → re-balancing). Turned manual rubric grading into a “rubric → judge → agreement metrics → dashboard” pipeline; after comparing 6 kinds of judge models, machine–human agreement reached 93.9%.</span><span class="zh">共同一作完成上方两项三维空间闭环交互基准。基于社区评论逆向构建视觉评测基准 EyeBench-HY，搭建“按比例出题 → 脚本生成 GT → 多模型 pass@1 → 迭代配比”的自动出题流水线；把人工 Rubric 评测改造成“标准 → Judge 机评 → 一致性指标 → 可视化看板”链路，横评 6 类 Judge 完成选型，机评-人评一致率 93.9%。</span></p>
+                <ul class="explore">
+                  <li><em><span class="en">Exploring</span><span class="zh">探索中</span></em><span class="en"><b>Scientific 3D (Sci3D-Bench):</b> 300 program-verified questions built from real protein structures (PDB / AlphaFold) and 65 whole-body CT scans; the source files stay outside the sandbox, so models must rotate, clip and read slices in a viewer to answer.</span><span class="zh"><b>科学三维（Sci3D-Bench）：</b>基于真实蛋白结构（PDB / AlphaFold）与 65 例全身 CT 构建 300 道程序核验的三维题；源文件锁在沙箱外，模型只能操作查看器旋转、剖切、阅片作答。</span></li>
+                  <li><em><span class="en">Exploring</span><span class="zh">探索中</span></em><span class="en"><b>Code-to-video (coding2video):</b> one generation round plus four chained edits on animation code, scored deterministically by diffing the render traces of consecutive rounds, with a vision model only as a fallback.</span><span class="zh"><b>代码生成视频（coding2video）：</b>“1 轮生成 + 4 轮链式修改”的可编辑性任务，用前后两轮渲染轨迹差分做确定性判分，视觉模型只兜底。</span></li>
+                </ul>
+                <ul class="tags" aria-label="Technologies used"><li>Benchmarks</li><li>Agentic Vision</li><li>Rubrics</li><li>LLM-as-Judge</li><li><span class="en">Trajectory attribution</span><span class="zh">轨迹归因</span></li></ul>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="card">
+              <div class="card-bg"></div>
+              <p class="card-date">2026.04 — 2026.08</p>
+              <div class="card-body">
+                <h3><a href="bytedance-detail.html"><span class="en">Agent Evaluation &amp; Product Intern · ByteDance, Volcano Engine</span><span class="zh">Agent 评测/产品实习 · 字节跳动 · 火山引擎</span><svg class="arr" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/></svg></a></h3>
+                <p><span class="en">Built an LLM-as-judge evaluation and attribution harness on LangGraph on my own, with state transitions, conditional routing, web tool calls, low-confidence review and human hand-off. Machine–human agreement on live traffic rose from 60% to 85%, and a release evaluation shrank from a week to a day. Helped move a phone-assistant agent from a single end-to-end chain to a modular architecture, owned routing definitions and acceptance for 15 industries × 9 intents, and set up a benchmark pipeline: live traffic → semantic-cluster sampling → context rewriting → rubric grading → human QA.</span><span class="zh">基于 LangGraph 独立搭建 LLM-as-Judge 评测与归因 Harness，设计状态流转、条件路由、联网工具调用、低置信度复核与人工介入机制；线上回流 case 机评-人评一致率由 60% 提升至 85%，单次版本评测周期由一周压缩至一天。参与手机助手 Agent 由端到端单链路向模块化架构转型，负责 15 类行业 × 9 类意图的路由定义与评测验收；建立“线上回流 → 语义聚类抽样 → 上下文重写 → Rubric 机评 → 人工质检”的 benchmark 构建链路。</span></p>
+                <ul class="tags" aria-label="Technologies used"><li>LangGraph</li><li>LLM-as-Judge</li><li>Agents</li><li>MCP</li><li>Rubrics</li></ul>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="card">
+              <div class="card-bg"></div>
+              <p class="card-date">2025.12 — 2026.03</p>
+              <div class="card-body">
+                <h3><a href="hyperparam-detail.html"><span class="en">AI NPC Agent · Parametrix</span><span class="zh">AI NPC Agent · 超参数科技</span><svg class="arr" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/></svg></a></h3>
+                <p><span class="en">Built complex game-agent showcases on Redis, Python and Milvus (an affinity-driven NPC and a dynamic trader) that supported demos for 3 business clients. Owned the v1.0 launch of a Coze / Dify-style agent platform and tracked down 30+ P0/P1 defects.</span><span class="zh">基于 Redis / Python / Milvus 搭建复杂游戏 Agent 案例（好感度 NPC、动态交易员），支撑 3 家 B 端客户演示；负责类 Coze / Dify 智能体平台 V1.0 上线，定位修复 30+ 项 P0/P1 缺陷。</span></p>
+                <ul class="tags" aria-label="Technologies used"><li>Python</li><li>Redis</li><li>Milvus</li><li>Agents</li></ul>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="card">
+              <div class="card-bg"></div>
+              <p class="card-date"><span class="en">Class of 2028</span><span class="zh">预计 2028.06 毕业</span></p>
+              <div class="card-body">
+                <h3><span class="en">B.Eng. Computer Science · Harbin Institute of Technology (Shenzhen)</span><span class="zh">计算机科学与技术 · 哈尔滨工业大学（深圳）</span></h3>
+                <p><span class="en">Undergraduate; switched from industrial design.</span><span class="zh">本科，转专业前就读工业设计。</span></p>
+                <ul class="tags" aria-label="Fields"><li><span class="en">Computer Science</span><span class="zh">计算机</span></li><li><span class="en">Industrial Design</span><span class="zh">工业设计</span></li></ul>
+              </div>
+            </div>
+          </li>
+        </ol>
+        <a class="more" href="assets/zekai-yuan-cv.pdf" target="_blank" rel="noopener"><span class="u"><span class="en">View Full Résumé</span><span class="zh">查看完整简历</span></span><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg></a>
+      </section>
+
+      <!-- Projects -->
+      <section id="projects" class="sec" aria-label="Selected projects">
+        <div class="sec-h"><h2><span class="en">Projects</span><span class="zh">作品</span></h2></div>
+        <ul class="list">
+          <li>
+            <div class="card card-media">
+              <div class="card-bg"></div>
+              <div class="card-body">
+                <h3><a href="https://hseek.cn" target="_blank" rel="noopener"><span class="en">Hseek (New 来): campus matching platform</span><span class="zh">哈机觅 Hseek（New 来）：校园匹配平台</span><svg class="arr" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/></svg></a></h3>
+                <p class="card-sub"><span class="en">Personal startup · founder, solo full-stack · 2026.03 — present</span><span class="zh">个人创业项目 · 创始人 / 独立全栈开发 · 2026.03 至今</span></p>
+                <p><span class="en">With no prior backend experience, I went from product design to a full-stack launch in 2 days: questionnaire scoring with stable matching, campus identity verification, weekly matches and mutual confirmation.</span><span class="zh">零后端基础，2 天独立完成从产品设计到全栈上线：问卷评分与稳定匹配算法、校园身份认证、按周匹配与双向确认。</span></p>
+                <p class="stat"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 8a3 3 0 100-6 3 3 0 000 6zM14.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM1.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 017 18a9.953 9.953 0 01-5.385-1.572zM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 00-1.588-3.755 4.502 4.502 0 015.874 2.636.818.818 0 01-.36.98A7.465 7.465 0 0114.5 16z"/></svg><span class="en">500+ sign-ups on day one, 2,000+ users in 5 days</span><span class="zh">上线首日注册 500+，5 天覆盖 2,000+ 用户</span></p>
+                <ul class="tags" aria-label="Technologies used"><li>React</li><li>TypeScript</li><li>Node / tRPC</li><li>MySQL</li></ul>
+              </div>
+              <img class="thumb" loading="lazy" src="images/v3/hseek.jpg" width="200" height="125" alt="Hseek landing page">
+            </div>
+          </li>
+          <li>
+            <div class="card card-media">
+              <div class="card-bg"></div>
+              <div class="card-body">
+                <h3><a href="https://ifdesign.com/en/winner-ranking/project/ecure/706776" target="_blank" rel="noopener"><span class="en">Ecure: intervention robot for autistic children</span><span class="zh">Ecure 孤独症儿童智能干预机器人</span><svg class="arr" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/></svg></a></h3>
+                <p class="card-sub"><span class="en">iF DESIGN AWARD 2025 · Professional Concept: Product Design · team member</span><span class="zh">iF DESIGN AWARD 2025（专业概念：产品设计）· 团队成员</span></p>
+                <p><span class="en">Personalised social training that combines emotion recognition, AR projection and multi-sensor interaction. Chosen from nearly 11,000 entries from 66 countries and regions (only 188 professional concepts won), and featured as best practice in the iF Design Trend Report 2025.</span><span class="zh">结合情绪识别、AR 投影与多传感器交互的个性化社交训练机器人；从 66 个国家和地区近 11,000 件作品中获奖（专业概念类仅 188 件），入选 iF 2025 设计趋势报告最佳实践。</span></p>
+                <ul class="card-links" aria-label="Related links">
+                  <li><a href="https://www.hitsz.edu.cn/news/2025/0305/c10a14546/page.htm" target="_blank" rel="noopener"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z"/><path d="M11.603 7.963a.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.667l-3 3a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 105.656 5.656l3-3a4 4 0 00-.225-5.865z"/></svg><span class="en">HITSZ news</span><span class="zh">学校报道</span></a></li>
+                </ul>
+                <ul class="tags" aria-label="Fields"><li><span class="en">Industrial Design</span><span class="zh">工业设计</span></li><li><span class="en">Emotion recognition</span><span class="zh">情绪识别</span></li><li>AR</li></ul>
+              </div>
+              <img class="thumb" loading="lazy" src="images/v4/ecure.jpg" width="200" height="125" alt="Ecure robot, white with a round screen face, touched by a hand">
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Life -->
+      <section id="life" class="sec" aria-label="Life">
+        <div class="sec-h"><h2><span class="en">Life</span><span class="zh">生活</span></h2></div>
+        <p><span class="en">A realist with a streak of idealism. Every trip becomes a magazine cover.</span><span class="zh">一个带有理想主义的现实主义者。每段旅程，都做成一期杂志封面。</span></p>
+        <ul class="tags tags-quiet" aria-label="About me"><li>ENFJ</li><li><span class="en">Aquarius</span><span class="zh">水瓶座</span></li><li><span class="en">Deadline fighter</span><span class="zh">DDL 战士</span></li><li><span class="en">2,000+ km road trips</span><span class="zh">自驾 2000 公里+</span></li><li><span class="en">Design + CS</span><span class="zh">设计 + 计算机</span></li></ul>
+        <div class="covers" tabindex="0" aria-label="Travel magazine covers">
+          <img loading="lazy" src="images/v3/cover-6029.jpg" alt="The 2025 Collection, Iceland">
+          <img loading="lazy" src="images/v3/cover-6030.jpg" alt="Edinburgh Chronicles">
+          <img loading="lazy" src="images/v3/cover-6031.jpg" alt="White Cliffs of Dover">
+          <img loading="lazy" src="images/v3/cover-6032.jpg" alt="Icelandic Road Trip">
+          <img loading="lazy" src="images/v3/cover-6036.jpg" alt="Silent Horizons, Iceland">
+          <img loading="lazy" src="images/v3/cover-6037.jpg" alt="Twilight Shores, Shenzhen">
+          <img loading="lazy" src="images/v3/cover-6039.jpg" alt="Horizon’s Glow, Shenzhen">
+          <img loading="lazy" src="images/v3/cover-6044.jpg" alt="Under the Lights, Guangzhou">
+          <img loading="lazy" src="images/v3/cover-6045.jpg" alt="Shenzhen Nights">
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section id="contact" class="sec sec-last" aria-label="Contact">
+        <div class="sec-h"><h2><span class="en">Contact</span><span class="zh">联系</span></h2></div>
+        <p class="contact-lead"><span class="en">Happy to talk about evaluation, agents, design, or a trip worth taking.</span><span class="zh">欢迎聊评测、智能体、设计，或者一段值得去的旅行。</span></p>
+        <a class="mail" href="mailto:cdjabah13@gmail.com">cdjabah13@gmail.com<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/></svg></a>
+      </section>
+
+      <footer class="credit">
+        <p><span class="en">Hero layout after <a href="https://dennissnellenberg.com/" target="_blank" rel="noopener">Dennis Snellenberg</a>, résumé layout after <a href="https://brittanychiang.com/" target="_blank" rel="noopener">Brittany Chiang</a>. Hand-written HTML, CSS and JavaScript, deployed on GitHub Pages. Text is set in <a href="https://rsms.me/inter/" target="_blank" rel="noopener">Inter</a>.</span><span class="zh">首页版式参考 <a href="https://dennissnellenberg.com/" target="_blank" rel="noopener">Dennis Snellenberg</a>，正文版式参考 <a href="https://brittanychiang.com/" target="_blank" rel="noopener">Brittany Chiang</a>。手写 HTML、CSS 与 JavaScript，部署在 GitHub Pages，英文字体为 <a href="https://rsms.me/inter/" target="_blank" rel="noopener">Inter</a>。</span></p>
+        <p>© 2026 Zekai Yuan</p>
+      </footer>
+    </main>
   </div>
 </div>
 
-<!-- covers marquee -->
-<section class="covers" aria-label="Travel covers">
-  <div class="covers-track">
-    <img loading="lazy" src="images/v3/cover-6029.jpg" alt="The 2025 Collection, Iceland">
-    <img loading="lazy" src="images/v3/cover-6030.jpg" alt="Edinburgh Chronicles">
-    <img loading="lazy" src="images/v3/cover-6031.jpg" alt="White Cliffs of Dover">
-    <img loading="lazy" src="images/v3/cover-6032.jpg" alt="Icelandic Road Trip">
-    <img loading="lazy" src="images/v3/cover-6036.jpg" alt="Silent Horizons, Iceland">
-    <img loading="lazy" src="images/v3/cover-6037.jpg" alt="Twilight Shores, Shenzhen">
-    <img loading="lazy" src="images/v3/cover-6039.jpg" alt="Horizon's Glow, Shenzhen">
-    <img loading="lazy" src="images/v3/cover-6044.jpg" alt="Under the Lights, Guangzhou">
-    <img loading="lazy" src="images/v3/cover-6045.jpg" alt="Shenzhen Nights">
-  </div>
-</section>
-
-</main>
-
-<!-- ============ CONTACT ============ -->
-<footer id="contact" class="cta">
-  <div class="cta-in">
-    <p class="cta-label"><span class="en">Contact</span><span class="zh">联系</span></p>
-    <h2 class="cta-title"><span class="en">Let’s <em>talk.</em></span><span class="zh">一起<em>聊聊</em>。</span></h2>
-    <p class="cta-sub"><span class="en">About evaluation, agents, design, or a trip worth taking.</span><span class="zh">聊评测、智能体、设计，或者一段值得去的旅行。</span></p>
-    <a class="mail magnetic" href="mailto:cdjabah13@gmail.com"><span>cdjabah13@gmail.com</span></a>
-    <p class="cta-links"><a href="https://github.com/ZK-Yuan" target="_blank" rel="noopener">GitHub ↗</a><a href="assets/zekai-yuan-cv.pdf" target="_blank" rel="noopener"><span class="en">Résumé ↗</span><span class="zh">简历 ↗</span></a><a href="https://zk-yuan.github.io/spacetrack/" target="_blank" rel="noopener">Space Track ↗</a></p>
-  </div>
-  <div class="bigname" aria-hidden="true"><div class="bigname-track"><span>Zekai Yuan — 苑泽楷 — </span><span>Zekai Yuan — 苑泽楷 — </span></div></div>
-  <div class="cta-foot">
-    <span>© 2026 Zekai Yuan</span>
-    <span class="en">Set in Inter &amp; Instrument Serif.</span><span class="zh">字体：Inter 与 Instrument Serif。</span>
-    <a href="#top"><span class="en">Back to top ↑</span><span class="zh">回到顶部 ↑</span></a>
-  </div>
-</footer>
-
-<div class="preview" aria-hidden="true"><div class="preview-in"></div></div>
-
-<script src="assets/v3.js" defer></script>
+<script src="assets/site.js" defer></script>
 </body>
 </html>
