@@ -9,7 +9,7 @@
   function setLang(l) {
     root.setAttribute('data-lang', l);
     root.lang = l === 'zh' ? 'zh-CN' : 'en';
-    document.title = l === 'zh' ? '苑泽楷 · Zekai Yuan' : 'Zekai Yuan · 苑泽楷';
+    document.title = root.getAttribute('data-title-' + l) || (l === 'zh' ? '苑泽楷 · Zekai Yuan' : 'Zekai Yuan · 苑泽楷');
     $$('[data-lang-btn]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lang-btn') === l)); });
     try { localStorage.setItem('lang', l); } catch (e) {}
   }
@@ -19,7 +19,7 @@
   /* preloader, then hero entrance */
   var hero = $('.hero');
   var loader = $('.loader');
-  function heroIn() { hero.classList.add('in'); }
+  function heroIn() { if (hero) hero.classList.add('in'); }
   if (loader && !root.classList.contains('skip-loader')) {
     var zh = root.getAttribute('data-lang') === 'zh';
     var words = zh
@@ -51,7 +51,7 @@
 
   /* hero name marquee: drifts left, reverses when scrolling up */
   var track = $('.hero-track');
-  if (track && !reduce) {
+  if (track && hero && !reduce) {
     var x = 0, dir = -1, boost = 0, w = 0, last = 0, lastY = window.scrollY, visible = true, raf = 0;
     var measure = function () { w = track.firstElementChild.getBoundingClientRect().width; };
     measure();
@@ -95,5 +95,18 @@
     window.addEventListener('scroll', updateNav, { passive: true });
     window.addEventListener('resize', updateNav);
     updateNav();
+  }
+
+  /* grow bar charts when they scroll into view */
+  var bars = $$('.bars');
+  if (bars.length) {
+    if (reduce || !('IntersectionObserver' in window)) {
+      bars.forEach(function (b) { b.classList.add('in'); });
+    } else {
+      var bio = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); bio.unobserve(e.target); } });
+      }, { threshold: 0.3 });
+      bars.forEach(function (b) { bio.observe(b); });
+    }
   }
 })();

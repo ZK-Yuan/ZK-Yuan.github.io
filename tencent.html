@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en" data-lang="en" data-title-en="Tencent Foundation Model Dept. · Zekai Yuan" data-title-zh="腾讯 · 基础模型部 · 苑泽楷">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tencent Foundation Model Dept. · Zekai Yuan</title>
+<meta name="description" content="Zekai Yuan's evaluation and benchmark internship at Tencent Foundation Model Dept.: EyeBench-HY, Sci3D-Bench, an automatic rubric pipeline and an agent failure-attribution operator.">
+<meta property="og:title" content="Tencent Foundation Model Dept. · Zekai Yuan">
+<meta property="og:image" content="https://zk-yuan.github.io/images/hy/sci3d-overview.jpg">
+<meta name="theme-color" content="#f5f5f7">
+<link rel="stylesheet" href="assets/site.css">
+<script>
+(function () {
+  var d = document.documentElement;
+  d.className += ' js skip-loader';
+  try {
+    var l = localStorage.getItem('lang');
+    if (!l) l = (navigator.language || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+    d.setAttribute('data-lang', l);
+    d.lang = l === 'zh' ? 'zh-CN' : 'en';
+  } catch (e) {}
+})();
+</script>
+</head>
+<body class="detail-page">
+<a class="skip" href="#main"><span class="en">Skip to content</span><span class="zh">跳到正文</span></a>
+
+<header class="dnav">
+  <a class="dnav-back" href="index.html#experience"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd"/></svg><span class="en">Zekai Yuan</span><span class="zh">苑泽楷</span></a>
+  <nav class="dnav-links" aria-label="On this page">
+    <a href="#eyebench">EyeBench-HY</a>
+    <a href="#sci3d">Sci3D</a>
+    <a href="#rubric">Rubric</a>
+    <a href="#trace"><span class="en">Attribution</span><span class="zh">归因算子</span></a>
+  </nav>
+  <span class="lang" role="group" aria-label="Language">
+    <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
+    <button type="button" data-lang-btn="zh" aria-pressed="false">中</button>
+  </span>
+</header>
+
+<main id="main" class="detail">
+
+  <section class="d-hero">
+    <p class="eyebrow">2026.08 — <span class="en">Present</span><span class="zh">至今</span></p>
+    <h1><span class="en">Evaluation &amp; Benchmark Intern<br>Tencent, Foundation Model Dept.</span><span class="zh">腾讯 · 基础模型部<br>评测 Benchmark 实习</span></h1>
+    <p class="d-lead"><span class="en">I build the questions, the judges and the failure analysis for multimodal models: synthetic visual puzzles, scientific 3D tasks, a pipeline that writes grading rubrics, and an operator that finds the first step where an agent went wrong.</span><span class="zh">为多模态大模型造题、造裁判、查失败：合成视觉题、科学三维题、自动写评分标准的链路，以及定位智能体“第一步走偏”的归因算子。</span></p>
+    <dl class="stats">
+      <div><dt>2</dt><dd><span class="en">closed-loop 3D benchmarks, co-first author</span><span class="zh">项三维空间闭环基准，共同一作</span></dd></div>
+      <div><dt>300</dt><dd><span class="en">EyeBench-HY questions across 12 task types</span><span class="zh">道 EyeBench-HY 题，12 种考法</span></dd></div>
+      <div><dt>80.2%</dt><dd><span class="en">cell agreement of generated rubrics (hand-written: 77.8%)</span><span class="zh">自动 Rubric 逐格一致率（人工 77.8%）</span></dd></div>
+      <div><dt>93.9%</dt><dd><span class="en">machine–human grading agreement</span><span class="zh">机评-人评一致率</span></dd></div>
+    </dl>
+  </section>
+
+  <!-- 01 EyeBench-HY -->
+  <section id="eyebench" class="d-sec">
+    <p class="eyebrow">01 · <span class="en">Visual benchmark</span><span class="zh">视觉基准</span></p>
+    <h2><span class="en">EyeBench-HY: puzzles reverse-engineered from user complaints</span><span class="zh">EyeBench-HY：从用户吐槽里反推的视觉考题</span></h2>
+    <p class="d-intro"><span class="en">I read community feedback on vision models, traced it to perception blind spots, and wrote 12 parametric generators that draw a puzzle and compute its answer at the same time. No labels to collect, so no label noise.</span><span class="zh">从社区对视觉模型的吐槽里反推感知盲区，写了 12 个参数化生成器：画图的同时算出答案，不需要人工标注，也就没有标注噪声。</span></p>
+    <div class="gallery">
+      <figure><img loading="lazy" src="images/hy/eb-maze-turns.png" width="720" height="720" alt="Maze for counting turns"><figcaption><span class="en">Maze turns</span><span class="zh">迷宫转弯计数</span></figcaption></figure>
+      <figure><img loading="lazy" src="images/hy/eb-crossings.png" width="720" height="720" alt="Tangled curves for counting crossings"><figcaption><span class="en">Crossings</span><span class="zh">交点计数</span></figcaption></figure>
+      <figure><img loading="lazy" src="images/hy/eb-closed-loops.png" width="720" height="720" alt="Curves for counting closed loops"><figcaption><span class="en">Closed loops</span><span class="zh">闭环计数</span></figcaption></figure>
+      <figure><img loading="lazy" src="images/hy/eb-pairing.png" width="720" height="720" alt="Lines connecting letters to numbers"><figcaption><span class="en">Endpoint pairing</span><span class="zh">端点配对</span></figcaption></figure>
+      <figure><img loading="lazy" src="images/hy/eb-maze-connect.png" width="720" height="720" alt="Maze with several entrances"><figcaption><span class="en">Maze connectivity</span><span class="zh">迷宫连通判定</span></figcaption></figure>
+      <figure><img loading="lazy" src="images/hy/eb-components.png" width="720" height="720" alt="Graph with separate components"><figcaption><span class="en">Graph components</span><span class="zh">图连通分量</span></figcaption></figure>
+      <figure><img loading="lazy" src="images/hy/eb-shortest.png" width="720" height="720" alt="Graph with start and end nodes"><figcaption><span class="en">Shortest path</span><span class="zh">图最短路</span></figcaption></figure>
+      <figure><img loading="lazy" src="images/hy/eb-pattern.png" width="720" height="720" alt="Sequence completion puzzle"><figcaption><span class="en">Sequence completion</span><span class="zh">规律序列补全</span></figcaption></figure>
+    </div>
+
+    <div class="d-grid2">
+      <div class="panel">
+        <h3><span class="en">Difficulty tiers hold up</span><span class="zh">难度分档成立</span></h3>
+        <p class="panel-note"><span class="en">Accuracy of four models over two rounds, 654 calls</span><span class="zh">四个模型两轮跑测，共 654 次调用的正确率</span></p>
+        <ul class="bars">
+          <li><span class="bl"><span class="en">Easy</span><span class="zh">简单</span></span><span class="bt"><i style="--v:86.5%"></i></span><b>86.5%</b></li>
+          <li><span class="bl"><span class="en">Medium</span><span class="zh">中等</span></span><span class="bt"><i style="--v:73.4%"></i></span><b>73.4%</b></li>
+          <li><span class="bl"><span class="en">Hard</span><span class="zh">困难</span></span><span class="bt"><i style="--v:58.8%"></i></span><b>58.8%</b></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3><span class="en">Where models break</span><span class="zh">模型在哪里翻车</span></h3>
+        <p class="panel-note"><span class="en">Hardest task types; graph degree, odd-one-out, sequences and shortest path were all solved</span><span class="zh">最难的几种考法；节点度数、找异类、序列补全、最短路全部答对</span></p>
+        <ul class="bars">
+          <li><span class="bl"><span class="en">Maze turns</span><span class="zh">转弯计数</span></span><span class="bt"><i style="--v:37.4%"></i></span><b>37.4%</b></li>
+          <li><span class="bl"><span class="en">Crossings</span><span class="zh">交点计数</span></span><span class="bt"><i style="--v:44.4%"></i></span><b>44.4%</b></li>
+          <li><span class="bl"><span class="en">Closed loops</span><span class="zh">闭环计数</span></span><span class="bt"><i style="--v:51.9%"></i></span><b>51.9%</b></li>
+          <li><span class="bl"><span class="en">Maze connect</span><span class="zh">连通判定</span></span><span class="bt"><i style="--v:65.6%"></i></span><b>65.6%</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <ol class="flow flow-5">
+      <li><b><span class="en">Sample by ratio</span><span class="zh">按比例出题</span></b><span><span class="en">12 task types × 3 tiers</span><span class="zh">12 种考法 × 3 档难度</span></span></li>
+      <li><b><span class="en">Scripted ground truth</span><span class="zh">脚本生成 GT</span></b><span><span class="en">answer computed with the image</span><span class="zh">画图时同步算答案</span></span></li>
+      <li><b><span class="en">Batch gate</span><span class="zh">批次门禁</span></b><span><span class="en">every item checked, legible at 448 px</span><span class="zh">逐题检查，缩到 448px 仍可辨认</span></span></li>
+      <li><b>pass@1</b><span><span class="en">four models screen for hard items</span><span class="zh">多模型筛出高难题</span></span></li>
+      <li><b><span class="en">Re-balance</span><span class="zh">迭代配比</span></b><span><span class="en">dashboard and leaderboard</span><span class="zh">上线看题看板与排行榜</span></span></li>
+    </ol>
+  </section>
+
+  <!-- 02 Sci3D -->
+  <section id="sci3d" class="d-sec">
+    <p class="eyebrow">02 · <span class="en">Scientific 3D</span><span class="zh">科学三维</span> <em class="tag-new"><span class="en">Exploring</span><span class="zh">探索中</span></em></p>
+    <h2><span class="en">Sci3D-Bench: answer by looking, not by reading the file</span><span class="zh">Sci3D-Bench：只能看，不能读文件</span></h2>
+    <p class="d-intro"><span class="en">300 questions built from real protein structures (RCSB PDB and AlphaFold DB, 7 families) and 65 whole-body CT scans. The source files stay outside the sandbox: the model must rotate, zoom and clip a structure viewer, or scroll through CT slices, to answer. Every answer is checked by two independent programs.</span><span class="zh">基于真实蛋白结构（RCSB PDB 与 AlphaFold DB，7 个题族）和 65 例全身 CT 构建 300 道题。源文件锁在沙箱外，模型只能自己旋转、缩放、剖切结构查看器，或翻看 CT 切面来作答；每道题的答案都由两条独立程序交叉核验。</span></p>
+    <div class="pair">
+      <figure><img loading="lazy" src="images/hy/sci3d-overview.jpg" width="900" height="900" alt="Protein structure rendered as grey ribbons with a coloured ligand"><figcaption><span class="en">What the model sees first</span><span class="zh">模型看到的总览</span></figcaption></figure>
+      <figure><img loading="lazy" src="images/hy/sci3d-clipped.jpg" width="900" height="900" alt="The same protein zoomed 2.25 times and clipped to expose the ligand pocket"><figcaption><span class="en">After zooming 2.25× and clipping to the ligand pocket</span><span class="zh">放大 2.25 倍并剖切到配体口袋之后</span></figcaption></figure>
+    </div>
+    <dl class="stats stats-sm">
+      <div><dt>8.7%</dt><dd><span class="en">blind baseline, no image</span><span class="zh">不看图盲答的基线</span></dd></div>
+      <div><dt>44–48%</dt><dd><span class="en">all-correct rate of frontier models</span><span class="zh">前沿模型全对率（初测）</span></dd></div>
+      <div><dt>49–75</dt><dd><span class="en">viewer calls per question</span><span class="zh">次查看器调用 / 题</span></dd></div>
+      <div><dt>38</dt><dd><span class="en">blocked attempts to scan the disk for source files</span><span class="zh">次扫盘偷看源文件被拦下</span></dd></div>
+    </dl>
+    <div class="panel">
+      <h3><span class="en">They see the whole, not the detail</span><span class="zh">看得清整体，看不准局部</span></h3>
+      <p class="panel-note"><span class="en">All-correct rate by protein family, one frontier model, first run</span><span class="zh">某前沿模型在蛋白题上的分题族全对率（初测）</span></p>
+      <ul class="bars">
+        <li><span class="bl"><span class="en">Disulfide bonds</span><span class="zh">二硫键</span></span><span class="bt"><i style="--v:100%"></i></span><b>100%</b></li>
+        <li><span class="bl"><span class="en">Quaternary symmetry</span><span class="zh">四级结构对称性</span></span><span class="bt"><i style="--v:100%"></i></span><b>100%</b></li>
+        <li><span class="bl"><span class="en">AlphaFold comparison</span><span class="zh">AlphaFold 对比</span></span><span class="bt"><i style="--v:78%"></i></span><b>78%</b></li>
+        <li><span class="bl"><span class="en">Chain interface</span><span class="zh">链间界面</span></span><span class="bt"><i style="--v:44%"></i></span><b>44%</b></li>
+        <li><span class="bl"><span class="en">Metal coordination</span><span class="zh">金属位点配位</span></span><span class="bt"><i style="--v:22%"></i></span><b>22%</b></li>
+        <li><span class="bl"><span class="en">Ligand pocket</span><span class="zh">配体口袋</span></span><span class="bt"><i style="--v:17%"></i></span><b>17%</b></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 03 Rubric pipeline -->
+  <section id="rubric" class="d-sec">
+    <p class="eyebrow">03 · <span class="en">Evaluation engineering</span><span class="zh">评测工程</span></p>
+    <h2><span class="en">A rubric pipeline that never sees the answer key</span><span class="zh">Rubric 自动生成链路：不看答案写评分标准</span></h2>
+    <p class="d-intro"><span class="en">For STEM drawing questions, the generator sees only the question and seven model responses. It first lists every response’s errors, then writes rules so that each real error is caught by a Must and no valid drawing is penalised.</span><span class="zh">面向 STEM 作图题。生成模型只看题目和 7 份模型作答，不看参考答案：先逐份写出错因，再写条款，要求每个实质错误都有一条 Must 拦住、合法画法不被误杀。</span></p>
+    <ol class="flow flow-5">
+      <li><b>1 · <span class="en">Route</span><span class="zh">路由</span></b><span><span class="en">split sub-questions, 11 drawing types</span><span class="zh">拆小问，归入 11 类作图形态</span></span></li>
+      <li><b>2 · <span class="en">Generate blind</span><span class="zh">盲产</span></b><span><span class="en">error table first, then rules</span><span class="zh">先写错因表，再写条款</span></span></li>
+      <li><b>3 · <span class="en">Lint</span><span class="zh">规则检查</span></b><span><span class="en">code checks count, format, banned words</span><span class="zh">代码查条数、格式与禁用词</span></span></li>
+      <li><b>4 · <span class="en">Two judges</span><span class="zh">两层裁判</span></b><span><span class="en">score by rubric vs. judge without it</span><span class="zh">按 Rubric 打分 vs. 不看 Rubric 判对错</span></span></li>
+      <li><b>5 · <span class="en">Gate &amp; ship</span><span class="zh">门禁与交付</span></b><span><span class="en">misses sent back, up to 2 repairs</span><span class="zh">漏拦打回，最多回修 2 次</span></span></li>
+    </ol>
+    <p class="flow-note"><span class="en">If the rubric passes a response that the rubric-free judge marks wrong, the case goes back to stage 2. Every round logs its feedback, lint errors and tokens.</span><span class="zh">Rubric 判全过、而不看 Rubric 的裁判判错的格子（漏拦）会打回第 2 步重写；每一轮的反馈原文、拦截明细和 token 都有记录。</span></p>
+    <div class="d-grid2">
+      <div class="panel">
+        <h3><span class="en">Closer to human eyes than hand-written rubrics</span><span class="zh">比人工写的 Rubric 更接近人眼</span></h3>
+        <p class="panel-note"><span class="en">Cell-level agreement with human judgement, 54 questions × 7 models</span><span class="zh">与人眼判定的逐格一致率，54 题 × 7 个模型</span></p>
+        <ul class="bars">
+          <li><span class="bl"><span class="en">Pipeline</span><span class="zh">自动链路</span></span><span class="bt"><i class="hi" style="--v:80.2%"></i></span><b>80.2%</b></li>
+          <li><span class="bl"><span class="en">Hand-written</span><span class="zh">人工 Rubric</span></span><span class="bt"><i style="--v:77.8%"></i></span><b>77.8%</b></li>
+        </ul>
+        <p class="panel-foot">Cohen’s κ <b>0.60</b> vs <b>0.54</b></p>
+      </div>
+      <div class="panel">
+        <h3><span class="en">Fast enough to run on every batch</span><span class="zh">快到每批都能跑</span></h3>
+        <dl class="mini">
+          <div><dt>~6 <small><span class="en">min</span><span class="zh">分钟</span></small></dt><dd><span class="en">per question, runs in parallel</span><span class="zh">单题耗时，可并发</span></dd></div>
+          <div><dt>4.4 → 1.4</dt><dd><span class="en">repair rounds per question after removing an over-strict gate</span><span class="zh">去掉过严门禁后，每题平均回修轮数</span></dd></div>
+          <div><dt>6</dt><dd><span class="en">judge models compared before choosing one</span><span class="zh">类 Judge 模型横评选型</span></dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Attribution operator -->
+  <section id="trace" class="d-sec">
+    <p class="eyebrow">04 · <span class="en">Trajectory attribution</span><span class="zh">轨迹归因</span></p>
+    <h2><span class="en">An attribution operator that finds the first wrong step</span><span class="zh">Agent 归因质检算子：找到第一步走偏的地方</span></h2>
+    <p class="d-intro"><span class="en">A score says an agent failed; it does not say where. For each low-scoring trajectory the operator names the earliest root cause (type, turn, step, what it did, what it should have done) and backs it with quotes from the trace, which are then checked word for word.</span><span class="zh">分数只告诉你智能体失败了，不告诉你错在哪。算子对每条低分轨迹给出最早的根因（类型、轮次、步号、做了什么、应该怎么做），并附上轨迹原文作为证据，再逐字核对这些引用。</span></p>
+    <ol class="flow flow-5">
+      <li><b><span class="en">Low-score traces</span><span class="zh">低分轨迹</span></b><span><span class="en">invalid tasks removed first</span><span class="zh">先剔除无效任务</span></span></li>
+      <li><b><span class="en">Attribute</span><span class="zh">逐条归因</span></b><span><span class="en">root cause, step, evidence</span><span class="zh">主因、步号与证据</span></span></li>
+      <li><b><span class="en">Verify quotes</span><span class="zh">证据核对</span></b><span><span class="en">deterministic, no LLM</span><span class="zh">确定性脚本，不调模型</span></span></li>
+      <li><b><span class="en">Cross-review</span><span class="zh">跨家族复核</span></b><span><span class="en">blind, adversarial, arbitration</span><span class="zh">盲归因 · 对抗审查 · 仲裁</span></span></li>
+      <li><b><span class="en">Patterns → operators</span><span class="zh">聚类成算子</span></b><span><span class="en">fix old ones, spec new ones</span><span class="zh">修旧算子，写新规格</span></span></li>
+    </ol>
+    <dl class="stats stats-sm">
+      <div><dt>9,368</dt><dd><span class="en">evidence quotes checked word for word</span><span class="zh">条证据引用逐字核对</span></dd></div>
+      <div><dt>12%</dt><dd><span class="en">not found in the trace, sent back for repair</span><span class="zh">在原轨迹中找不到，打回修复</span></dd></div>
+      <div><dt>46</dt><dd><span class="en">existing operators audited line by line</span><span class="zh">个现有算子逐个读代码审计</span></dd></div>
+      <div><dt>62</dt><dd><span class="en">bad patterns clustered into 52 operator specs</span><span class="zh">类 bad pattern，整理成 52 份算子规格</span></dd></div>
+    </dl>
+    <div class="d-grid2">
+      <div class="panel">
+        <h3><span class="en">Environment errors were counted as model errors</span><span class="zh">环境故障被算成了模型失败</span></h3>
+        <p><span class="en">An interruption operator was not registered as an environment signal. After the fix, the share of traces flagged as bad dropped from 52.0% to 47.2%.</span><span class="zh">环境中断算子没有注册成环境信号，命中后仍被算作 bad case。修正后，被判为 bad 的轨迹比例从 52.0% 降到 47.2%。</span></p>
+      </div>
+      <div class="panel">
+        <h3><span class="en">An operator that could never fire</span><span class="zh">一个永远不会命中的算子</span></h3>
+        <p><span class="en">The adapter passed an empty tool schema, so invalid-argument checks always returned zero. With the real schema they catch about 3.3% of sampled traces.</span><span class="zh">适配层把工具 schema 写成了空的，参数校验算子全库零命中。传入真实 schema 后，抽样中约 3.3% 的轨迹被抓出漏传必填参数。</span></p>
+      </div>
+    </div>
+    <p class="flow-note"><span class="en">The same method, applied to 3D benchmark trajectories, traced the in-house model’s failures to four causes and turned them into training suggestions. <a class="hl" href="index.html#research">See Research</a>.</span><span class="zh">同一套方法用在三维基准的轨迹上，把自研模型的失败归到四类主因，并转成训练侧建议，<a class="hl" href="index.html#research">见主页“研究”</a>。</span></p>
+  </section>
+
+  <!-- 05 coding2video -->
+  <section id="c2v" class="d-sec">
+    <p class="eyebrow">05 · <span class="en">Code-to-video</span><span class="zh">代码生成视频</span> <em class="tag-new"><span class="en">Exploring</span><span class="zh">探索中</span></em></p>
+    <h2><span class="en">coding2video: can a model edit its own animation?</span><span class="zh">coding2video：模型能不能只改该改的地方</span></h2>
+    <p class="d-intro"><span class="en">Models write animation code (HTML, Manim, Three.js) that is rendered into video. Each task is one generation plus four chained edits; scoring diffs the render traces of consecutive rounds, so most checks are deterministic and a vision model only covers what the trace cannot read.</span><span class="zh">模型写动画代码（HTML、Manim、Three.js 等），再逐帧渲染成视频。每题 1 轮生成 + 4 轮链式修改，判分比对前后两轮的渲染轨迹，大部分检查是确定性的，视觉模型只兜底轨迹读不到的部分。</span></p>
+    <ol class="chain" aria-label="Task structure">
+      <li><span class="en">Generate</span><span class="zh">生成</span></li>
+      <li><span class="en">Edit 1</span><span class="zh">修改 1</span></li>
+      <li><span class="en">Edit 2</span><span class="zh">修改 2</span></li>
+      <li><span class="en">Edit 3</span><span class="zh">修改 3</span></li>
+      <li><span class="en">Edit 4</span><span class="zh">修改 4</span></li>
+    </ol>
+    <p class="flow-note"><span class="en">A first round of 180 single-edit samples passed in full, so the task is being made harder. An audit of the public Code2Video-Compass benchmark found six methodological issues.</span><span class="zh">首轮 180 个单次修改样本全部通过，说明任务太简单，正在加难度；另外审查了公开基准 Code2Video-Compass，定位出 6 处方法问题。</span></p>
+  </section>
+
+  <!-- 06 3D benchmarks -->
+  <section id="spatial" class="d-sec">
+    <p class="eyebrow">06 · <span class="en">3D spatial benchmarks</span><span class="zh">三维空间基准</span></p>
+    <h2><span class="en">Two closed-loop 3D benchmarks</span><span class="zh">两项三维空间闭环基准</span></h2>
+    <a class="feature" href="https://zk-yuan.github.io/spacetrack/" target="_blank" rel="noopener">
+      <img loading="lazy" src="images/v3/spacetrack-2.jpg" alt="First-person view inside a Space Track world">
+      <div>
+        <h3>Space Track<svg class="arr" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/></svg></h3>
+        <p><span class="en">Five first-person worlds that change as the agent acts. Agents describe the change but cannot act on it; a ground-truth map lifts success from 25% to 47%.</span><span class="zh">5 个随行动变化的第一人称世界。智能体能描述变化却无法据此行动，给真值地图后成功率 25% → 47%。</span></p>
+      </div>
+    </a>
+    <p class="flow-note"><span class="en">The second benchmark (Lego bricks and mechanical puzzles, 108 instances) is under double-blind review, so its name is withheld.</span><span class="zh">另一项基准（乐高积木与机械谜题，108 个实例）在双盲评审中，暂隐去名称。</span></p>
+  </section>
+
+  <footer class="d-foot">
+    <a class="more" href="index.html#experience"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd"/></svg><span class="u"><span class="en">Back to home</span><span class="zh">返回主页</span></span></a>
+    <p>© 2026 Zekai Yuan</p>
+  </footer>
+</main>
+
+<script src="assets/site.js" defer></script>
+</body>
+</html>
