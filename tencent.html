@@ -57,7 +57,7 @@
   <section id="eyebench" class="d-sec">
     <p class="eyebrow">01 · <span class="en">Visual benchmark</span><span class="zh">视觉基准</span></p>
     <h2><span class="en">EyeBench-HY: puzzles reverse-engineered from user complaints</span><span class="zh">EyeBench-HY：从用户吐槽里反推的视觉考题</span></h2>
-    <p class="d-intro"><span class="en">I traced community complaints about vision models to perception blind spots and split spatial perception into <b>12 atomic skills</b> in five groups (path tracing, difference detection, topological closure, graph structure, visual patterns), each with three difficulty tiers. Parametric generators draw a puzzle and compute its answer at the same time, so new batches cost nothing to label and can target whichever skill a model is weak at.</span><span class="zh">从社区对视觉模型的吐槽反推感知盲区，把空间感知拆成路径追踪、差异检测、拓扑闭合、图结构、图形规律 <b>5 类 12 种原子能力</b>，每种 3 档难度。参数化生成器画图的同时算出答案，新题不需要人工标注，还能针对模型薄弱的能力<b>定向生产训练数据</b>。</span></p>
+    <p class="d-intro"><span class="en">I traced community complaints about vision models to perception blind spots and split spatial perception into <b>12 atomic skills</b> in five groups (path tracing, difference detection, topological closure, graph structure, visual patterns), each with three difficulty tiers. Parametric generators draw a puzzle and compute its answer at the same time, so new batches cost nothing to label. For weak skills I produced targeted training data: SFT samples (image, programmatic answer and step-by-step reasoning) and verifiable-reward RL data scored by program and staged by difficulty, filtering out items answerable without the image.</span><span class="zh">从社区对视觉模型的吐槽反推感知盲区，把空间感知拆成路径追踪、差异检测、拓扑闭合、图结构、图形规律 <b>5 类 12 种原子能力</b>，每种 3 档难度。参数化生成器画图的同时算出答案，新题不需要人工标注。针对薄弱能力定向生产训练数据：<b>SFT 数据</b>（题图 + 程序化答案 + 分步推理过程）与 <b>RL 可验证奖励数据</b>（程序判分、按难度分档做课程），并用去图消融过滤不看图也能答对的样本。</span></p>
     <div class="gallery">
       <figure><img loading="lazy" src="images/hy/eb-maze-turns.png" width="720" height="720" alt="Maze for counting turns"><figcaption><span class="en">Maze turns</span><span class="zh">迷宫转弯计数</span></figcaption></figure>
       <figure><img loading="lazy" src="images/hy/eb-crossings.png" width="720" height="720" alt="Tangled curves for counting crossings"><figcaption><span class="en">Crossings</span><span class="zh">交点计数</span></figcaption></figure>
@@ -188,8 +188,8 @@
         <p><span class="en">On the timing tasks, every failure with zero rule hits was traced by the LLM layer to the same cause: the drop was timed wrong.</span><span class="zh">时间类任务里，规则零命中的失败，LLM 层全部定位到了同一个原因：投放时机算错。</span></p>
       </div>
       <div class="panel">
-        <h3><span class="en">From failure modes to training</span><span class="zh">从失败模式到训练建议</span></h3>
-        <p><span class="en">On the 3D benchmarks the in-house model’s failures fell into four causes (distance and angle, no external memory, no recovery, no motion timing), which became data, SFT and step-level RL suggestions. <a class="hl" href="index.html#research">See Research</a>.</span><span class="zh">在三维基准上，自研模型的失败归为四类主因（距离与转角、不记状态、失败后不归因、不会推算运动周期），并转成数据、SFT 与 RL 步级惩罚建议。</span></p>
+        <h3><span class="en">Bad patterns and training suggestions</span><span class="zh">归纳的 Bad Pattern 与训练建议</span></h3>
+        <p><span class="en">The in-house model misjudges first-person distance and angle and burns its steps on tiny corrections; misses loops, loses its heading and keeps no notes, then declares tasks impossible; ignores failure feedback; cannot time moving obstacles from several frames; and reasons correctly without acting on it. Suggestions: metric perception, exploration with external notes and multi-frame timing data; recovery trajectories for SFT; for RL, remove the fallback that hides invalid calls, penalise wasted steps and supervise each step.</span><span class="zh">自研模型的主要问题：估不准距离与转角、反复微调耗光步数；认不出环路、转身丢方向、不记笔记，迷路后宣称做不到；操作失败不归因、跨环境误调工具；不会从多帧推算运动周期；推理与行动脱节。训练建议：补度量感知、带外部笔记的长程探索、多帧时序三类数据；SFT 补“失败 → 验证 → 回退”纠错轨迹；RL 去掉掩盖非法调用的 fallback，惩罚无效动作与步数浪费，做步级过程监督。</span></p>
       </div>
     </div>
   </section>
@@ -215,7 +215,7 @@
       <img loading="lazy" src="images/v4/spaceact.jpg" alt="A red Lego arch being built in SpaceAct">
       <div>
         <h3>SpaceAct<svg class="arr" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/></svg></h3>
-        <p><span class="en">Lego building and mechanical puzzles from first-person RGB, with no coordinates: 108 solver-verified instances. The bottleneck is estimating 3D geometry from 2D views, not planning.</span><span class="zh">只凭第一人称画面完成乐高搭建与机械解谜，不给坐标，共 108 道求解器验证题。瓶颈不在规划，而在从二维画面估准三维几何。</span></p>
+        <p><span class="en">Lego building and mechanical puzzles from first-person RGB, with no coordinates: 108 solver-verified instances.</span><span class="zh">只凭第一人称画面完成乐高搭建与机械解谜，不给坐标，共 108 道求解器验证题。</span></p>
       </div>
     </a>
   </section>
