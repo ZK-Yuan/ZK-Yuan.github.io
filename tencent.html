@@ -29,7 +29,7 @@
   <a class="dnav-back" href="index.html#experience"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd"/></svg><span class="en">Zekai Yuan</span><span class="zh">苑泽楷</span></a>
   <nav class="dnav-links" aria-label="On this page">
     <a href="#eyebench">EyeBench-HY</a>
-    <a href="#sci3d">Sci3D</a>
+    <a href="#sci3d">AI for Biology</a>
     <a href="#rubric">Rubric</a>
     <a href="#trace"><span class="en">Attribution</span><span class="zh">归因算子</span></a>
   </nav>
@@ -57,7 +57,7 @@
   <section id="eyebench" class="d-sec">
     <p class="eyebrow">01 · <span class="en">Visual benchmark</span><span class="zh">视觉基准</span></p>
     <h2><span class="en">EyeBench-HY: puzzles reverse-engineered from user complaints</span><span class="zh">EyeBench-HY：从用户吐槽里反推的视觉考题</span></h2>
-    <p class="d-intro"><span class="en">I read community feedback on vision models, traced it to perception blind spots, and wrote 12 parametric generators that draw a puzzle and compute its answer at the same time. No labels to collect, so no label noise.</span><span class="zh">从社区对视觉模型的吐槽里反推感知盲区，写了 12 个参数化生成器：画图的同时算出答案，不需要人工标注，也就没有标注噪声。</span></p>
+    <p class="d-intro"><span class="en">I traced community complaints about vision models to perception blind spots and split spatial perception into <b>12 atomic skills</b> in five groups (path tracing, difference detection, topological closure, graph structure, visual patterns), each with three difficulty tiers. Parametric generators draw a puzzle and compute its answer at the same time, so new batches cost nothing to label and can target whichever skill a model is weak at.</span><span class="zh">从社区对视觉模型的吐槽反推感知盲区，把空间感知拆成路径追踪、差异检测、拓扑闭合、图结构、图形规律 <b>5 类 12 种原子能力</b>，每种 3 档难度。参数化生成器画图的同时算出答案，新题不需要人工标注，还能针对模型薄弱的能力<b>定向生产训练数据</b>。</span></p>
     <div class="gallery">
       <figure><img loading="lazy" src="images/hy/eb-maze-turns.png" width="720" height="720" alt="Maze for counting turns"><figcaption><span class="en">Maze turns</span><span class="zh">迷宫转弯计数</span></figcaption></figure>
       <figure><img loading="lazy" src="images/hy/eb-crossings.png" width="720" height="720" alt="Tangled curves for counting crossings"><figcaption><span class="en">Crossings</span><span class="zh">交点计数</span></figcaption></figure>
@@ -102,9 +102,9 @@
 
   <!-- 02 Sci3D -->
   <section id="sci3d" class="d-sec">
-    <p class="eyebrow">02 · <span class="en">Scientific 3D</span><span class="zh">科学三维</span> <em class="tag-new"><span class="en">Exploring</span><span class="zh">探索中</span></em></p>
-    <h2><span class="en">Sci3D-Bench: answer by looking, not by reading the file</span><span class="zh">Sci3D-Bench：只能看，不能读文件</span></h2>
-    <p class="d-intro"><span class="en">300 questions built from real protein structures (RCSB PDB and AlphaFold DB, 7 families) and 65 whole-body CT scans. The source files stay outside the sandbox: the model must rotate, zoom and clip a structure viewer, or scroll through CT slices, to answer. Every answer is checked by two independent programs.</span><span class="zh">基于真实蛋白结构（RCSB PDB 与 AlphaFold DB，7 个题族）和 65 例全身 CT 构建 300 道题。源文件锁在沙箱外，模型只能自己旋转、缩放、剖切结构查看器，或翻看 CT 切面来作答；每道题的答案都由两条独立程序交叉核验。</span></p>
+    <p class="eyebrow">02 · AI for Biology <em class="tag-new"><span class="en">Exploring</span><span class="zh">探索中</span></em></p>
+    <h2><span class="en">AI for Biology: turning journal figures into 3D science questions</span><span class="zh">AI for Biology：把顶刊论文里的图变成三维科学题</span></h2>
+    <p class="d-intro"><span class="en">Expert-level biology questions are expensive to write. This pipeline starts from the figures, data and appendices of top biomedical papers (for example the PDB structures they cite), renders them as interactive 3D models, and asks an agent to explore them to answer. The first 300 questions cover protein structures and 65 whole-body CT scans; source files stay outside the sandbox, so the model has to rotate, clip and read slices in a viewer. The same pipeline can move to other fields.</span><span class="zh">专家级的生物科学题出题成本很高。这条 pipeline 从生物医学顶刊论文的图表、数据与附录出发（例如论文引用的 PDB 结构），渲染成可交互的三维模型，让智能体在空间中探索作答。首批 300 题覆盖蛋白结构与 65 例全身 CT；源文件锁在沙箱外，模型只能在查看器里旋转、剖切、翻看切面。同一套流程可以迁移到其他学科。</span></p>
     <div class="pair">
       <figure><img loading="lazy" src="images/hy/sci3d-overview.jpg" width="900" height="900" alt="Protein structure rendered as grey ribbons with a coloured ligand"><figcaption><span class="en">What the model sees first</span><span class="zh">模型看到的总览</span></figcaption></figure>
       <figure><img loading="lazy" src="images/hy/sci3d-clipped.jpg" width="900" height="900" alt="The same protein zoomed 2.25 times and clipped to expose the ligand pocket"><figcaption><span class="en">After zooming 2.25× and clipping to the ligand pocket</span><span class="zh">放大 2.25 倍并剖切到配体口袋之后</span></figcaption></figure>
@@ -166,38 +166,44 @@
   <!-- 04 Attribution operator -->
   <section id="trace" class="d-sec">
     <p class="eyebrow">04 · <span class="en">Trajectory attribution</span><span class="zh">轨迹归因</span></p>
-    <h2><span class="en">An attribution operator that finds the first wrong step</span><span class="zh">Agent 归因质检算子：找到第一步走偏的地方</span></h2>
-    <p class="d-intro"><span class="en">A score says an agent failed; it does not say where. For each low-scoring trajectory the operator names the earliest root cause (type, turn, step, what it did, what it should have done) and backs it with quotes from the trace, which are then checked word for word.</span><span class="zh">分数只告诉你智能体失败了，不告诉你错在哪。算子对每条低分轨迹给出最早的根因（类型、轮次、步号、做了什么、应该怎么做），并附上轨迹原文作为证据，再逐字核对这些引用。</span></p>
+    <h2><span class="en">An attribution operator that finds the turn where the model went wrong</span><span class="zh">智能体轨迹归因算子：定位模型在哪一轮想错</span></h2>
+    <p class="d-intro"><span class="en">Existing operators mostly flag downstream symptoms: their evidence lands on the root-cause step only 24.1% of the time. So I split the job in two. Rules give the facts: 29 rule operators flag symptoms and compress each trajectory into an evidence pack indexed by turn. An LLM gives the diagnosis: 14 root-cause types across understanding, perception, reasoning, feedback and termination name the turn where the model went wrong.</span><span class="zh">平台现有算子大多在报下游现象，证据落在根因那一步的只有 24.1%。所以我把工作拆成两层：<b>规则给数</b>，29 个规则算子标出现象，并把每条轨迹压成按轮次索引的证据包；<b>LLM 给话</b>，14 类根因（理解、感知、推理、反馈、终止）指出模型在哪一轮想错。</span></p>
     <ol class="flow flow-5">
-      <li><b><span class="en">Low-score traces</span><span class="zh">低分轨迹</span></b><span><span class="en">invalid tasks removed first</span><span class="zh">先剔除无效任务</span></span></li>
-      <li><b><span class="en">Attribute</span><span class="zh">逐条归因</span></b><span><span class="en">root cause, step, evidence</span><span class="zh">主因、步号与证据</span></span></li>
-      <li><b><span class="en">Verify quotes</span><span class="zh">证据核对</span></b><span><span class="en">deterministic, no LLM</span><span class="zh">确定性脚本，不调模型</span></span></li>
-      <li><b><span class="en">Cross-review</span><span class="zh">跨家族复核</span></b><span><span class="en">blind, adversarial, arbitration</span><span class="zh">盲归因 · 对抗审查 · 仲裁</span></span></li>
-      <li><b><span class="en">Patterns → operators</span><span class="zh">聚类成算子</span></b><span><span class="en">fix old ones, spec new ones</span><span class="zh">修旧算子，写新规格</span></span></li>
+      <li><b><span class="en">Rule operators</span><span class="zh">规则算子</span></b><span><span class="en">29 symptom checks</span><span class="zh">29 个现象检查</span></span></li>
+      <li><b><span class="en">Evidence pack</span><span class="zh">证据包</span></b><span><span class="en">reasoning, actions, feedback by turn</span><span class="zh">逐轮理由、动作与环境反馈</span></span></li>
+      <li><b><span class="en">LLM root cause</span><span class="zh">LLM 根因</span></b><span><span class="en">14 types, turn and quote</span><span class="zh">14 类根因，给出轮次与摘录</span></span></li>
+      <li><b><span class="en">Quote check</span><span class="zh">逐字核对</span></b><span><span class="en">quote must appear in that turn</span><span class="zh">摘录必须出现在该轮原文</span></span></li>
+      <li><b><span class="en">Adversarial review</span><span class="zh">对抗复核</span></b><span><span class="en">other families try to overturn it</span><span class="zh">异家族模型以推翻为目标复核</span></span></li>
     </ol>
+    <p class="flow-note"><span class="en">Reviewers see the turn in context (±2 turns) and the images the model saw at that moment; a reviewer from the same family as the tested model abstains, and kept findings are graded fatal, serious or minor. Evaluator-only progress can be hidden as an ablation, and trajectories not yet run return “cannot judge” instead of counting as failures.</span><span class="zh">复核员能看到该轮前后各 2 轮原文和模型当时看到的画面；与被测模型同家族的复核员回避，保留下来的结论按致命、严重、一般分级。评测侧信息可以屏蔽做消融，没跑过的轨迹记“判不了”，不算失败。</span></p>
     <dl class="stats stats-sm">
-      <div><dt>9,368</dt><dd><span class="en">evidence quotes checked word for word</span><span class="zh">条证据引用逐字核对</span></dd></div>
-      <div><dt>12%</dt><dd><span class="en">not found in the trace, sent back for repair</span><span class="zh">在原轨迹中找不到，打回修复</span></dd></div>
-      <div><dt>46</dt><dd><span class="en">existing operators audited line by line</span><span class="zh">个现有算子逐个读代码审计</span></dd></div>
-      <div><dt>62</dt><dd><span class="en">bad patterns clustered into 52 operator specs</span><span class="zh">类 bad pattern，整理成 52 份算子规格</span></dd></div>
+      <div><dt>24.1%</dt><dd><span class="en">of existing operators’ evidence lands on the root-cause step</span><span class="zh">现有算子证据落在根因步的比例</span></dd></div>
+      <div><dt>29 + 14</dt><dd><span class="en">rule operators + LLM root-cause types</span><span class="zh">规则算子 + LLM 根因类型</span></dd></div>
+      <div><dt>64.5%</dt><dd><span class="en">of failed dev trajectories get a doubly verified root cause</span><span class="zh">开发集失败轨迹拿到双核验主因</span></dd></div>
+      <div><dt>+2.6 pt</dt><dd><span class="en">extra false positives on successful runs</span><span class="zh">成功轨迹上增加的误报</span></dd></div>
     </dl>
     <div class="d-grid2">
       <div class="panel">
-        <h3><span class="en">Environment errors were counted as model errors</span><span class="zh">环境故障被算成了模型失败</span></h3>
-        <p><span class="en">An interruption operator was not registered as an environment signal. After the fix, the share of traces flagged as bad dropped from 52.0% to 47.2%.</span><span class="zh">环境中断算子没有注册成环境信号，命中后仍被算作 bad case。修正后，被判为 bad 的轨迹比例从 52.0% 降到 47.2%。</span></p>
+        <h3><span class="en">Where rules see nothing</span><span class="zh">规则看不到的地方</span></h3>
+        <p><span class="en">On the timing tasks, every failure with zero rule hits was traced by the LLM layer to the same cause: the drop was timed wrong.</span><span class="zh">时间类任务里，规则零命中的失败，LLM 层全部定位到了同一个原因：投放时机算错。</span></p>
       </div>
       <div class="panel">
-        <h3><span class="en">An operator that could never fire</span><span class="zh">一个永远不会命中的算子</span></h3>
-        <p><span class="en">The adapter passed an empty tool schema, so invalid-argument checks always returned zero. With the real schema they catch about 3.3% of sampled traces.</span><span class="zh">适配层把工具 schema 写成了空的，参数校验算子全库零命中。传入真实 schema 后，抽样中约 3.3% 的轨迹被抓出漏传必填参数。</span></p>
+        <h3><span class="en">From failure modes to training</span><span class="zh">从失败模式到训练建议</span></h3>
+        <p><span class="en">On the 3D benchmarks the in-house model’s failures fell into four causes (distance and angle, no external memory, no recovery, no motion timing), which became data, SFT and step-level RL suggestions. <a class="hl" href="index.html#research">See Research</a>.</span><span class="zh">在三维基准上，自研模型的失败归为四类主因（距离与转角、不记状态、失败后不归因、不会推算运动周期），并转成数据、SFT 与 RL 步级惩罚建议。</span></p>
       </div>
     </div>
-    <p class="flow-note"><span class="en">The same method, applied to 3D benchmark trajectories, traced the in-house model’s failures to four causes and turned them into training suggestions. <a class="hl" href="index.html#research">See Research</a>.</span><span class="zh">同一套方法用在三维基准的轨迹上，把自研模型的失败归到四类主因，并转成训练侧建议，<a class="hl" href="index.html#research">见主页“研究”</a>。</span></p>
   </section>
 
   <!-- 06 3D benchmarks -->
   <section id="spatial" class="d-sec">
-    <p class="eyebrow">05 · <span class="en">3D spatial benchmarks</span><span class="zh">三维空间基准</span></p>
-    <h2><span class="en">Two closed-loop 3D benchmarks</span><span class="zh">两项三维空间闭环基准</span></h2>
+    <p class="eyebrow">05 · <span class="en">3D spatial benchmarks · success rate</span><span class="zh">三维空间基准 · 成功率</span></p>
+    <h2><span class="en">Two game-like closed-loop 3D benchmarks</span><span class="zh">两项游戏化三维空间闭环基准</span></h2>
+    <dl class="stats stats-sm">
+      <div><dt>70.5–97.7%</dt><dd><span class="en">Western top three, SpaceAct</span><span class="zh">海外三家 · SpaceAct</span></dd></div>
+      <div><dt>2.3–38.6%</dt><dd><span class="en">Chinese models, SpaceAct</span><span class="zh">国产模型 · SpaceAct</span></dd></div>
+      <div><dt>41.8–55.4%</dt><dd><span class="en">Western top three, Space Track</span><span class="zh">海外三家 · Space Track</span></dd></div>
+      <div><dt>8.5–15.3%</dt><dd><span class="en">Chinese models, Space Track</span><span class="zh">国产模型 · Space Track</span></dd></div>
+    </dl>
     <a class="feature" href="https://zk-yuan.github.io/spacetrack/" target="_blank" rel="noopener">
       <img loading="lazy" src="images/v3/spacetrack-2.jpg" alt="First-person view inside a Space Track world">
       <div>
