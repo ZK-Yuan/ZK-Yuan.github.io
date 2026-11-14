@@ -273,10 +273,6 @@ a.hl:hover { text-decoration: underline; }
 .pair img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
 .pair figcaption { padding: 12px 18px 16px; font-size: 13px; color: var(--ink-3); }
 
-.chain { list-style: none; margin: 28px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 22px; }
-.chain li { position: relative; padding: 10px 18px; border-radius: 999px; background: var(--card); font-size: 15px; font-weight: 500; }
-.chain li:first-child { background: var(--ink); color: #fff; }
-.chain li:not(:last-child)::after { content: ""; position: absolute; right: -14px; top: 50%; width: 6px; height: 6px; border-top: 1.5px solid var(--ink-4); border-right: 1.5px solid var(--ink-4); transform: translateY(-50%) rotate(45deg); }
 
 .feature { display: grid; grid-template-columns: 1.15fr 1fr; margin: 32px 0 0; overflow: hidden; border-radius: 22px; background: var(--card); transition: transform 0.5s var(--out), box-shadow 0.5s var(--out); }
 .feature:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -18px rgba(0, 0, 0, 0.18); }

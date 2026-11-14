@@ -194,24 +194,9 @@
     <p class="flow-note"><span class="en">The same method, applied to 3D benchmark trajectories, traced the in-house model’s failures to four causes and turned them into training suggestions. <a class="hl" href="index.html#research">See Research</a>.</span><span class="zh">同一套方法用在三维基准的轨迹上，把自研模型的失败归到四类主因，并转成训练侧建议，<a class="hl" href="index.html#research">见主页“研究”</a>。</span></p>
   </section>
 
-  <!-- 05 coding2video -->
-  <section id="c2v" class="d-sec">
-    <p class="eyebrow">05 · <span class="en">Code-to-video</span><span class="zh">代码生成视频</span> <em class="tag-new"><span class="en">Exploring</span><span class="zh">探索中</span></em></p>
-    <h2><span class="en">coding2video: can a model edit its own animation?</span><span class="zh">coding2video：模型能不能只改该改的地方</span></h2>
-    <p class="d-intro"><span class="en">Models write animation code (HTML, Manim, Three.js) that is rendered into video. Each task is one generation plus four chained edits; scoring diffs the render traces of consecutive rounds, so most checks are deterministic and a vision model only covers what the trace cannot read.</span><span class="zh">模型写动画代码（HTML、Manim、Three.js 等），再逐帧渲染成视频。每题 1 轮生成 + 4 轮链式修改，判分比对前后两轮的渲染轨迹，大部分检查是确定性的，视觉模型只兜底轨迹读不到的部分。</span></p>
-    <ol class="chain" aria-label="Task structure">
-      <li><span class="en">Generate</span><span class="zh">生成</span></li>
-      <li><span class="en">Edit 1</span><span class="zh">修改 1</span></li>
-      <li><span class="en">Edit 2</span><span class="zh">修改 2</span></li>
-      <li><span class="en">Edit 3</span><span class="zh">修改 3</span></li>
-      <li><span class="en">Edit 4</span><span class="zh">修改 4</span></li>
-    </ol>
-    <p class="flow-note"><span class="en">A first round of 180 single-edit samples passed in full, so the task is being made harder. An audit of the public Code2Video-Compass benchmark found six methodological issues.</span><span class="zh">首轮 180 个单次修改样本全部通过，说明任务太简单，正在加难度；另外审查了公开基准 Code2Video-Compass，定位出 6 处方法问题。</span></p>
-  </section>
-
   <!-- 06 3D benchmarks -->
   <section id="spatial" class="d-sec">
-    <p class="eyebrow">06 · <span class="en">3D spatial benchmarks</span><span class="zh">三维空间基准</span></p>
+    <p class="eyebrow">05 · <span class="en">3D spatial benchmarks</span><span class="zh">三维空间基准</span></p>
     <h2><span class="en">Two closed-loop 3D benchmarks</span><span class="zh">两项三维空间闭环基准</span></h2>
     <a class="feature" href="https://zk-yuan.github.io/spacetrack/" target="_blank" rel="noopener">
       <img loading="lazy" src="images/v3/spacetrack-2.jpg" alt="First-person view inside a Space Track world">
