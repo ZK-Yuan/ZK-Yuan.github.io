@@ -107,7 +107,7 @@
           <div class="edu-row">
             <div>
               <h3><span class="en">Harbin Institute of Technology (Shenzhen)</span><span class="zh">哈尔滨工业大学（深圳）</span></h3>
-              <p><span class="en">B.Eng. in Computer Science and Technology · transferred from Industrial Design</span><span class="zh">本科 · 计算机科学与技术（转自工业设计）</span></p>
+              <p><span class="en">B.Eng. in Computer Science and Technology</span><span class="zh">本科 · 计算机科学与技术</span></p>
             </div>
             <p class="edu-date"><span class="en">Expected Jun 2028</span><span class="zh">预计 2028.06 毕业</span></p>
           </div>
@@ -136,12 +136,16 @@
           <li>
             <div class="card card-media">
               <div class="card-body">
-                <h3><span class="en">3D Physical Manipulation &amp; Mechanism Puzzles from First-Person RGB</span><span class="zh">仅凭第一人称 RGB 的三维物理操作与机械解谜基准</span></h3>
-                <p class="card-sub"><span class="en">Co-first author · under double-blind review, title withheld</span><span class="zh">共同一作 · 双盲在投，暂隐去名称</span></p>
+                <h3><a href="https://arxiv.org/abs/2610.38405" target="_blank" rel="noopener">SpaceAct: Benchmarking 3D Spatial and Temporal Reasoning via Closed-Loop Action and Active Perception<svg class="arr" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/></svg></a></h3>
+                <p class="card-sub">Chenglong Shi*, <b>Zekai Yuan*</b>, Yue Song, Jon Pu, Will Wu · 2026</p>
                 <p><span class="en">RGB only, no coordinates: Lego building and mechanical puzzles within 100 steps, 108 solver-verified instances in 36 families, 12 models evaluated. Controlled injections show the bottleneck is estimating 3D geometry from 2D views, not planning.</span><span class="zh">只给渲染画面、不给坐标，在最多 100 步内完成乐高搭建与机械解谜，共 36 题族 / 108 道求解器验证题，跑测 12 个模型。受控实验表明瓶颈不在规划，而在从二维画面估准三维几何。</span></p>
-                <ul class="tags" aria-label="Topics"><li><span class="en">Co-first author</span><span class="zh">共同一作</span></li><li><span class="en">Under review</span><span class="zh">在投</span></li></ul>
+                <ul class="card-links" aria-label="Related links">
+                  <li><a href="https://arxiv.org/abs/2610.38405" target="_blank" rel="noopener">arXiv</a></li>
+                  <li><a href="https://zk-yuan.github.io/spaceact/" target="_blank" rel="noopener"><span class="en">Project</span><span class="zh">项目页</span></a></li>
+                </ul>
+                <ul class="tags" aria-label="Topics"><li><span class="en">Co-first author</span><span class="zh">共同一作</span></li><li>3D Benchmark</li><li>Embodied Reasoning</li></ul>
               </div>
-              <div class="thumb thumb-tile" aria-hidden="true"><span>RGB<small>only</small></span></div>
+              <img class="thumb" loading="lazy" src="images/v4/spaceact.jpg" width="200" height="133" alt="A red Lego arch being built in SpaceAct">
             </div>
           </li>
           <li>
@@ -169,7 +173,7 @@
                 <p><span class="en">Co-first author on the two 3D benchmarks above; I own visual benchmarks and automated grading for Hunyuan’s multimodal models.</span><span class="zh">两项三维空间基准共同一作；负责混元多模态模型的视觉出题与自动判分。</span></p>
                 <ul class="explore">
                   <li><em class="lbl">EyeBench-HY</em><span class="en">12 parametric generators turn user-reported blind spots into puzzles with programmatic answers, split into three tiers by four models.</span><span class="zh">从社区翻车案例反推感知盲区，12 个参数化生成器自动出题、程序算真值，四个模型筛出三档难度。</span></li>
-                  <li><em class="lbl">Rubric Judge</em><span class="en">A blind rubric-generation pipeline and a comparison of 6 judge models; 93.9% agreement with human graders.</span><span class="zh">盲产 Rubric 自动生成链路与 6 类 Judge 选型，机评-人评一致率 93.9%。</span></li>
+                  <li><em class="lbl">Rubric Judge</em><span class="en">The generator reads seven responses at once and every rubric item must be grounded in at least one of them; a judge re-ranks each item and sends it back if its order disagrees. 93.9% agreement with human graders.</span><span class="zh">生成模型同时看 7 份作答写 Rubric，每条须在至少一份作答中有依据；裁判逐条复核偏序，与生成方不一致即打回；机评-人评一致率 93.9%。</span></li>
                   <li><em><span class="en">Exploring</span><span class="zh">探索中</span></em><span class="en"><b>Sci3D-Bench:</b> 3D questions from protein structures and whole-body CT; source files stay outside the sandbox, so models must use a viewer.</span><span class="zh"><b>Sci3D-Bench：</b>蛋白结构与全身 CT 三维题，源文件锁在沙箱外，只能操作查看器作答。</span></li>
                 </ul>
                 <ul class="card-links" aria-label="Related links"><li><a href="tencent.html"><span class="en">Images, results and pipelines</span><span class="zh">查看图片、结果与链路结构</span></a></li></ul>

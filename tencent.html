@@ -133,15 +133,15 @@
   <section id="rubric" class="d-sec">
     <p class="eyebrow">03 · <span class="en">Evaluation engineering</span><span class="zh">评测工程</span></p>
     <h2><span class="en">A rubric pipeline that never sees the answer key</span><span class="zh">Rubric 自动生成链路：不看答案写评分标准</span></h2>
-    <p class="d-intro"><span class="en">For STEM drawing questions, the generator sees only the question and seven model responses. It first lists every response’s errors, then writes rules so that each real error is caught by a Must and no valid drawing is penalised.</span><span class="zh">面向 STEM 作图题。生成模型只看题目和 7 份模型作答，不看参考答案：先逐份写出错因，再写条款，要求每个实质错误都有一条 Must 拦住、合法画法不被误杀。</span></p>
+    <p class="d-intro"><span class="en">For STEM drawing questions. Instead of an answer key, the generator sees seven model responses to the same question at once: it lists each response’s errors, then writes rules. Every rule must be grounded in at least one of those responses and comes with a ranking of all seven on that rule, so the rubric targets errors that actually occur rather than imagined ones.</span><span class="zh">面向 STEM 作图题。生成模型不看参考答案，而是同时看到同一题的 7 份模型作答：先逐份写错因，再写条款。每条 Rubric 必须在至少一份作答里找到依据，并给出 7 份作答在这一条上的偏序，写出来的标准针对的是真实出现的错误，而不是凭空想象的扣分点。</span></p>
     <ol class="flow flow-5">
       <li><b>1 · <span class="en">Route</span><span class="zh">路由</span></b><span><span class="en">split sub-questions, 11 drawing types</span><span class="zh">拆小问，归入 11 类作图形态</span></span></li>
-      <li><b>2 · <span class="en">Generate blind</span><span class="zh">盲产</span></b><span><span class="en">error table first, then rules</span><span class="zh">先写错因表，再写条款</span></span></li>
-      <li><b>3 · <span class="en">Lint</span><span class="zh">规则检查</span></b><span><span class="en">code checks count, format, banned words</span><span class="zh">代码查条数、格式与禁用词</span></span></li>
-      <li><b>4 · <span class="en">Two judges</span><span class="zh">两层裁判</span></b><span><span class="en">score by rubric vs. judge without it</span><span class="zh">按 Rubric 打分 vs. 不看 Rubric 判对错</span></span></li>
-      <li><b>5 · <span class="en">Gate &amp; ship</span><span class="zh">门禁与交付</span></b><span><span class="en">misses sent back, up to 2 repairs</span><span class="zh">漏拦打回，最多回修 2 次</span></span></li>
+      <li><b>2 · <span class="en">Compare, blind</span><span class="zh">对比式盲产</span></b><span><span class="en">7 responses at once, errors first</span><span class="zh">同时看 7 份作答，先写错因表</span></span></li>
+      <li><b>3 · <span class="en">Ground &amp; rank</span><span class="zh">依据与偏序</span></b><span><span class="en">each rule cites a response and ranks all 7</span><span class="zh">每条标注依据作答，并给出偏序</span></span></li>
+      <li><b>4 · <span class="en">Re-rank check</span><span class="zh">逐条复核</span></b><span><span class="en">a judge re-ranks; reversal sends it back</span><span class="zh">裁判重打偏序，相反即打回</span></span></li>
+      <li><b>5 · <span class="en">Two-judge gate</span><span class="zh">两层裁判门禁</span></b><span><span class="en">misses sent back, up to 2 repairs</span><span class="zh">漏拦打回，最多回修 2 次</span></span></li>
     </ol>
-    <p class="flow-note"><span class="en">If the rubric passes a response that the rubric-free judge marks wrong, the case goes back to stage 2. Every round logs its feedback, lint errors and tokens.</span><span class="zh">Rubric 判全过、而不看 Rubric 的裁判判错的格子（漏拦）会打回第 2 步重写；每一轮的反馈原文、拦截明细和 token 都有记录。</span></p>
+    <p class="flow-note"><span class="en">A rule goes back to stage 2 if the judge’s ranking reverses the generator’s, or if the rubric passes a response that a rubric-free judge marks wrong. Code checks on count, format and banned words run throughout, and every round logs its feedback and tokens.</span><span class="zh">裁判重打的偏序与生产模型相反，或者按 Rubric 判全过、而不看 Rubric 的裁判判错（漏拦），都会打回第 2 步重写；条数、格式、禁用词的代码检查贯穿全程，每一轮的反馈原文和 token 都有记录。</span></p>
     <div class="d-grid2">
       <div class="panel">
         <h3><span class="en">Closer to human eyes than hand-written rubrics</span><span class="zh">比人工写的 Rubric 更接近人眼</span></h3>
@@ -205,7 +205,13 @@
         <p><span class="en">Five first-person worlds that change as the agent acts. Agents describe the change but cannot act on it; a ground-truth map lifts success from 25% to 47%.</span><span class="zh">5 个随行动变化的第一人称世界。智能体能描述变化却无法据此行动，给真值地图后成功率 25% → 47%。</span></p>
       </div>
     </a>
-    <p class="flow-note"><span class="en">The second benchmark (Lego bricks and mechanical puzzles, 108 instances) is under double-blind review, so its name is withheld.</span><span class="zh">另一项基准（乐高积木与机械谜题，108 个实例）在双盲评审中，暂隐去名称。</span></p>
+    <a class="feature" href="https://arxiv.org/abs/2610.38405" target="_blank" rel="noopener">
+      <img loading="lazy" src="images/v4/spaceact.jpg" alt="A red Lego arch being built in SpaceAct">
+      <div>
+        <h3>SpaceAct<svg class="arr" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/></svg></h3>
+        <p><span class="en">Lego building and mechanical puzzles from first-person RGB, with no coordinates: 108 solver-verified instances. The bottleneck is estimating 3D geometry from 2D views, not planning.</span><span class="zh">只凭第一人称画面完成乐高搭建与机械解谜，不给坐标，共 108 道求解器验证题。瓶颈不在规划，而在从二维画面估准三维几何。</span></p>
+      </div>
+    </a>
   </section>
 
   <footer class="d-foot">
