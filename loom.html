@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en" data-lang="en" data-title-en="Loom: a team chat where the AI is a member · Zekai Yuan" data-title-zh="Loom：AI 是群成员的团队群聊 · 苑泽楷">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Loom: a team chat where the AI is a member · Zekai Yuan</title>
+<meta name="description" content="Loom, an internal tool Zekai Yuan built for his team: a resident AI per room that decides when to speak, task cards completed by an execution agent, layered memory, and a private assistant for every member.">
+<meta property="og:title" content="Loom: a team chat where the AI is a member · Zekai Yuan">
+<meta property="og:image" content="https://zk-yuan.github.io/images/v4/og.jpg">
+<meta name="theme-color" content="#f5f5f7">
+<link rel="stylesheet" href="assets/site.css">
+<script>
+(function () {
+  var d = document.documentElement;
+  d.className += ' js skip-loader';
+  try {
+    var l = localStorage.getItem('lang');
+    if (!l) l = (navigator.language || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+    d.setAttribute('data-lang', l);
+    d.lang = l === 'zh' ? 'zh-CN' : 'en';
+  } catch (e) {}
+})();
+</script>
+</head>
+<body class="detail-page">
+<a class="skip" href="#main"><span class="en">Skip to content</span><span class="zh">跳到正文</span></a>
+
+<header class="dnav">
+  <a class="dnav-back" href="index.html#projects"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd"/></svg><span class="en">Zekai Yuan</span><span class="zh">苑泽楷</span></a>
+  <nav class="dnav-links" aria-label="On this page">
+    <a href="#proactive"><span class="en">Proactive</span><span class="zh">主动介入</span></a>
+    <a href="#tasks"><span class="en">Tasks</span><span class="zh">提卡执行</span></a>
+    <a href="#memory"><span class="en">Memory</span><span class="zh">记忆</span></a>
+    <a href="#assistant"><span class="en">Assistant</span><span class="zh">私人助理</span></a>
+  </nav>
+  <span class="lang" role="group" aria-label="Language">
+    <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
+    <button type="button" data-lang-btn="zh" aria-pressed="false">中</button>
+  </span>
+</header>
+
+<main id="main" class="detail">
+
+  <section class="d-hero">
+    <p class="eyebrow">2026.10 — <span class="en">Present · an internal tool I built for my team at Tencent Hunyuan</span><span class="zh">至今 · 混元实习期间为团队搭建的内部工具</span></p>
+    <h1>Loom<br><span class="en">A team chat where the AI is a member</span><span class="zh">AI 是群成员的团队群聊</span></h1>
+    <p class="d-lead"><span class="en">Every room has a resident AI. It decides for itself when to speak, turns what the team decides into task cards that an execution agent completes with evidence, and keeps the outcome in layered memory. Everyone also gets a private assistant that learns them quietly, orders coffee and plans trips.</span><span class="zh">每个群常驻一个 AI：自己判断什么时候开口，把讨论里定下的事提成任务卡，确认后交给执行 agent 带证据做完，结论沉淀进分层记忆。每个人另有一个私人助理，在对话里悄悄记住你，能帮你点咖啡、排行程。</span></p>
+    <dl class="stats">
+      <div><dt><span class="en">3 wks</span><span class="zh">3 周</span></dt><dd><span class="en">from first commit to v1.3, 85 commits</span><span class="zh">从第一次提交到 v1.3，共 85 次提交</span></dd></div>
+      <div><dt>10+</dt><dd><span class="en">teammates using it</span><span class="zh">位同事在用</span></dd></div>
+      <div><dt>22</dt><dd><span class="en">end-to-end test scripts</span><span class="zh">个端到端测试脚本</span></dd></div>
+      <div><dt>96%</dt><dd><span class="en">prompt-cache hit between replies (was ~50%)</span><span class="zh">相邻回复的提示词缓存命中（原约 50%）</span></dd></div>
+    </dl>
+  </section>
+
+  <!-- 01 Proactive -->
+  <section id="proactive" class="d-sec">
+    <p class="eyebrow">01 · <span class="en">Proactive</span><span class="zh">主动介入</span></p>
+    <h2><span class="en">Speaks up without an @, but doesn’t butt in</span><span class="zh">不用 @ 也会接话，但不乱插话</span></h2>
+    <p class="d-intro"><span class="en">An AI that only answers @-mentions is a tool; one that answers everything is noise. After a pause, a light decision model (Jev) reads the last 20 messages and answers several questions at once: is someone actually talking to the AI, is a question unanswered or a claim wrong, is the matter already settled, and who should handle it. Only a score above the room’s bar wakes the large model, which may still choose to stay quiet.</span><span class="zh">只会被 @ 的 AI 是工具，什么都接话的 AI 是噪音。讨论停顿后，轻量决策模型 Jev 读最近 20 条消息，一次回答几个问题：有人其实在跟 AI 说话吗？有没人答的问题、说错的话？事情是不是已经聊完了？该找谁？分数过了本群门槛才唤醒大模型，被唤醒后它仍然可以不说。</span></p>
+
+    <div class="d-grid2">
+      <div>
+        <div class="lm-mock" aria-label="Illustration of a group chat">
+          <p class="lm-head"><span class="en">Launch prep</span><span class="zh">发布筹备群</span></p>
+          <div class="lm-msg"><span class="lm-av">L</span><div><span class="lm-name">Lin</span><span class="lm-bub"><span class="en">Did we lock Friday for the public launch?</span><span class="zh">周五对外发布的日期最后定了吗？</span></span></div></div>
+          <div class="lm-msg"><span class="lm-av">J</span><div><span class="lm-name">Jay</span><span class="lm-bub"><span class="en">I think Friday, but nobody confirmed.</span><span class="zh">我记得是周五，但没人确认过。</span></span></div></div>
+          <p class="lm-pause"><span class="en">10 s pause · Jev: unanswered question 0.86 · ask Mia</span><span class="zh">停顿 10 秒 · Jev：没人答的问题 0.86 · 该找 Mia</span></p>
+          <div class="lm-msg ai"><span class="lm-av ai">AI</span><div><span class="lm-name">Loom<span class="lm-chip"><span class="en">stepped in</span><span class="zh">主动介入</span></span></span><span class="lm-bub"><span class="en">It moved to next Monday last Thursday (room memory, Nov 6). @Mia, you own the date. Can you confirm?</span><span class="zh">上周四改成了下周一（本群记忆 11-06）。@Mia 你是负责人，麻烦确认一下？</span></span></div></div>
+          <div class="lm-msg"><span class="lm-av">M</span><div><span class="lm-name">Mia</span><span class="lm-bub"><span class="en">Yes, Monday. No change 👍</span><span class="zh">对，下周一，不变 👍</span></span></div></div>
+          <p class="lm-foot"><span class="en">Someone replied, so this counts as useful and the bar holds.</span><span class="zh">有人回复，记为有用，门槛不变。</span></p>
+        </div>
+        <p class="lm-cap"><span class="en">Illustration with made-up names and content.</span><span class="zh">示意图，人名和内容均为虚构。</span></p>
+      </div>
+      <div class="panel">
+        <h3><span class="en">Five ways to step in</span><span class="zh">五种介入方式</span></h3>
+        <p class="panel-note"><span class="en">The same Jev call also picks how</span><span class="zh">同一次 Jev 判断里一起决定用哪种</span></p>
+        <ul class="lm-ways">
+          <li><b><span class="en">Say it</span><span class="zh">插话</span></b><span><span class="en">only with a definite answer or a correction; @ the right person</span><span class="zh">有确切答案或需要纠正时说一句，该找谁就 @ 谁</span></span></li>
+          <li><b><span class="en">Suggest a card</span><span class="zh">建议提卡</span></b><span><span class="en">nobody owns a to-do: one click turns it into a task</span><span class="zh">有事没人认领，发一张一键转任务的建议卡</span></span></li>
+          <li><b><span class="en">Wait</span><span class="zh">先等一等</span></b><span><span class="en">a new question gets 3 minutes for a human to answer</span><span class="zh">新问题先留 3 分钟给人回答</span></span></li>
+          <li><b><span class="en">Nudge</span><span class="zh">私信提醒</span></b><span><span class="en">needs someone who isn’t here: goes to their private assistant</span><span class="zh">需要不在场的人，发到 TA 的私人助理和企微</span></span></li>
+          <li><b><span class="en">Note it</span><span class="zh">记一笔</span></b><span><span class="en">a decision was made: written to room memory, no message</span><span class="zh">定下了一件事，悄悄写进本群记忆，不发消息</span></span></li>
+        </ul>
+      </div>
+    </div>
+
+    <ol class="flow flow-5">
+      <li><b><span class="en">Pause</span><span class="zh">等停顿</span></b><span><span class="en">10 s by default; 3 s when called by name</span><span class="zh">默认 10 秒，被叫名字只等 3 秒</span></span></li>
+      <li><b><span class="en">Jev scores</span><span class="zh">Jev 打分</span></b><span><span class="en">last 20 messages, one call</span><span class="zh">读最近 20 条，一次答完</span></span></li>
+      <li><b><span class="en">Room bar</span><span class="zh">过门槛</span></b><span><span class="en">quiet 0.85 · normal 0.7 · active 0.6</span><span class="zh">少说 0.85 / 适中 0.7 / 积极 0.6</span></span></li>
+      <li><b><span class="en">Rate limit</span><span class="zh">频率与静音</span></b><span><span class="en">1–4 a minute; “stop” mutes for 2 h</span><span class="zh">每分钟 1–4 次，「别插话」后静 2 小时</span></span></li>
+      <li><b><span class="en">Feedback</span><span class="zh">看反馈</span></b><span><span class="en">reply = useful; 15 min of silence = ignored</span><span class="zh">有人理算有用，15 分钟没人理算忽略</span></span></li>
+    </ol>
+    <p class="flow-note"><span class="en"><b>Shadow mode.</b> Each way of stepping in, each rule and interjecting itself can be off, in shadow or live. In shadow the AI still decides and drafts, but only records what it would have done; members label drafts “should have said” or “shouldn’t have”, and once the labels are numerous and accurate it goes live in one click. Members write rules in one sentence (“no interjections after 8 pm”), which the model reads as trigger, forbid, require or quiet hours. Misses count too: if the AI stayed silent and was then @-ed about the same thing twice in a week, the bar drops.</span><span class="zh"><b>影子模式。</b>每种介入方式、每条规则以及整个插话，都可以设成「关闭 / 影子 / 正式」。影子里 AI 照常判断、写好草稿，但只记录「本来会怎么做」；成员标注「该说 / 不该说」，标得够多够准就一键转正式。成员还能用一句话定规则（「晚上 8 点以后不插话」），模型读成触发、禁止、只在…时、免打扰四类。漏判也算：AI 没开口、之后 7 天内有人两次 @ 它问同一件事，门槛就调低。</span></p>
+  </section>
+
+  <!-- 02 Router + Worker -->
+  <section id="tasks" class="d-sec">
+    <p class="eyebrow">02 · <span class="en">Task execution</span><span class="zh">提卡执行</span></p>
+    <h2><span class="en">One lane to talk, another to work</span><span class="zh">Router + Worker 双轨：聊天和干活分开</span></h2>
+    <p class="d-intro"><span class="en">The room’s AI only talks, checks facts and proposes task cards, with read-only access. A card says what to do, where, who owns it, when it’s due and how to tell it’s done. Once a person confirms, a separate execution agent (Codex by default, with GPT, Claude, Gemini, DeepSeek or Kimi behind it) opens a session for that card alone and reports back with evidence.</span><span class="zh">群里的 AI 只负责对话、查证和提任务卡，权限只读。卡上写清做什么、在哪做、负责人、截止时间和「怎样算做完」。有人确认后，独立的执行 agent（默认 Codex，可选 GPT、Claude、Gemini、DeepSeek、Kimi）只为这张卡开一个会话，做完带证据汇报。</span></p>
+    <ol class="flow flow-5">
+      <li><b><span class="en">Discuss</span><span class="zh">讨论</span></b><span><span class="en">in the room or in WeCom</span><span class="zh">在群里或企业微信里</span></span></li>
+      <li><b><span class="en">Propose</span><span class="zh">提卡</span></b><span><span class="en">done-when criteria, review or not</span><span class="zh">写明完成标准、要不要验收</span></span></li>
+      <li><b><span class="en">Confirm</span><span class="zh">人确认</span></b><span><span class="en">anyone, members or admins</span><span class="zh">所有人 / 成员 / 管理员可选</span></span></li>
+      <li><b><span class="en">Execute</span><span class="zh">执行</span></b><span><span class="en">plan first, tick each step</span><span class="zh">先列计划，做一步勾一步</span></span></li>
+      <li><b><span class="en">Evidence</span><span class="zh">证据与验收</span></b><span><span class="en">test output, files, paths; rejections carry a reason</span><span class="zh">测试输出、改动文件、产出路径；打回带原因</span></span></li>
+    </ol>
+    <div class="d-grid2">
+      <div class="panel">
+        <h3><span class="en">Router · the room’s AI</span><span class="zh">Router · 群里的 AI</span></h3>
+        <p><span class="en">One per room, always on. Read-only access to the workspace, memory and the web. The only voice in the room, and it keeps answering while tasks run.</span><span class="zh">每群一个，常驻。只读工作区、记忆和网页。群里唯一说话的角色，任务跑着时照常问答。</span></p>
+      </div>
+      <div class="panel">
+        <h3><span class="en">Worker · the execution agent</span><span class="zh">Worker · 执行 agent</span></h3>
+        <p><span class="en">One session per confirmed card, closed when done. Can edit files, run commands and browse. Never posts in the room; its progress lives on the card. Rooms run in parallel, cards in a room queue up.</span><span class="zh">每张确认的卡一个会话，做完即结束。能读写文件、跑命令、联网。不在群里发言，过程收在任务卡里。不同群并行，同群排队。</span></p>
+      </div>
+    </div>
+    <p class="flow-note"><span class="en">Cards have a bar too: no card unless someone asked for the work, and none if three are already waiting, a similar one was dismissed in the past week, or it duplicates an open card. When a room is bound to Loom’s own code, the worker edits it on a separate branch and runs smoke tests; an admin clicks “deploy” to merge, and a failed health check rolls it back.</span><span class="zh">提卡也有门槛：没人要它做就不提；已有 3 张待确认、同类卡 7 天内被忽略过、或和未完成的卡重复，都会拒绝。群绑定 Loom 自己的代码时，Worker 在独立分支里改、跑冒烟测试，管理员点「部署上线」才合并，健康检查失败自动回滚。</span></p>
+  </section>
+
+  <!-- 03 Memory -->
+  <section id="memory" class="d-sec">
+    <p class="eyebrow">03 · <span class="en">Memory</span><span class="zh">记忆</span></p>
+    <h2><span class="en">One memory tree, read in three layers</span><span class="zh">一棵记忆树，分三层读</span></h2>
+    <p class="d-intro"><span class="en">Decisions used to scatter across the chat, and the AI needed the background re-explained every time. Now stage summaries and memory live in one Markdown tree. Prompts carry only one-line abstracts (L0) and one-page overviews (L1); the AI opens the originals (L2) when it needs detail, so the context stays short and stable without losing anything.</span><span class="zh">以前结论散在聊天里，AI 每次都要重新给背景。现在阶段总结和记忆合成一棵 Markdown 文件树：提示词里只放一句话摘要（L0）和一页概览（L1），需要细节时 AI 自己打开原文（L2）。上下文短而稳定，信息也不丢。</span></p>
+    <div class="d-grid2">
+      <div class="panel">
+        <h3><span class="en">The tree</span><span class="zh">记忆树</span></h3>
+        <ul class="lm-tree">
+          <li><code>team/</code><span><span class="en">shared knowledge: background, who does what, decisions, in progress</span><span class="zh">团队知识：背景、分工、决策约定、进行中</span></span></li>
+          <li><code>rooms/&lt;room&gt;/</code><span><span class="en">room notes, every stage summary, task log</span><span class="zh">本群记忆、每次阶段总结、任务记录</span></span></li>
+          <li><code>people/&lt;name&gt;/</code><span><span class="en">profile and daily digests of private chats</span><span class="zh">个人画像、和私人助理的每日摘要</span></span></li>
+          <li><code>daily/&lt;date&gt;.md</code><span><span class="en">short-term memory, one file a day</span><span class="zh">每天一份短期记忆</span></span></li>
+          <li><code>history/</code><span><span class="en">old versions before rewrites and deletes; the AI can’t read them</span><span class="zh">改写和删除前的旧版本，AI 读不到</span></span></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3><span class="en">Three layers</span><span class="zh">三级分层</span></h3>
+        <dl class="mini">
+          <div><dt>L0</dt><dd><span class="en">one sentence per folder (≤ 80 chars); every reply carries the other rooms’ L0</span><span class="zh">每个目录一句话（≤ 80 字）；每次回复带上其他群的 L0</span></dd></div>
+          <div><dt>L1</dt><dd><span class="en">one page of decisions, work in progress and open items (≤ 1,500 chars); the team’s and this room’s</span><span class="zh">一页要点：决定、进行中、待解决（≤ 1,500 字）；带团队和本群的 L1</span></dd></div>
+          <div><dt>L2</dt><dd><span class="en">the originals, no limit; the AI browses, reads and searches them itself</span><span class="zh">原文不限篇幅；AI 自己浏览、读取、检索</span></dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="d-grid2">
+      <div class="panel">
+        <h3><span class="en">Ordered for the cache</span><span class="zh">按缓存排提示词</span></h3>
+        <p class="panel-note"><span class="en">Prompt-cache hit between adjacent replies</span><span class="zh">相邻两次回复的提示词缓存命中率</span></p>
+        <ul class="bars">
+          <li><span class="bl"><span class="en">Before</span><span class="zh">改前</span></span><span class="bt"><i style="--v:50%"></i></span><b>~50%</b></li>
+          <li><span class="bl"><span class="en">After</span><span class="zh">改后</span></span><span class="bt"><i class="hi" style="--v:96%"></i></span><b>~96%</b></li>
+        </ul>
+        <p class="panel-foot"><span class="en">Fixed system prompt first, chat window advancing 20 messages at a time, and what changes every minute (time, location) at the very end.</span><span class="zh">不变的系统提示词在前，聊天窗口每 20 条才往前挪一次，每分钟都变的（时间、位置）放在最后。</span></p>
+      </div>
+      <div class="panel">
+        <h3><span class="en">Written on a schedule</span><span class="zh">定时写入与压缩</span></h3>
+        <dl class="mini">
+          <div><dt><span class="en">2 a day</span><span class="zh">每天 2 次</span></dt><dd><span class="en">stage summaries at 10:00 and 20:00, only after a real discussion</span><span class="zh">阶段总结（10:00、20:00），有真讨论才写</span></dd></div>
+          <div><dt>150–250</dt><dd><span class="en">characters per summary, down from 1.5–2.6k</span><span class="zh">字一份总结，原来 1,500–2,600 字</span></dd></div>
+          <div><dt>23:50</dt><dd><span class="en">the day folds into team knowledge and profiles</span><span class="zh">当天内容并进团队知识和个人画像</span></dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Personal assistant -->
+  <section id="assistant" class="d-sec">
+    <p class="eyebrow">04 · <span class="en">Personal assistant</span><span class="zh">私人助理</span></p>
+    <h2><span class="en">An assistant that learns you without being told</span><span class="zh">私人助理：不用说「记住」，它也懂你</span></h2>
+    <p class="d-intro"><span class="en">Each member gets a one-to-one assistant, on the web and in WeCom. Living in the same system as the team AI, it knows both you and your rooms: your tasks, your @-mentions, a morning brief under 300 characters at 9:30. After every turn it compares your profile with what you just said and keeps only what has clear evidence.</span><span class="zh">每人一个只有自己能看的助理，网页和企业微信单聊都能用。它和团队 AI 在同一个系统里，所以既懂你，也知道你所在各群发生了什么：分给你的任务、@你的消息、每天 9:30 一份 300 字以内的早报。每轮对话后，它对比画像和刚才这轮，只记下有明确证据的信息。</span></p>
+
+    <div class="d-grid2">
+      <div>
+        <div class="lm-mock" aria-label="Illustration of a coffee order">
+          <p class="lm-head"><span class="en">Private assistant</span><span class="zh">私人助理</span></p>
+          <div class="lm-msg me"><span class="lm-bub"><span class="en">The usual from Luckin, pick up downstairs.</span><span class="zh">老样子，来杯瑞幸，楼下那家自取。</span></span></div>
+          <div class="lm-msg ai"><span class="lm-av ai">AI</span><div><span class="lm-bub"><span class="en">Large, less ice, no sugar (you said you’re cutting back).</span><span class="zh">按你的习惯：大杯、少冰、不加糖（你说过在控糖）。</span></span>
+            <div class="lm-card">
+              <h4><span class="en">Luckin · waiting for you</span><span class="zh">瑞幸咖啡 · 待你确认</span></h4>
+              <div class="lm-row"><span><span class="en">Coconut latte · large · less ice</span><span class="zh">生椰拿铁 · 大杯 · 少冰</span></span><b>¥ 16</b></div>
+              <div class="lm-row"><span><span class="en">Shop downstairs · pick up</span><span class="zh">楼下门店 · 自取</span></span></div>
+              <div class="lm-btns"><span class="lm-btn go"><span class="en">Place order</span><span class="zh">确认下单</span></span><span class="lm-btn"><span class="en">Cancel</span><span class="zh">取消</span></span></div>
+            </div>
+          </div></div>
+          <div class="lm-msg ai"><span class="lm-av ai">AI</span><div><span class="lm-bub"><span class="lm-ok"><span class="en">Paid ✓</span><span class="zh">已付款 ✓</span></span> <span class="en">Pickup code A137, ready in about 8 minutes.</span><span class="zh">取餐码 A137，约 8 分钟后可取。</span></span></div></div>
+          <p class="lm-foot"><span class="en">Anything that spends money stops at a card until you confirm.</span><span class="zh">花钱的操作只出卡片，本人确认后才执行。</span></p>
+        </div>
+      </div>
+      <div>
+        <div class="lm-mock" aria-label="Illustration of a trip card">
+          <p class="lm-head"><span class="en">Hangzhou · 2 days</span><span class="zh">杭州 · 2 天</span></p>
+          <div class="lm-msg ai"><span class="lm-av ai">AI</span><div><span class="lm-bub"><span class="en">How do you like to travel?</span><span class="zh">这次想怎么玩？</span></span>
+            <div class="lm-btns"><span class="lm-btn"><span class="en">Packed</span><span class="zh">特种兵</span></span><span class="lm-btn on"><span class="en">Balanced</span><span class="zh">均衡</span></span><span class="lm-btn"><span class="en">Relaxed</span><span class="zh">度假</span></span></div>
+          </div></div>
+          <div class="lm-card">
+            <h4><span class="en">Day 1 · balanced</span><span class="zh">第 1 天 · 均衡节奏</span></h4>
+            <ul class="lm-stops">
+              <li><b><span class="en">West Lake, Broken Bridge</span><span class="zh">西湖 · 断桥</span></b><small><span class="lm-ok"><span class="en">checked on Amap</span><span class="zh">高德已核验</span></span> · 4.8 · <span class="en">free · open all day · walk 18 min</span><span class="zh">免费 · 全天开放 · 步行 18 分钟</span></small></li>
+              <li><b><span class="en">Lingyin Temple</span><span class="zh">灵隐寺</span></b><small><span class="lm-ok"><span class="en">checked on Amap</span><span class="zh">高德已核验</span></span> · 4.7 · ¥75 · 07:00–18:00 · <span class="en">bus 25 min</span><span class="zh">公交 25 分钟</span></small></li>
+              <li><b><span class="en">Street snacks, Hefang Street</span><span class="zh">河坊街小吃</span></b><small><span class="lm-warn"><span class="en">not verified</span><span class="zh">未核验</span></span></small></li>
+            </ul>
+          </div>
+          <p class="lm-foot">🎫 <span class="en">To book: Lingyin tickets ☐ (also pinned in the status bar)</span><span class="zh">需提前预约：灵隐寺门票 ☐（同时挂在顶部状态条）</span></p>
+        </div>
+      </div>
+    </div>
+    <p class="lm-cap"><span class="en">Illustrations with made-up orders, prices and ratings.</span><span class="zh">示意图，订单、价格和评分均为虚构。</span></p>
+
+    <div class="panel">
+      <h3><span class="en">What it picks up on its own</span><span class="zh">它自己会记下什么</span></h3>
+      <p class="panel-note"><span class="en">11 kinds of implicit memory, written into a five-part profile</span><span class="zh">11 类隐式记忆，写进五个分区的画像</span></p>
+      <ul class="lm-ways">
+        <li><b><span class="en">Cause → effect</span><span class="zh">事实与因果</span></b><span><span class="en">a family member is lactose intolerant → snacks and food orders avoid dairy</span><span class="zh">家人乳糖不耐 → 买零食、订餐都避开乳制品</span></span></li>
+        <li><b><span class="en">Habits</span><span class="zh">偏好与习惯</span></b><span><span class="en">hospital visits after 9 am; first-party stores first</span><span class="zh">约医院都约 9 点以后；买东西优先自营店</span></span></li>
+        <li><b><span class="en">People</span><span class="zh">称谓与保密</span></b><span><span class="en">how to address Kevin; two colleagues with the same name; what stays secret from whom</span><span class="zh">跟 Kevin 说话不用「您」；区分两个同名的张姐；某事对某人保密</span></span></li>
+        <li><b><span class="en">Promises</span><span class="zh">待兑现约定</span></b><span><span class="en">after Thursday’s review, remind me to answer the wedding invite; cleared once done</span><span class="zh">周四汇报完 → 提醒回复婚礼去不去；兑现后自动核销</span></span></li>
+        <li><b><span class="en">Travel &amp; topics</span><span class="zh">出行与关注</span></b><span><span class="en">trip pace, transport, the tech they follow</span><span class="zh">度假节奏、交通偏好、长期关注的技术方向</span></span></li>
+      </ul>
+    </div>
+    <p class="flow-note"><span class="en">Coffee, burgers, taxis and maps run through Luckin’s, McDonald’s, DiDi’s and Amap’s official MCP servers, with each member’s own account. Location is on only after the member agrees; it is converted to the coordinates those services use (GCJ-02) and kept in memory for two hours, never in the database, backups or logs. Service tokens sit in a separate file and never reach the database, prompts or messages.</span><span class="zh">点咖啡、点餐、打车、查地图分别接入瑞幸、麦当劳、滴滴、高德的官方 MCP，每人连自己的账号。定位要本人同意才开，换算成这些服务用的 GCJ-02 坐标，只在内存里留 2 小时，不进数据库、备份和日志；各服务的 Token 单独存放，不进数据库、提示词和消息。</span></p>
+  </section>
+
+  <!-- 05 Engineering -->
+  <section id="engineering" class="d-sec">
+    <p class="eyebrow">05 · <span class="en">Engineering</span><span class="zh">工程</span></p>
+    <h2><span class="en">Built fast, tested as if live</span><span class="zh">做得快，也测得严</span></h2>
+    <p class="d-intro"><span class="en">Python (FastAPI, SQLite) with a plain-JavaScript front end and no build step. I ran several coding agents in parallel, one each on the front end, the back end and the private assistant, and reviewed and merged their work. Changes go to an isolated instance first, and a deploy waits until the AI is idle.</span><span class="zh">后端 Python（FastAPI + SQLite），前端原生 JavaScript，无构建步骤。开发时我同时带几个 coding agent 分工，前端交互、后端功能、私人助理各一个，由我审查合并。改动先在隔离实例上验证，部署时等 AI 空闲再切换。</span></p>
+    <dl class="stats stats-sm">
+      <div><dt>22</dt><dd><span class="en">end-to-end scripts; Jev, MCP and WeCom are replaced by fakes</span><span class="zh">个端到端测试，Jev、MCP、企微都换成假服务</span></dd></div>
+      <div><dt>0</dt><dd><span class="en">real accounts used in tests; payment flows run on fake services</span><span class="zh">个真实账号进测试，下单付款流程跑在假服务上</span></dd></div>
+      <div><dt>3 + 1</dt><dd><span class="en">calls in flight per model, plus one background lane behind replies</span><span class="zh">每个模型并发 3 路，后台整理另走 1 路，排在回复后面</span></dd></div>
+      <div><dt>2</dt><dd><span class="en">more ways in: WeCom and Cursor (MCP)</span><span class="zh">个额外入口：企业微信与 Cursor（MCP）</span></dd></div>
+    </dl>
+  </section>
+
+  <footer class="d-foot">
+    <a class="more" href="index.html#projects"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd"/></svg><span class="u"><span class="en">Back to home</span><span class="zh">返回主页</span></span></a>
+    <p>© 2026 Zekai Yuan</p>
+  </footer>
+</main>
+
+<script src="assets/site.js" defer></script>
+</body>
+</html>
