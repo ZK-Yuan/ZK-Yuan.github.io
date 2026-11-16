@@ -30,68 +30,18 @@ img { display: block; max-width: 100%; }
 .skip:focus { left: 12px; }
 :focus-visible { outline: 2px solid #0071e3; outline-offset: 3px; border-radius: 6px; }
 
-/* ---------- loader ---------- */
-.loader { display: none; }
-.js .loader { position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; background: #141517; color: #fff; transition: transform 0.9s var(--ease); animation: loader-bail 0.01s 6s forwards; }
-.js.skip-loader .loader { display: none; }
-.loader.done { transform: translateY(-100%); }
-.loader-word { margin: 0; display: flex; align-items: center; gap: 0.45em; font-size: clamp(38px, 5vw, 64px); font-weight: 400; letter-spacing: -0.02em; line-height: 1; opacity: 0; animation: fade-in 0.6s 0.15s forwards; }
-.loader-word i { width: 0.2em; height: 0.2em; border-radius: 50%; background: currentColor; }
-.loader-curve { position: absolute; left: -10%; width: 120%; top: calc(100% - 1px); height: 16vh; background: #141517; border-radius: 0 0 50% 50%; transition: height 0.9s var(--ease); }
-.loader.done .loader-curve { height: 0; }
-@keyframes fade-in { to { opacity: 1; } }
-@keyframes loader-bail { to { visibility: hidden; } }
-
-/* ---------- hero ---------- */
-.hero { position: relative; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden; isolation: isolate; color: var(--ink); background: radial-gradient(ellipse 60% 80% at 47% 56%, #dddddf 0%, #d4d4d6 42%, #c6c6c8 100%); }
-.hero-nav { position: absolute; z-index: 5; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 26px clamp(20px, 2.6vw, 40px); font-size: 15px; }
-.hero-logo { display: inline-flex; gap: 0.35em; line-height: 1.4; }
-.roll { display: inline-grid; overflow: hidden; height: 1.4em; }
-.roll > span { grid-area: 1 / 1; transition: transform 0.65s var(--out); }
-.roll > span + span { transform: translateY(105%); }
-.hero-logo:hover .roll > span:first-child { transform: translateY(-105%); }
-.hero-logo:hover .roll > span + span { transform: none; }
-.hero-links { display: flex; align-items: center; gap: clamp(18px, 2.4vw, 36px); }
-.hero-links > a { position: relative; }
-.hero-links > a:not(.hero-cv)::after { content: ""; position: absolute; left: 50%; bottom: -12px; width: 5px; height: 5px; margin-left: -2.5px; border-radius: 50%; background: currentColor; transform: scale(0); transition: transform 0.35s var(--out); }
-.hero-links > a:hover::after { transform: scale(1); }
-.hero-cv { padding: 8px 16px; border-radius: 999px; background: var(--ink); color: #fff; transition: background 0.3s; }
-.hero-cv:hover { background: #000; }
-
+/* ---------- language switch ---------- */
 .lang { display: inline-flex; padding: 2px; border-radius: 999px; border: 1px solid rgba(29, 29, 31, 0.2); }
 .lang button { border: 0; background: none; cursor: pointer; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; color: rgba(29, 29, 31, 0.55); transition: color 0.2s, background 0.2s; }
 .lang button:hover { color: var(--ink); }
 .lang button[aria-pressed="true"] { background: var(--ink); color: #fff; }
 
-.hero-figure { position: absolute; z-index: 1; bottom: 0; left: 50%; height: 93%; aspect-ratio: 853 / 1024; transform: translateX(-50%); }
-.hero-figure img { width: 100%; height: 100%; object-fit: cover; -webkit-mask-image: linear-gradient(to right, transparent 0, #000 17%, #000 83%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 7%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent 0, #000 17%, #000 83%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 7%); mask-composite: intersect; }
-
-.hero-loc { position: absolute; z-index: 3; left: 0; top: 50%; display: flex; align-items: center; gap: 26px; padding: 14px 14px 14px 30px; border-radius: 0 999px 999px 0; background: var(--ink); color: #fff; font-size: 14.5px; line-height: 1.35; transform: translateY(-50%); }
-.hero-loc p { margin: 0; }
-.globe { display: grid; place-items: center; width: 62px; height: 62px; border-radius: 50%; background: #9c9ea1; color: #fff; }
-.globe svg { width: 32px; height: 32px; }
-.mer { transform-box: fill-box; transform-origin: center; animation: meridian 4.5s linear infinite; }
-.mer:nth-of-type(2) { animation-delay: -1.5s; }
-.mer:nth-of-type(3) { animation-delay: -3s; }
-@keyframes meridian { from { transform: scaleX(1); } to { transform: scaleX(-1); } }
-
-.hero-name { position: absolute; z-index: 2; left: 0; right: 0; bottom: 2.5vh; color: #fff; mix-blend-mode: difference; pointer-events: none; }
-.hero-track { display: flex; width: max-content; will-change: transform; }
-.hero-track span { flex: none; white-space: nowrap; font-size: clamp(92px, 14.5vw, 270px); font-weight: 400; line-height: 1.12; letter-spacing: -0.035em; }
-
-/* entrance */
-.js .hero-figure { opacity: 0; transform: translate(-50%, 5%) scale(1.03); transition: opacity 1.2s var(--out), transform 1.8s var(--out); }
-.js .hero-name { opacity: 0; transform: translateY(35%); transition: opacity 1.2s var(--out) 0.15s, transform 1.6s var(--out) 0.15s; }
-.js .hero-nav, .js .hero-loc { opacity: 0; transition: opacity 1s var(--out) 0.45s; }
-.js .hero.in .hero-figure { opacity: 1; transform: translate(-50%, 0); }
-.js .hero.in .hero-name, .js .hero.in .hero-nav, .js .hero.in .hero-loc { opacity: 1; }
-.js .hero.in .hero-name { transform: none; }
-
 /* ---------- résumé ---------- */
-.page { position: relative; background: linear-gradient(to bottom, #e9e9eb 0, var(--bg) 360px); }
+.page { position: relative; background: var(--bg); }
 .wrap { max-width: 1240px; margin: 0 auto; padding: 0 64px; display: flex; justify-content: space-between; gap: 56px; }
 
-.side { position: sticky; top: 0; align-self: flex-start; width: 36%; height: 100vh; max-height: 100vh; padding: 120px 0 64px; display: flex; flex-direction: column; justify-content: space-between; }
+.side { position: sticky; top: 0; align-self: flex-start; width: 36%; height: 100vh; max-height: 100vh; padding: 96px 0 64px; display: flex; flex-direction: column; justify-content: space-between; }
+.side-avatar { width: 76px; height: 76px; margin: 0 0 20px; border-radius: 50%; object-fit: cover; }
 .side-name { margin: 0; font-size: 48px; font-weight: 600; line-height: 1.05; letter-spacing: -0.03em; color: var(--ink); }
 [data-lang="zh"] .side-name { letter-spacing: 0.02em; }
 .side-role { margin: 14px 0 0; font-size: 19px; font-weight: 500; line-height: 1.4; letter-spacing: -0.01em; color: var(--ink); }
@@ -112,7 +62,7 @@ img { display: block; max-width: 100%; }
 .socials a:hover { color: var(--ink); }
 .socials svg { display: block; width: 22px; height: 22px; }
 
-.content { width: 60%; padding: 120px 0 80px; }
+.content { width: 60%; padding: 96px 0 80px; }
 .sec { margin-bottom: 128px; scroll-margin-top: 48px; }
 .sec-last { margin-bottom: 96px; }
 .sec-h h2 { margin: 0 0 28px; font-size: 40px; font-weight: 600; line-height: 1.1; letter-spacing: -0.025em; color: var(--ink); }
@@ -359,11 +309,6 @@ a.hl:hover { text-decoration: underline; }
   .bars li { grid-template-columns: 6.5em minmax(0, 1fr) 3.2em; gap: 10px; }
   .panel { padding: 22px 20px 24px; }
 }
-@media (max-width: 820px) {
-  .hero-links > a:not(.hero-cv) { display: none; }
-  .hero-loc { display: none; }
-  .hero-figure { height: 82%; }
-  .hero-track span { font-size: 23vw; }
 }
 @media (max-width: 639px) {
   .wrap { padding: 56px 20px 0; }
@@ -374,11 +319,7 @@ a.hl:hover { text-decoration: underline; }
   .card-media .card-body { order: 2; }
   .thumb { aspect-ratio: 16 / 9; }
   .side-name { font-size: 40px; }
-  .hero-nav { padding: 20px; }
   .covers img { height: 200px; }
-}
-@media (max-width: 420px) {
-  .hero-figure { height: 76%; }
 }
 @media (hover: none) {
   .card:hover { transform: none; box-shadow: none; }
@@ -387,10 +328,6 @@ a.hl:hover { text-decoration: underline; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .js .hero-figure, .js .hero-name, .js .hero-nav, .js .hero-loc { opacity: 1 !important; transition: none !important; }
-  .js .hero-figure { transform: translateX(-50%) !important; }
-  .js .hero-name { transform: none !important; }
-  .mer { animation: none; }
   .card, .thumb, .covers img { transition: none; }
   .js .bt i { transform: none; transition: none; }
 }

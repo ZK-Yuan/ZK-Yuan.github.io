@@ -12,7 +12,7 @@
 <script>
 (function () {
   var d = document.documentElement;
-  d.className += ' js skip-loader';
+  d.className += ' js';
   try {
     var l = localStorage.getItem('lang');
     if (!l) l = (navigator.language || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
