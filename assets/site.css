@@ -48,6 +48,8 @@ img { display: block; max-width: 100%; }
 [data-lang="zh"] .side-role { font-size: 18px; letter-spacing: 0; }
 .side-tag { margin: 12px 0 0; max-width: 22rem; font-size: 17px; line-height: 1.5; color: var(--ink-3); }
 [data-lang="zh"] .side-tag { line-height: 1.7; }
+.side-loc { display: flex; align-items: center; gap: 6px; }
+.side-loc svg { width: 16px; height: 16px; flex: none; color: var(--ink-4); }
 .side-nav { margin-top: 40px; }
 .side-nav ul { list-style: none; margin: 0; padding: 0; width: max-content; }
 .side-nav a { display: flex; align-items: center; padding: 9px 0; }
